@@ -41,14 +41,22 @@ namespace Simulation
             updateSpreadingSpeed();
         }
 
+        public void changeHealtcareIndex (double healtcareIndex)
+        {
+            this.healthcareIndex = healtcareIndex;
+        }
+
         public void updateSpreadingSpeed()
         {
             // Tohle opet dodelat, az budou ready ability
         }
 
-        public void simulateDay()
+        public StatisticUpdate simulateDay()
         {
+            StatisticUpdate update = new StatisticUpdate(0,0,0);
             // Tady se bude odehravat kompletni vypocet deni zmeny
+
+            return update;
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Simulation
+{
+    public struct UserAction
+    {
+        public enum ActionType
+        {
+            ChangeDieseaseSpreadingSpeed,
+            AddDiseaseAbility,
+            RemoveDiseaseAbility,
+            ChangeRegionHealthcareIndex,
+            AddRegionAbility,
+            RemoveRegionAbility,
+        }
+
+        public ActionType actionType;
+        public Region? changedRegion;
+        public IAbility? ability;
+        public double? doubleValue;
+
+
+        public UserAction(ActionType actionType, double? doubleValue, IAbility? ability, Region? changedRegion) {
+            this.actionType = actionType;
+            if (doubleValue != null)
+                this.doubleValue = doubleValue;
+            if (ability != null)
+                this.ability = ability;
+            if (changedRegion != null)
+                this.changedRegion = changedRegion;
+        }
+    }
+}
