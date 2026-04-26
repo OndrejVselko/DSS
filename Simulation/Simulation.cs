@@ -9,12 +9,14 @@ namespace Simulation
 {
     public class Simulation
     {
-        public Disease disease {  get; set; }
+        public Disease disease { get; set; }
         public Dictionary<int, Region> regions { get; set; }
-        public DateOnly startDate {  get; set; }
+        public DateOnly startDate { get; set; }
         public DateOnly currentSimulationDate { get; set; }
         private bool _isRunning;
-        public Queue<UserAction> userActions;  
+        public Queue<UserAction> userActions;
+        public int reportingInterval;
+        public int dayLength { get; set; }
 
         public Simulation(Disease disease, Dictionary<int, Region> regions, DateOnly startDate = default)
         {
@@ -27,11 +29,15 @@ namespace Simulation
             }
 
             this.userActions = new Queue<UserAction>();
+            this.reportingInterval = 1;
+            this.dayLength = 1000;
+
         }
 
         public void Run() { 
             this._isRunning = true;
         }
+
         public void Stop() {
             this._isRunning = false;
         }
@@ -39,6 +45,14 @@ namespace Simulation
         public bool IsRunning()
         {
             return this._isRunning;
+        }
+
+        public void changeDayLength(int ms)
+        {
+            if (dayLength < 0)
+                this.dayLength = ms;
+            else
+                Console.WriteLine("Neplatný čas");
         }
 
         public async Task Simulate(CancellationToken ct)
@@ -54,7 +68,7 @@ namespace Simulation
 
                 try
                 {
-                    await Task.Delay(1000, ct);
+                    await Task.Delay(dayLength, ct);
                 }
                 catch (TaskCanceledException)
                 {
