@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Simulation
+namespace SimulationCore
 {
     public struct UserAction
     {

@@ -1,0 +1,370 @@
+[
+  {
+    "id": 1,
+    "name": "Albánie",
+    "population": 2830000,
+    "healthcareIndex": 0.65,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 2,
+    "name": "Andorra",
+    "population": 77000,
+    "healthcareIndex": 0.92,
+    "spreadingSpeed": 1.1,
+    "abilities": []
+  },
+  {
+    "id": 3,
+    "name": "Belgie",
+    "population": 11590000,
+    "healthcareIndex": 0.88,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 4,
+    "name": "Bělorusko",
+    "population": 9350000,
+    "healthcareIndex": 0.70,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 5,
+    "name": "Bosna a Hercegovina",
+    "population": 3280000,
+    "healthcareIndex": 0.58,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 6,
+    "name": "Bulharsko",
+    "population": 6920000,
+    "healthcareIndex": 0.62,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 7,
+    "name": "Černá Hora",
+    "population": 620000,
+    "healthcareIndex": 0.68,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 8,
+    "name": "Česko",
+    "population": 10700000,
+    "healthcareIndex": 0.82,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 9,
+    "name": "Dánsko",
+    "population": 5830000,
+    "healthcareIndex": 0.94,
+    "spreadingSpeed": 1.1,
+    "abilities": []
+  },
+  {
+    "id": 10,
+    "name": "Estonsko",
+    "population": 1330000,
+    "healthcareIndex": 0.85,
+    "spreadingSpeed": 1.1,
+    "abilities": []
+  },
+  {
+    "id": 11,
+    "name": "Finsko",
+    "population": 5530000,
+    "healthcareIndex": 0.95,
+    "spreadingSpeed": 1.0,
+    "abilities": []
+  },
+  {
+    "id": 12,
+    "name": "Francie",
+    "population": 67400000,
+    "healthcareIndex": 0.90,
+    "spreadingSpeed": 1.5,
+    "abilities": []
+  },
+  {
+    "id": 13,
+    "name": "Chorvatsko",
+    "population": 4050000,
+    "healthcareIndex": 0.75,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 14,
+    "name": "Irsko",
+    "population": 4990000,
+    "healthcareIndex": 0.87,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 15,
+    "name": "Island",
+    "population": 366000,
+    "healthcareIndex": 0.96,
+    "spreadingSpeed": 0.9,
+    "abilities": []
+  },
+  {
+    "id": 16,
+    "name": "Itálie",
+    "population": 59550000,
+    "healthcareIndex": 0.85,
+    "spreadingSpeed": 1.6,
+    "abilities": []
+  },
+  {
+    "id": 17,
+    "name": "Kosovo",
+    "population": 1800000,
+    "healthcareIndex": 0.50,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 18,
+    "name": "Kypr",
+    "population": 1200000,
+    "healthcareIndex": 0.80,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 19,
+    "name": "Lichtenštejnsko",
+    "population": 38000,
+    "healthcareIndex": 0.94,
+    "spreadingSpeed": 1.0,
+    "abilities": []
+  },
+  {
+    "id": 20,
+    "name": "Litva",
+    "population": 2790000,
+    "healthcareIndex": 0.78,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 21,
+    "name": "Lotyšsko",
+    "population": 1900000,
+    "healthcareIndex": 0.76,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 22,
+    "name": "Lucembursko",
+    "population": 630000,
+    "healthcareIndex": 0.93,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 23,
+    "name": "Maďarsko",
+    "population": 9750000,
+    "healthcareIndex": 0.71,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 24,
+    "name": "Malta",
+    "population": 515000,
+    "healthcareIndex": 0.89,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 25,
+    "name": "Moldavsko",
+    "population": 2600000,
+    "healthcareIndex": 0.55,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 26,
+    "name": "Monako",
+    "population": 39000,
+    "healthcareIndex": 0.98,
+    "spreadingSpeed": 1.5,
+    "abilities": []
+  },
+  {
+    "id": 27,
+    "name": "Německo",
+    "population": 83240000,
+    "healthcareIndex": 0.92,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 28,
+    "name": "Nizozemsko",
+    "population": 17440000,
+    "healthcareIndex": 0.91,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 29,
+    "name": "Norsko",
+    "population": 5380000,
+    "healthcareIndex": 0.97,
+    "spreadingSpeed": 1.0,
+    "abilities": []
+  },
+  {
+    "id": 30,
+    "name": "Polsko",
+    "population": 37950000,
+    "healthcareIndex": 0.74,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 31,
+    "name": "Portugalsko",
+    "population": 10300000,
+    "healthcareIndex": 0.84,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 32,
+    "name": "Rakousko",
+    "population": 8910000,
+    "healthcareIndex": 0.89,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 33,
+    "name": "Rumunsko",
+    "population": 19280000,
+    "healthcareIndex": 0.60,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 34,
+    "name": "Rusko",
+    "population": 144100000,
+    "healthcareIndex": 0.68,
+    "spreadingSpeed": 1.5,
+    "abilities": []
+  },
+  {
+    "id": 35,
+    "name": "Řecko",
+    "population": 10720000,
+    "healthcareIndex": 0.79,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 36,
+    "name": "San Marino",
+    "population": 34000,
+    "healthcareIndex": 0.90,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 37,
+    "name": "Severní Makedonie",
+    "population": 2080000,
+    "healthcareIndex": 0.61,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 38,
+    "name": "Slovensko",
+    "population": 5450000,
+    "healthcareIndex": 0.76,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 39,
+    "name": "Slovinsko",
+    "population": 2100000,
+    "healthcareIndex": 0.83,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 40,
+    "name": "Spojené království",
+    "population": 67080000,
+    "healthcareIndex": 0.88,
+    "spreadingSpeed": 1.5,
+    "abilities": []
+  },
+  {
+    "id": 41,
+    "name": "Srbsko",
+    "population": 6900000,
+    "healthcareIndex": 0.66,
+    "spreadingSpeed": 1.3,
+    "abilities": []
+  },
+  {
+    "id": 42,
+    "name": "Španělsko",
+    "population": 47350000,
+    "healthcareIndex": 0.87,
+    "spreadingSpeed": 1.5,
+    "abilities": []
+  },
+  {
+    "id": 43,
+    "name": "Švédsko",
+    "population": 10350000,
+    "healthcareIndex": 0.94,
+    "spreadingSpeed": 1.1,
+    "abilities": []
+  },
+  {
+    "id": 44,
+    "name": "Švýcarsko",
+    "population": 8630000,
+    "healthcareIndex": 0.98,
+    "spreadingSpeed": 1.2,
+    "abilities": []
+  },
+  {
+    "id": 45,
+    "name": "Ukrajina",
+    "population": 41000000,
+    "healthcareIndex": 0.58,
+    "spreadingSpeed": 1.4,
+    "abilities": []
+  },
+  {
+    "id": 46,
+    "name": "Vatikán",
+    "population": 800,
+    "healthcareIndex": 0.90,
+    "spreadingSpeed": 0.8,
+    "abilities": []
+  }
+]

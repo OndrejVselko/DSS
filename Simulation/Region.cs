@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Simulation
+namespace SimulationCore
 {
     public class Region
     {
@@ -18,14 +18,8 @@ namespace Simulation
         public double spreadingSpeed {  get; set; }
         public List<RegionAbility> abilities { get; set; }
 
-        public Region(int id, string name, int population, int vaccinated, double healthcareIndex, double spreadingSpeed)
+        public Region()
         {
-            this.id = id;
-            this.name = name;
-            this.population = population;
-            this.vaccinated = vaccinated;
-            this.healthcareIndex = healthcareIndex;
-            this.spreadingSpeed = spreadingSpeed;
             abilities = new List<RegionAbility>();
         }
 

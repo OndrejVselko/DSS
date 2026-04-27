@@ -5,7 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Simulation
+namespace SimulationCore
 {
     public class Simulation
     {
@@ -18,14 +18,19 @@ namespace Simulation
         public int reportingInterval;
         public int dayLength { get; set; }
 
-        public Simulation(Disease disease, Dictionary<int, Region> regions, DateOnly startDate = default)
+        public Simulation(Disease disease, List<Region> regions, DateOnly startDate = default)
         {
             this.disease = disease;
-            this.regions = regions;
             if (startDate == default)
             {
                 this.startDate = DateOnly.FromDateTime(DateTime.Now);
                 this.currentSimulationDate = DateOnly.FromDateTime(DateTime.Now);
+            }
+
+            this.regions = new Dictionary<int, Region>();
+            foreach(var region in regions)
+            {
+                this.regions[region.id] = region;
             }
 
             this.userActions = new Queue<UserAction>();
