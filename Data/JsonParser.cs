@@ -12,8 +12,8 @@ namespace Data
     {
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
-            PropertyNameCaseInsensitive = true, // Aby nevadilo id vs Id
-            WriteIndented = true                // Pro hezký formát při ukládání
+            PropertyNameCaseInsensitive = true,
+            WriteIndented = true
         };
 
         public static async Task<List<Region>> LoadRegionsFromJson(string filePath)

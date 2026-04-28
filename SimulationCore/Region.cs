@@ -16,11 +16,22 @@ namespace SimulationCore
         public int vaccinated {  get; set; }
         public double healthcareIndex { get; set; }
         public double spreadingSpeed {  get; set; }
+        public double deathPropability { get; set; }
         public List<RegionAbility> abilities { get; set; }
+        public Queue<int> sickHistory;
 
         public Region()
         {
+            sickHistory = new Queue<int>();       
             abilities = new List<RegionAbility>();
+        }
+
+        public void setStartingQueue(int days)
+        {
+            for (int i = 0; i < days; i++)
+            {
+                sickHistory.Enqueue(0);
+            }
         }
 
         public void addAbility(RegionAbility ability)
@@ -47,10 +58,25 @@ namespace SimulationCore
 
         public StatisticUpdate simulateDay()
         {
-            StatisticUpdate update = new StatisticUpdate(0,0,0);
-            // Tady se bude odehravat kompletni vypocet deni zmeny
+            int finishingSick = this.sickHistory.Dequeue();
 
-            return update;
+            int deathGrowth = (int)Math.Floor(finishingSick * deathPropability);
+            deathGrowth = Math.Min(deathGrowth, finishingSick);
+
+            int newInfections = (int)Math.Floor(this.sick * spreadingSpeed);
+            int susceptible = this.population - this.sick - this.dead;
+            newInfections = Math.Min(newInfections, susceptible);
+
+            this.sickHistory.Enqueue(newInfections);
+
+            this.sick += newInfections - finishingSick;
+
+            this.dead += deathGrowth;
+
+            if (this.sick < 0) 
+                this.sick = 0;
+
+            return new StatisticUpdate(newInfections, deathGrowth, 0);
         }
     }
 }

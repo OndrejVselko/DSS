@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -9,6 +10,8 @@ namespace SimulationCore
 {
     public class Simulation
     {
+        public event Action<string>? OnDaySimulated;
+
         public Disease disease { get; set; }
         public Dictionary<int, Region> regions { get; set; }
         public DateOnly startDate { get; set; }
@@ -37,6 +40,8 @@ namespace SimulationCore
             this.reportingInterval = 1;
             this.dayLength = 1000;
 
+            setRegionQueues();
+
         }
 
         public void Run() { 
@@ -52,9 +57,17 @@ namespace SimulationCore
             return this._isRunning;
         }
 
+        private void setRegionQueues()
+        {
+            foreach (int key in this.regions.Keys)
+            {
+                regions[key].setStartingQueue(this.disease.sicknessLength);
+            }
+        }
+
         public void changeDayLength(int ms)
         {
-            if (dayLength < 0)
+            if (dayLength > 0)
                 this.dayLength = ms;
             else
                 Console.WriteLine("Neplatný čas");
@@ -65,11 +78,12 @@ namespace SimulationCore
             while (this._isRunning && !ct.IsCancellationRequested)
             {
                 currentSimulationDate = currentSimulationDate.AddDays(1);
+
                 string dayString = currentSimulationDate.ToString() + "\n";
 
                 dayString += SimulateDay().ToString();
-                   
-                Console.WriteLine(dayString);
+
+                OnDaySimulated?.Invoke(dayString);
 
                 try
                 {
