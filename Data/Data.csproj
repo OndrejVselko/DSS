@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimulationCore\SimulationCore.csproj" />
-    <ProjectReference Include="..\Simulation\SimulationCore.csproj" />
   </ItemGroup>
 
 </Project>

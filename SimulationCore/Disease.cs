@@ -13,11 +13,12 @@ namespace SimulationCore
         public double totalSpreadingSpeed { get; set; }
         public int sicknessLength { get; set; }
         public List<DiseaseAbility> abilities { get; set; }
-
-        public Disease(string name, double defaultSpreadingSpeed, int sicknessLength) { 
+        public double deathProbability { get; set; }
+        public Disease(string name, double defaultSpreadingSpeed, int sicknessLength, double deathProbability) { 
             this.name = name;
             this.defaultSpreadingSpeed = defaultSpreadingSpeed;
             this.sicknessLength = sicknessLength;
+            this.deathProbability = deathProbability;
             abilities = new List<DiseaseAbility>();
         }
 

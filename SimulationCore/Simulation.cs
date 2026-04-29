@@ -127,12 +127,9 @@ namespace SimulationCore
                         break;
 
 
-                    case (UserAction.ActionType.ChangeDieseaseSpreadingSpeed):
-                        if (action.doubleValue != null)
-                        {
-                            this.disease.changeDefaultSpreadingSpeed((double)action.doubleValue);
-                            updateAllRegions = true;
-                        }
+                    case (UserAction.ActionType.ChangeDefaultSpreadingSpeed):
+                        this.disease.changeDefaultSpreadingSpeed((double)action.doubleValue);
+                        updateAllRegions = true;
                         break;
 
                     case (UserAction.ActionType.AddRegionAbility):
@@ -149,7 +146,6 @@ namespace SimulationCore
                         if (action.changedRegion != null && action.doubleValue != null)
                             this.regions[action.changedRegion.id].changeHealtcareIndex((double)action.doubleValue);
                         break;
-
 
                     default:
                         Console.WriteLine("Neznama uzivatelska akce: " + action.actionType);

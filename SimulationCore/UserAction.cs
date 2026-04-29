@@ -10,7 +10,7 @@ namespace SimulationCore
     {
         public enum ActionType
         {
-            ChangeDieseaseSpreadingSpeed,
+            ChangeDefaultSpreadingSpeed,
             AddDiseaseAbility,
             RemoveDiseaseAbility,
             ChangeRegionHealthcareIndex,
@@ -24,7 +24,7 @@ namespace SimulationCore
         public double? doubleValue;
 
 
-        public UserAction(ActionType actionType, double? doubleValue, IAbility? ability, Region? changedRegion) {
+        public UserAction(ActionType actionType, double? doubleValue = null, IAbility? ability = null, Region? changedRegion = null) {
             this.actionType = actionType;
             if (doubleValue != null)
                 this.doubleValue = doubleValue;
