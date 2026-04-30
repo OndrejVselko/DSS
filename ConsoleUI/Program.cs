@@ -120,7 +120,7 @@ namespace ConsoleUI
                         simulationServices.stopSimulation();
                         break;
                     case "2":
-                        Console.WriteLine("Zadejte hodnotu <0; 100>");
+                        Console.WriteLine("Zadejte hodnotu: ");
                         simulationServices.changeDefaultSpreadingSpeed(Console.ReadLine());
                         break;
                     default:

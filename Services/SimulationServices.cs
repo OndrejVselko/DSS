@@ -50,8 +50,8 @@ namespace Services
 
         public void changeDefaultSpreadingSpeed(string? input)
         {
-            if (input is not null && !double.TryParse(input, out double defaultSpreadingSpeed))
-                throw new ArgumentException("Zadejte číslo v rozsahu 0-100");
+            if (input == null || !double.TryParse(input, out double defaultSpreadingSpeed))
+                throw new ArgumentException("Zadejte číselnou hodnotu");
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeDefaultSpreadingSpeed, defaultSpreadingSpeed));
            
 
