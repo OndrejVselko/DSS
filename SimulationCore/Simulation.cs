@@ -21,27 +21,35 @@ namespace SimulationCore
         public int reportingInterval;
         public int dayLength { get; set; }
 
-        public Simulation(Disease disease, List<Region> regions, DateOnly startDate = default)
+        public Simulation()
+        {
+            this.userActions = new Queue<UserAction>();
+            this.reportingInterval = 1;
+            this.dayLength = 1000;
+        }
+
+        public void SetDisease(Disease disease)
         {
             this.disease = disease;
+        }
+
+        public void SetRegions(List<Region> regions)
+        {
+            this.regions = new Dictionary<int, Region>();
+            foreach (var region in regions)
+            {
+                this.regions[region.id] = region;
+            }
+            setRegionQueues();
+        }
+
+        public void SetStartDate(DateOnly startDate = default)
+        {
             if (startDate == default)
             {
                 this.startDate = DateOnly.FromDateTime(DateTime.Now);
                 this.currentSimulationDate = DateOnly.FromDateTime(DateTime.Now);
             }
-
-            this.regions = new Dictionary<int, Region>();
-            foreach(var region in regions)
-            {
-                this.regions[region.id] = region;
-            }
-
-            this.userActions = new Queue<UserAction>();
-            this.reportingInterval = 1;
-            this.dayLength = 1000;
-
-            setRegionQueues();
-
         }
 
         public void Run() { 
@@ -115,7 +123,6 @@ namespace SimulationCore
                             this.disease.addAbility(diseaseAddedAbility);
                             updateAllRegions = true;
                         }
-
                         break;
 
                     case (UserAction.ActionType.RemoveDiseaseAbility):
@@ -126,12 +133,11 @@ namespace SimulationCore
                         }
                         break;
 
-
                     case (UserAction.ActionType.ChangeDefaultSpreadingSpeed):
                         this.disease.changeDefaultSpreadingSpeed((double)action.doubleValue!);
                         updateAllRegions = true;
                         break;
-vi
+
                     case (UserAction.ActionType.AddRegionAbility):
                         if (action.ability != null && action.ability is RegionAbility regionAddedAbility && action.changedRegion != null)
                             this.regions[action.changedRegion.id].addAbility(regionAddedAbility);

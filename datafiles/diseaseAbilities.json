@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "Name": "Zoonotický přenos",
+    "Description": "Schopnost šířit se prostřednictvím hospodářských zvířat.",
+    "PrimaryModifier": 1.2
+  },
+  {
+    "Id": 2,
+    "Name": "Odolnost vůči chladu",
+    "Description": "Virus přežívá déle v nízkých teplotách.",
+    "PrimaryModifier": 1.15
+  },
+  {
+    "Id": 3,
+    "Name": "Letecká kontaminace",
+    "Description": "Vysoká stabilita v kapénkách na velké vzdálenosti.",
+    "PrimaryModifier": 1.5
+  },
+  {
+    "Id": 4,
+    "Name": "Vodem šiřitelný patogen",
+    "Description": "Nemoc dokáže přežít ve vodních zdrojích a potrubí.",
+    "PrimaryModifier": 1.3
+  },
+  {
+    "Id": 5,
+    "Name": "Dlouhá inkubační doba",
+    "Description": "Nakažení nevykazují symptomy, ale šíří nemoc dál.",
+    "PrimaryModifier": 1.6
+  },
+  {
+    "Id": 6,
+    "Name": "Vektor: Hmyz",
+    "Description": "Nemoc je přenášena komáry nebo klíšťaty.",
+    "PrimaryModifier": 1.1
+  }
+]

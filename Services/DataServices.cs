@@ -18,5 +18,10 @@ namespace Services
         {
             return await JsonParser.LoadRegionsFromJson(path);
         }
+        public async Task<Dictionary<int, DiseaseAbility>> LoadDiseaseAbilities(string path)
+        {
+            return await JsonParser.LoadDiseaseAbilitiesFromJson(path);
+        }
+
     }
 }

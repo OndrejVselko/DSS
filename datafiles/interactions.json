@@ -1,0 +1,44 @@
+[
+  {
+    "DiseaseAbility": { "Id": 1 }, 
+    "RegionAbility": { "Id": 1 },
+    "SecondaryModifier": 1.8,
+    "Comment": "Kombinace zoonózy a farem je smrtící."
+  },
+  {
+    "DiseaseAbility": { "Id": 2 },
+    "RegionAbility": { "Id": 2 },
+    "SecondaryModifier": 1.4,
+    "Comment": "V mrazu tato nemoc vyloženě prosperuje."
+  },
+  {
+    "DiseaseAbility": { "Id": 3 },
+    "RegionAbility": { "Id": 6 },
+    "SecondaryModifier": 1.7,
+    "Comment": "Klimatizace v mrakodrapech rozvádí kapénky po celé budově."
+  },
+  {
+    "DiseaseAbility": { "Id": 4 },
+    "RegionAbility": { "Id": 5 },
+    "SecondaryModifier": 2.2,
+    "Comment": "Špatná voda v přelidněném slumu = nekontrolovaná epidemie."
+  },
+  {
+    "DiseaseAbility": { "Id": 6 },
+    "RegionAbility": { "Id": 4 },
+    "SecondaryModifier": 2.0,
+    "Comment": "V džungli je hmyzu tolik, že se nemoc šíří okamžitě."
+  },
+  {
+    "DiseaseAbility": { "Id": 3 },
+    "RegionAbility": { "Id": 2 },
+    "SecondaryModifier": 0.6,
+    "Comment": "V extrémním mrazu kapénky okamžitě mrznou a padají k zemi, šíření vzduchem klesá."
+  },
+  {
+    "DiseaseAbility": { "Id": 5 },
+    "RegionAbility": { "Id": 3 },
+    "SecondaryModifier": 1.9,
+    "Comment": "Lidé s dlouhou inkubační dobou stihnou proletět půl světa dřív, než zjistí, že jsou nemocní."
+  }
+]

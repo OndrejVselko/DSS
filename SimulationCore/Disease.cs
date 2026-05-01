@@ -14,7 +14,7 @@ namespace SimulationCore
         public int sicknessLength { get; set; }
         public List<DiseaseAbility> abilities { get; set; }
         public double deathProbability { get; set; }
-        public Disease(string name, double defaultSpreadingSpeed, int sicknessLength, double deathProbability) { 
+        public Disease(string name, double defaultSpreadingSpeed, double deathProbability, int sicknessLength ) { 
             this.name = name;
             this.defaultSpreadingSpeed = defaultSpreadingSpeed;
             this.sicknessLength = sicknessLength;
@@ -30,8 +30,11 @@ namespace SimulationCore
 
         public void removeAbility(DiseaseAbility ability)
         {
-            abilities.Remove(ability);
-            updateTotalSpreadingSpeed();
+            if (abilities.Contains(ability))
+            {
+                abilities.Remove(ability);
+                updateTotalSpreadingSpeed();
+            }
         }
 
         public void changeDefaultSpreadingSpeed (double newSpreadingSpeed)
