@@ -16,6 +16,7 @@ namespace SimulationCore
             ChangeRegionHealthcareIndex,
             AddRegionAbility,
             RemoveRegionAbility,
+            ChangeDeathProbability
         }
 
         public ActionType actionType;

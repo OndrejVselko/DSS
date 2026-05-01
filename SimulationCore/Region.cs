@@ -16,7 +16,7 @@ namespace SimulationCore
         public int vaccinated {  get; set; }
         public double healthcareIndex { get; set; }
         public double spreadingSpeed {  get; set; }
-        public double deathPropability { get; set; }
+        public double deathPropability { get; set; } = 0.0;
         public List<RegionAbility> abilities { get; set; }
         public Queue<int> sickHistory;
 

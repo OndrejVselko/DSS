@@ -53,8 +53,13 @@ namespace Services
             if (input == null || !double.TryParse(input, out double defaultSpreadingSpeed))
                 throw new ArgumentException("Zadejte číselnou hodnotu");
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeDefaultSpreadingSpeed, defaultSpreadingSpeed));
-           
+        }
 
+        public void changeDeathProbability(string? input)
+        {
+            if (input == null || !double.TryParse(input, out double deathProbability) || !(deathProbability >= 0 && deathProbability <= 1))
+                throw new ArgumentException("Zadejte číselnou hodnotu");
+            simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeDeathProbability, deathProbability));
         }
     }
 }

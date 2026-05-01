@@ -128,10 +128,10 @@ namespace SimulationCore
 
 
                     case (UserAction.ActionType.ChangeDefaultSpreadingSpeed):
-                        this.disease.changeDefaultSpreadingSpeed((double)action.doubleValue);
+                        this.disease.changeDefaultSpreadingSpeed((double)action.doubleValue!);
                         updateAllRegions = true;
                         break;
-
+vi
                     case (UserAction.ActionType.AddRegionAbility):
                         if (action.ability != null && action.ability is RegionAbility regionAddedAbility && action.changedRegion != null)
                             this.regions[action.changedRegion.id].addAbility(regionAddedAbility);
@@ -147,6 +147,10 @@ namespace SimulationCore
                             this.regions[action.changedRegion.id].changeHealtcareIndex((double)action.doubleValue);
                         break;
 
+                    case (UserAction.ActionType.ChangeDeathProbability):
+                        this.disease.changeDeathProbability((double)action.doubleValue!);
+                        updateAllRegions = true;
+                        break;
                     default:
                         Console.WriteLine("Neznama uzivatelska akce: " + action.actionType);
                         break;
@@ -164,7 +168,7 @@ namespace SimulationCore
                 newVaccinated += regionUpdate.newVaccinated;
 
             }
-
+            updateAllRegions = false;
             return new StatisticUpdate(newSick, newDead, newVaccinated);
         }
     }

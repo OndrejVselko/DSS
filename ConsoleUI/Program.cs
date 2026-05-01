@@ -45,7 +45,7 @@ namespace ConsoleUI
         Zadejte cestu k souboru s regiony: 
         """);
             List<Region> regions = null;
-            Disease diseaseMock = new Disease("MockJmeno", 2, 1, 0.2);
+            Disease diseaseMock = new Disease("MockJmeno", 1, 5, 0.5);
             while (regions == null)
             {
                 string input = Console.ReadLine()?.Trim() ?? string.Empty;
@@ -107,6 +107,7 @@ namespace ConsoleUI
                 [0] - Spustit simulaci
                 [1] - Pozastavit simulaci
                 [2] - Změnit rychlost šíření
+                [3] - Změnit šanci na smrt
                 """);
             while (!exit)
             {
@@ -122,6 +123,9 @@ namespace ConsoleUI
                     case "2":
                         Console.WriteLine("Zadejte hodnotu: ");
                         simulationServices.changeDefaultSpreadingSpeed(Console.ReadLine());
+                        break;
+                    case "3": 
+                        simulationServices.changeDeathProbability(Console.ReadLine());
                         break;
                     default:
                         Console.WriteLine("Neznámý příkaz");

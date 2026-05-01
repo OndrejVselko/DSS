@@ -38,6 +38,11 @@ namespace SimulationCore
         {
             this.defaultSpreadingSpeed = newSpreadingSpeed;
         }
+        
+        public void changeDeathProbability(double newDeathProbability)
+        {
+            this.deathProbability = newDeathProbability;
+        }
 
         private void updateTotalSpreadingSpeed()
         {
