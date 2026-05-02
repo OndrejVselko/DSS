@@ -7,6 +7,8 @@ namespace Services
         private readonly SimulationServices _simulationServices;
         private readonly DataServices _dataServices;
         private Dictionary<int, DiseaseAbility> _availableDiseaseAbilities;
+        private Dictionary<int, RegionAbility> _availableRegionAbilities;
+        private Dictionary<(int , int), Interaction> _interaction;
 
         public event Action<string>? OnDaySimulated;
 
@@ -16,21 +18,23 @@ namespace Services
             _dataServices = new DataServices();
             _simulationServices.OnDaySimulated += msg => OnDaySimulated?.Invoke(msg);
             _availableDiseaseAbilities = new();
+            _availableRegionAbilities = new();
+            _interaction = new();
         }
 
         // --- DataServices ---
 
-        public async Task<List<Region>> LoadRegionsFromJson(string path)
+        public async Task LoadData(string path)
         {
-            var regions = await _dataServices.LoadRegionsFromJson(path);
-            _simulationServices.SetRegions(regions);
-            return regions;
-        }
+            if (path == null) throw new ArgumentNullException("input");
 
-        public async Task<Dictionary<int, DiseaseAbility>> LoadDiseaseAbilities(string path)
-        {
-            _availableDiseaseAbilities = await _dataServices.LoadDiseaseAbilities(path);
-            return _availableDiseaseAbilities;
+            var scenario = await _dataServices.LoadScenario(path);
+
+            _availableDiseaseAbilities = scenario.DiseaseAbilities;
+            _availableRegionAbilities = scenario.RegionAbilities;
+            _interaction = scenario.Interactions;
+
+            _simulationServices.SetRegions(scenario.Regions.Values.ToList());
         }
 
         public Dictionary<int, DiseaseAbility> GetAvailableDiseaseAbilities()
@@ -38,21 +42,13 @@ namespace Services
             return _availableDiseaseAbilities;
         }
 
-        public void AddDiseaseAbilityToDisease(int id)
+        public Dictionary<int, RegionAbility> GetAvailableRegionAbilities()
         {
-            if (!_availableDiseaseAbilities.TryGetValue(id, out DiseaseAbility? ability))
-                throw new ArgumentException($"Ability s id {id} neexistuje.");
-
-            _simulationServices.AddDiseaseAbility(ability);
+            return _availableRegionAbilities;
         }
 
-        public void RemoveDiseaseAbilityFromDisease(int id)
-        {
-            if (!_availableDiseaseAbilities.TryGetValue(id, out DiseaseAbility? ability))
-                throw new ArgumentException($"Ability s id {id} neexistuje.");
+        public Dictionary<int, Region> GetAllRegions() => _simulationServices.GetAllRegions();
 
-            _simulationServices.RemoveDiseaseAbility(ability);
-        }
 
         // --- Sestavení simulace ---
         public void SetSimulation() => _simulationServices.SetSimulation();
@@ -70,5 +66,21 @@ namespace Services
         public void StopSimulation() => _simulationServices.stopSimulation();
         public void ChangeDefaultSpreadingSpeed(string? input) => _simulationServices.changeDefaultSpreadingSpeed(input);
         public void ChangeDeathProbability(string? input) => _simulationServices.changeDeathProbability(input);
+
+        public void AddDiseaseAbilityToDisease(int id)
+        {
+            if (!_availableDiseaseAbilities.TryGetValue(id, out DiseaseAbility? ability))
+                throw new ArgumentException($"Ability s id {id} neexistuje.");
+
+            _simulationServices.AddDiseaseAbility(ability);
+        }
+
+        public void RemoveDiseaseAbilityFromDisease(int id)
+        {
+            if (!_availableDiseaseAbilities.TryGetValue(id, out DiseaseAbility? ability))
+                throw new ArgumentException($"Ability s id {id} neexistuje.");
+
+            _simulationServices.RemoveDiseaseAbility(ability);
+        }
     }
 }

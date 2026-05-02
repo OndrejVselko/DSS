@@ -8,75 +8,92 @@ namespace SimulationCore
 {
     public class Region
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int population { get; set; }
-        public int sick {  get; set; }
-        public int dead {  get; set; }
-        public int vaccinated {  get; set; }
-        public double healthcareIndex { get; set; }
-        public double spreadingSpeed {  get; set; }
-        public double deathPropability { get; set; } = 0.0;
-        public List<RegionAbility> abilities { get; set; }
-        public Queue<int> sickHistory;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Population { get; set; }
+        public int Sick {  get; set; }
+        public int Dead {  get; set; }
+        public int Vaccinated {  get; set; }
+        public double HealthcareIndex { get; set; }
+        public double TotalSpreadingSpeed { get; set; }
+        public double TotalDeathProbability { get; set; }
+        public double RegionSpreadingSpeed {  get; set; }
+        public double RegionDeathPropability { get; set; } = 1;
+        public double DiseaseSpreadingSpeed { get; set; }
+        public double DiseaseDeathPropability { get; set; }
+        public List<RegionAbility> Abilities { get; set; }
+        public Queue<int> SickHistory;
 
         public Region()
         {
-            sickHistory = new Queue<int>();       
-            abilities = new List<RegionAbility>();
+            SickHistory = new Queue<int>();       
+            Abilities = new List<RegionAbility>();
         }
 
-        public void setStartingQueue(int days)
+        public void SetStartingQueue(int days)
         {
             for (int i = 0; i < days; i++)
             {
-                sickHistory.Enqueue(0);
+                SickHistory.Enqueue(0);
             }
         }
 
-        public void addAbility(RegionAbility ability)
+        public void AddAbility(RegionAbility ability)
         {
-            abilities.Add(ability);
-            updateSpreadingSpeed();
+            Abilities.Add(ability);
+            UpdateRegionValues();
         }
 
-        public void removeAbility(RegionAbility ability) 
+        public void RemoveAbility(RegionAbility ability) 
         { 
-            abilities.Remove(ability);
-            updateSpreadingSpeed();
+            Abilities.Remove(ability);
+            UpdateRegionValues();
         }
 
-        public void changeHealtcareIndex (double healtcareIndex)
+        public void ChangeHealtcareIndex (double healtcareIndex)
         {
-            this.healthcareIndex = healtcareIndex;
+            this.HealthcareIndex = healtcareIndex;
         }
 
-        public void updateSpreadingSpeed()
+        public void UpdateRegionValues()
         {
-            // Tohle opet dodelat, az budou ready ability
+            double spreadingSpeed = RegionSpreadingSpeed * DiseaseSpreadingSpeed;
+            foreach (RegionAbility ability in Abilities) {
+                spreadingSpeed *= ability.PrimaryModifier;
+            }
+
+            spreadingSpeed *= 1;//  Tady bude místo jedničky funkce Interakce, která vrácí hodnotu pro region
+            TotalSpreadingSpeed = spreadingSpeed;
+            TotalDeathProbability = DiseaseDeathPropability;
         }
 
-        public StatisticUpdate simulateDay()
+        public StatisticUpdate SimulateDay()
         {
-            int finishingSick = this.sickHistory.Dequeue();
+            int finishingSick = this.SickHistory.Dequeue();
 
-            int deathGrowth = (int)Math.Floor(finishingSick * deathPropability);
+            int deathGrowth = (int)Math.Floor(finishingSick * TotalDeathProbability);
             deathGrowth = Math.Min(deathGrowth, finishingSick);
 
-            int newInfections = (int)Math.Floor(this.sick * spreadingSpeed);
-            int susceptible = this.population - this.sick - this.dead;
+            int newInfections = (int)Math.Floor(this.Sick * TotalSpreadingSpeed);
+            int susceptible = this.Population - this.Sick - this.Dead;
             newInfections = Math.Min(newInfections, susceptible);
 
-            this.sickHistory.Enqueue(newInfections);
+            SickHistory.Enqueue(newInfections);
 
-            this.sick += newInfections - finishingSick;
+            Sick += newInfections - finishingSick;
 
-            this.dead += deathGrowth;
+            Dead += deathGrowth;
 
-            if (this.sick < 0) 
-                this.sick = 0;
+            if (this.Sick < 0) 
+                this.Sick = 0;
+            int newVaccinated = 0;
+            return new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
+        }
 
-            return new StatisticUpdate(newInfections, deathGrowth, 0);
+        public void UpdateDiseaseValues(double diseaseSpreadingSpeed, double diseaseDeathProbability)
+        {
+            DiseaseSpreadingSpeed = diseaseSpreadingSpeed;
+            DiseaseDeathPropability = diseaseDeathProbability;
         }
     }
 }

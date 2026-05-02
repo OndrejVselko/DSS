@@ -42,28 +42,18 @@ namespace ConsoleUI
 
         static async Task NewSimulation()
         {
-            appService.SetSimulation();
-            await CreateOrLoadDisease();
-
             Console.WriteLine("""
-                ---Nová Simulace---
-                Zadejte cestu k souboru s regiony: 
-                """);
-            await SetRegions();   
+            ---Nová Simulace---
+            Zadejte cestu k souboru s daty: 
+            """);
 
-            while (true)
-            {
-                Console.WriteLine("Zadejte číslo počátečního regionu:");
-                try
-                {
-                    appService.SetStartingRegion(Console.ReadLine());
-                    break;
-                }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
+            appService.SetSimulation();
+            await LoadData();
+            await CreateOrLoadDisease();
+            await SetDiseaseAbilities();
+            await SetStartingRegion();
+            await ShowRegionsForEdit();
+            
 
             await SimulationMenu();
         }
@@ -115,54 +105,75 @@ namespace ConsoleUI
                     Console.WriteLine("Zadejte hodnoty znovu");
                 }
             }
+        }
 
-            Console.WriteLine("Zadejte cestu k souboru s vlastnostmi nemoci (JSON):");
-            string path = Console.ReadLine() ?? "";
+        static async Task SetDiseaseAbilities()
+        {
+            Dictionary<int, DiseaseAbility> availableAbilities = appService.GetAvailableDiseaseAbilities();
+            List<int> selectedIds = new List<int>();
 
-            try
+            bool adding = true;
+            while (adding)
             {
-                Dictionary<int, DiseaseAbility> availableAbilities = await appService.LoadDiseaseAbilities(path);
-                List<int> selectedIds = new List<int>();
-
-                bool adding = true;
-                while (adding)
+                Console.WriteLine("\n--- Dostupné vlastnosti (Zadejte ID pro přidání, 0 pro dokončení) ---");
+                foreach (var ab in availableAbilities.Values)
                 {
-                    Console.WriteLine("\n--- Dostupné vlastnosti (Zadejte ID pro přidání, 0 pro dokončení) ---");
-                    foreach (var ab in availableAbilities.Values)
-                    {
-                        string status = selectedIds.Contains(ab.Id) ? "[VYBRÁNO]" : "";
-                        Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.PrimaryModifier})");
-                    }
+                    string status = selectedIds.Contains(ab.Id) ? "[VYBRÁNO]" : "";
+                    Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.PrimaryModifier})");
+                }
 
-                    if (int.TryParse(Console.ReadLine(), out int id))
+                if (int.TryParse(Console.ReadLine(), out int id))
+                {
+                    if (id == 0)
                     {
-                        if (id == 0)
-                        {
-                            adding = false;
-                        }
-                        else if (!availableAbilities.ContainsKey(id))
-                        {
-                            Console.WriteLine("Neznámé ID.");
-                        }
-                        else if (selectedIds.Contains(id))
-                        {
-                            appService.RemoveDiseaseAbilityFromDisease(id);
-                            selectedIds.Remove(id);
-                            Console.WriteLine($"Odebráno: {availableAbilities[id].Name}");
-                        }
-                        else
-                        {
-                            appService.AddDiseaseAbilityToDisease(id);
-                            selectedIds.Add(id);
-                            Console.WriteLine($"Přidáno: {availableAbilities[id].Name}");
-                        }
+                        adding = false;
+                    }
+                    else if (!availableAbilities.ContainsKey(id))
+                    {
+                        Console.WriteLine("Neznámé ID.");
+                    }
+                    else if (selectedIds.Contains(id))
+                    {
+                        appService.RemoveDiseaseAbilityFromDisease(id);
+                        selectedIds.Remove(id);
+                        Console.WriteLine($"Odebráno: {availableAbilities[id].Name}");
+                    }
+                    else
+                    {
+                        appService.AddDiseaseAbilityToDisease(id);
+                        selectedIds.Add(id);
+                        Console.WriteLine($"Přidáno: {availableAbilities[id].Name}");
                     }
                 }
             }
-            catch (Exception e)
+        }
+        
+        static async Task SetStartingRegion()
+        {
+            Dictionary<int, Region> regions = appService.GetAllRegions();
+            foreach (int key in regions.Keys)
             {
-                Console.WriteLine($"Nepodařilo se načíst vlastnosti: {e.Message}");
+                Console.WriteLine($"[{key}] {regions[key].Name}");
             }
+
+                while (true)
+            {
+                Console.WriteLine("Zadejte číslo počátečního regionu:");
+                try
+                {
+                    appService.SetStartingRegion(Console.ReadLine());
+                    break;
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+        }
+
+        static async Task ShowRegionsForEdit()
+        {
+
         }
 
         static async Task SimulationMenu()
@@ -176,6 +187,8 @@ namespace ConsoleUI
                 [1] - Pozastavit simulaci
                 [2] - Změnit rychlost šíření
                 [3] - Změnit šanci na smrt
+                [4] - Upravit vlastnosti nemoce
+                [9] - Breakpoint
                 """);
             while (!exit)
             {
@@ -195,6 +208,12 @@ namespace ConsoleUI
                     case "3":
                         appService.ChangeDeathProbability(Console.ReadLine());
                         break;
+                    case "4":
+                        await SetDiseaseAbilities();
+                        break;
+                    case "9":
+                        Console.WriteLine("Breakpoint");
+                        break;
                     default:
                         Console.WriteLine("Neznámý příkaz");
                         break;
@@ -202,38 +221,26 @@ namespace ConsoleUI
             }
         }
 
-        static async Task SetRegions()
+        static async Task LoadData()
         {
-            List<Region>? regions = null;
-            while (regions == null)
+            while (true)
             {
-                string input = Console.ReadLine()?.Trim() ?? string.Empty;
-                if (input.ToLower() == "zpet")
-                    return;
                 try
                 {
-                    regions = await appService.LoadRegionsFromJson(input); 
-                    if (regions.Count == 0)
-                    {
-                        Console.WriteLine("Soubor je prázdný, zadejte znovu");
-                        regions = null;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Načteno {regions.Count} regionů:");
-                        foreach (var region in regions)
-                            Console.WriteLine($"[{region.id}] {region.name}");
-                    }
+                    string input = Console.ReadLine()?.Trim() ?? string.Empty;
+                    await appService.LoadData(input);
+                    break;
                 }
                 catch (FileNotFoundException)
                 {
                     Console.WriteLine("Soubor nebyl nalezen. Zkuste to znovu.");
                 }
-                catch (JsonException)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Soubor má špatný formát. Zkuste jiný soubor.");
+                    Console.WriteLine($"Chyba při načítání: {e.Message}");
                 }
             }
         }
+
     }
 }

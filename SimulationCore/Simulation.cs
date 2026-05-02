@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -38,9 +39,8 @@ namespace SimulationCore
             this.regions = new Dictionary<int, Region>();
             foreach (var region in regions)
             {
-                this.regions[region.id] = region;
+                this.regions[region.Id] = region;
             }
-            setRegionQueues();
         }
 
         public void SetStartDate(DateOnly startDate = default)
@@ -65,11 +65,19 @@ namespace SimulationCore
             return this._isRunning;
         }
 
-        private void setRegionQueues()
+        public void SetRegionQueues()
         {
             foreach (int key in this.regions.Keys)
             {
-                regions[key].setStartingQueue(this.disease.sicknessLength);
+                regions[key].SetStartingQueue(this.disease.SicknessLength);
+            }
+        }
+
+        public void UpdateRegionsDiseaseValues()
+        {
+            foreach (var key in this.regions.Keys)
+            {
+                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.DeathProbability);
             }
         }
 
@@ -106,6 +114,9 @@ namespace SimulationCore
 
         private StatisticUpdate SimulateDay()
         {
+            int totalSick = 0;
+            int totalDeath = 0;
+            int totalVaccinated = 0;
             int newSick = 0;
             int newDead = 0;
             int newVaccinated = 0;
@@ -120,7 +131,7 @@ namespace SimulationCore
                     case (UserAction.ActionType.AddDiseaseAbility):
                         if (action.ability != null && action.ability is DiseaseAbility diseaseAddedAbility)
                         {
-                            this.disease.addAbility(diseaseAddedAbility);
+                            this.disease.AddAbility(diseaseAddedAbility);
                             updateAllRegions = true;
                         }
                         break;
@@ -128,33 +139,33 @@ namespace SimulationCore
                     case (UserAction.ActionType.RemoveDiseaseAbility):
                         if (action.ability != null && action.ability is DiseaseAbility diseaseRemovedAbility)
                         {
-                            this.disease.removeAbility(diseaseRemovedAbility);
+                            this.disease.RemoveAbility(diseaseRemovedAbility);
                             updateAllRegions = true;
                         }
                         break;
 
                     case (UserAction.ActionType.ChangeDefaultSpreadingSpeed):
-                        this.disease.changeDefaultSpreadingSpeed((double)action.doubleValue!);
+                        this.disease.ChangeDefaultSpreadingSpeed((double)action.doubleValue!);
                         updateAllRegions = true;
                         break;
 
                     case (UserAction.ActionType.AddRegionAbility):
                         if (action.ability != null && action.ability is RegionAbility regionAddedAbility && action.changedRegion != null)
-                            this.regions[action.changedRegion.id].addAbility(regionAddedAbility);
+                            this.regions[action.changedRegion.Id].AddAbility(regionAddedAbility);
                         break;
 
                     case (UserAction.ActionType.RemoveRegionAbility):
                         if (action.ability != null && action.ability is RegionAbility regionRemovedAbility && action.changedRegion != null)
-                            this.regions[action.changedRegion.id].removeAbility(regionRemovedAbility);
+                            this.regions[action.changedRegion.Id].RemoveAbility(regionRemovedAbility);
                         break;
 
                     case (UserAction.ActionType.ChangeRegionHealthcareIndex):
                         if (action.changedRegion != null && action.doubleValue != null)
-                            this.regions[action.changedRegion.id].changeHealtcareIndex((double)action.doubleValue);
+                            this.regions[action.changedRegion.Id].ChangeHealtcareIndex((double)action.doubleValue);
                         break;
 
                     case (UserAction.ActionType.ChangeDeathProbability):
-                        this.disease.changeDeathProbability((double)action.doubleValue!);
+                        this.disease.ChangeDeathProbability((double)action.doubleValue!);
                         updateAllRegions = true;
                         break;
                     default:
@@ -166,16 +177,22 @@ namespace SimulationCore
             foreach (int key in this.regions.Keys)
             {
                 if (updateAllRegions)
-                    regions[key].updateSpreadingSpeed();
+                {
+                    regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.DeathProbability);
+                    regions[key].UpdateRegionValues();
+                }
 
-                StatisticUpdate regionUpdate = regions[key].simulateDay();
-                newDead += regionUpdate.newDead;
-                newSick += regionUpdate.newSick;
-                newVaccinated += regionUpdate.newVaccinated;
+                StatisticUpdate regionUpdate = regions[key].SimulateDay();
+                newDead += regionUpdate.NewDead;
+                newSick += regionUpdate.NewSick;
+                newVaccinated += regionUpdate.NewVaccinated;
+                totalSick += regionUpdate.TotalSick;
+                totalDeath += regionUpdate.TotalDead;
+                totalVaccinated += regionUpdate.TotalVaccinated;
 
             }
             updateAllRegions = false;
-            return new StatisticUpdate(newSick, newDead, newVaccinated);
+            return new StatisticUpdate(newSick, newDead, newVaccinated, totalSick, totalDeath, totalVaccinated);
         }
     }
 }

@@ -9,18 +9,34 @@ using System.Threading.Tasks;
 
 namespace Services
 {
+    public record LoadedScenario(
+        Dictionary<int, Region> Regions,
+        Dictionary<int, DiseaseAbility> DiseaseAbilities,
+        Dictionary<int, RegionAbility> RegionAbilities,
+        Dictionary<(int, int), Interaction> Interactions
+    );
+
     public class DataServices
     {
+
         public DataServices() { 
         
         }
-        public async Task<List<Region>> LoadRegionsFromJson(string path)
+  
+
+        public async Task<LoadedScenario> LoadScenario(string path)
         {
-            return await JsonParser.LoadRegionsFromJson(path);
-        }
-        public async Task<Dictionary<int, DiseaseAbility>> LoadDiseaseAbilities(string path)
-        {
-            return await JsonParser.LoadDiseaseAbilitiesFromJson(path);
+            ScenarioData data = await JsonParser.LoadScenarioFromJson(path);
+
+            var regions = data.Regions.ToDictionary(r => r.Id);
+            var diseaseAbilities = data.DiseaseAbilities.ToDictionary(a => a.Id);
+            var regionAbilities = data.RegionAbilities.ToDictionary(a => a.Id);
+            var interactions = data.Interactions.ToDictionary(
+                i => (i.DiseaseAbilityId, i.RegionAbilityId),
+                i => new Interaction(i.DiseaseAbilityId, i.RegionAbilityId, i.SecondaryModifier, i.Comment)
+            );
+
+            return new LoadedScenario(regions, diseaseAbilities, regionAbilities, interactions);
         }
 
     }

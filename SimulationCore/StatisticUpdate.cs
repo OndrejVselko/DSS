@@ -9,20 +9,26 @@ namespace SimulationCore
 {
     public struct StatisticUpdate
     {
-        public int newSick;
-        public int newDead;
-        public int newVaccinated;
+        public int TotalSick;
+        public int TotalDead;
+        public int TotalVaccinated;
+        public int NewSick;
+        public int NewDead;
+        public int NewVaccinated;
 
-        public StatisticUpdate(int newSick, int newDead, int newVaccinated)
+        public StatisticUpdate(int newSick, int newDead, int newVaccinated, int totalSick, int totalDead, int totalVaccinated)
         {
-            this.newSick = newSick;
-            this.newDead = newDead;
-            this.newVaccinated = newVaccinated;
+            TotalSick = totalSick;
+            TotalDead = totalDead;
+            TotalVaccinated = totalVaccinated;
+            NewSick = newSick;
+            NewDead = newDead;
+            NewVaccinated = newVaccinated;
         }
 
         public override string ToString()
         {
-            return "Nakazeni: " + newSick + " Mrtvi: " + newDead + " Ockovani: " + newVaccinated;
+            return $"Nakazeni: {TotalSick} ({NewSick}); Mrtvi: {TotalDead} ({NewDead}); Ockovani: {TotalVaccinated} ({NewVaccinated})";
         } 
     }
 }

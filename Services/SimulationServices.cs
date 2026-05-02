@@ -25,6 +25,7 @@ namespace Services
         {
             throw new NotImplementedException();
         }
+
         public void SetDisease(string name, double speed, double deathProbability, int length)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -47,11 +48,18 @@ namespace Services
                 throw new ArgumentOutOfRangeException(nameof(length), "Délka trvání nemoci musí být alespoň 1 den.");
             }
 
-            simulation.disease = new Disease(name, speed, deathProbability, length);
+            simulation.SetDisease(new Disease(name, speed, deathProbability, length));
+            SetRegionsQueues();
+            UpdateRegionsDiseaseValues();
         }
-        public void SetRegions(List<Region> regions) => simulation.SetRegions(regions);
-        public void SetStartDate(DateOnly startDate = default) => simulation.SetStartDate(startDate);
 
+        public void SetRegions(List<Region> regions) => simulation.SetRegions(regions);
+
+        public void SetRegionsQueues() => simulation.SetRegionQueues();
+
+        public void UpdateRegionsDiseaseValues() => simulation.UpdateRegionsDiseaseValues();
+
+        public void SetStartDate(DateOnly startDate = default) => simulation.SetStartDate(startDate);
 
         public void startSimulation()
         {
@@ -77,7 +85,7 @@ namespace Services
             if (!simulation.regions.ContainsKey(regionId))
                 throw new ArgumentException($"Region s id {regionId} neexistuje.");
 
-            simulation.regions[regionId].sick += 1;
+            simulation.regions[regionId].Sick += 1;
         }
 
         public void changeDefaultSpreadingSpeed(string? input)
@@ -94,8 +102,6 @@ namespace Services
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeDeathProbability, deathProbability));
         }
 
-        
-
         public void AddDiseaseAbility(DiseaseAbility ability)
         {
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.AddDiseaseAbility, ability: ability));
@@ -104,6 +110,11 @@ namespace Services
         public void RemoveDiseaseAbility(DiseaseAbility ability)
         {
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.RemoveDiseaseAbility, ability: ability));
+        }
+
+        public Dictionary<int, Region> GetAllRegions()
+        {
+            return simulation.regions;
         }
     }
 }

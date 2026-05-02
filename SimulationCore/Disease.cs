@@ -8,48 +8,55 @@ namespace SimulationCore
 {
     public class Disease
     {
-        public string name {  get; set; } = string.Empty;
-        public double defaultSpreadingSpeed { get; set; }
-        public double totalSpreadingSpeed { get; set; }
-        public int sicknessLength { get; set; }
-        public List<DiseaseAbility> abilities { get; set; }
-        public double deathProbability { get; set; }
+        public string Name {  get; set; } = string.Empty;
+        public double DefaultSpreadingSpeed { get; set; }
+        public double TotalSpreadingSpeed { get; set; }
+        public int SicknessLength { get; set; }
+        public List<DiseaseAbility> Abilities { get; set; }
+        public double DeathProbability { get; set; }
         public Disease(string name, double defaultSpreadingSpeed, double deathProbability, int sicknessLength ) { 
-            this.name = name;
-            this.defaultSpreadingSpeed = defaultSpreadingSpeed;
-            this.sicknessLength = sicknessLength;
-            this.deathProbability = deathProbability;
-            abilities = new List<DiseaseAbility>();
+            Name = name;
+            DefaultSpreadingSpeed = defaultSpreadingSpeed;
+            SicknessLength = sicknessLength;
+            DeathProbability = deathProbability;
+            Abilities = new List<DiseaseAbility>();
         }
 
-        public void addAbility(DiseaseAbility ability)
+        public void AddAbility(DiseaseAbility ability)
         {
-            abilities.Add(ability);
-            updateTotalSpreadingSpeed();
+            Abilities.Add(ability);
+            UpdateTotalSpreadingSpeed();
         }
 
-        public void removeAbility(DiseaseAbility ability)
+        public void RemoveAbility(DiseaseAbility ability)
         {
-            if (abilities.Contains(ability))
+            if (Abilities.Contains(ability))
             {
-                abilities.Remove(ability);
-                updateTotalSpreadingSpeed();
+                Abilities.Remove(ability);
+                UpdateTotalSpreadingSpeed();
             }
         }
 
-        public void changeDefaultSpreadingSpeed (double newSpreadingSpeed)
+        public void ChangeDefaultSpreadingSpeed (double newSpreadingSpeed)
         {
-            this.defaultSpreadingSpeed = newSpreadingSpeed;
+            DefaultSpreadingSpeed = newSpreadingSpeed;
+            UpdateTotalSpreadingSpeed();
         }
         
-        public void changeDeathProbability(double newDeathProbability)
+        public void ChangeDeathProbability(double newDeathProbability)
         {
-            this.deathProbability = newDeathProbability;
+            DeathProbability = newDeathProbability;
         }
 
-        private void updateTotalSpreadingSpeed()
+        private void UpdateTotalSpreadingSpeed()
         {
-            // Dodelat az bude disease a region ability
+            double tss = DefaultSpreadingSpeed;
+            foreach(DiseaseAbility ability in Abilities)
+            {
+                tss *= ability.PrimaryModifier;
+            }
+
+            TotalSpreadingSpeed = tss;
         }
     }
 }

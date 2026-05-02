@@ -9,14 +9,17 @@ namespace SimulationCore
 {
     public class Interaction
     {
-        public RegionAbility RegionAbility { get; set; }
-        public DiseaseAbility DiseaseAbility { get; set; }
+        public int DiseaseAbilityId { get; set; }
+        public int RegionAbilityId { get; set; }
         public double SecondaryModifier { get; set; }
-        public Interaction(RegionAbility regionAbility, DiseaseAbility diseaseAbility, double secondaryModifier)
+        public string Comment { get; set; }
+
+        public Interaction(int diseaseAbilityId, int regionAbilityId, double secondaryModifier, string comment)
         {
-            RegionAbility = regionAbility;
-            DiseaseAbility = diseaseAbility;
+            DiseaseAbilityId = diseaseAbilityId;
+            RegionAbilityId = regionAbilityId;
             SecondaryModifier = secondaryModifier;
+            Comment = comment;
         }
     }
 }
