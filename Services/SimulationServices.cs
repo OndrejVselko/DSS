@@ -139,20 +139,6 @@ namespace Services
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeRegionSpreadingSpeed, changedRegion: region, doubleValue: newSpreadingSpeed));
         }
 
-        public void SetRegionDeathProbability(int regionId, string value)
-        {
-            Region region;
-            if (simulation.regions.ContainsKey(regionId))
-                region = simulation.regions[regionId];
-            else
-                throw new ArgumentException("Neplatný region");
-
-            if (!double.TryParse(value, out double newDeathProbability) && newDeathProbability >= 0 && newDeathProbability <= 1)
-                throw new ArgumentException("Neplatná hodnota");
-
-            simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeRegionDeathProbability, changedRegion: region, doubleValue: newDeathProbability));
-        }
-
         public void SetRegionHealthcareIndex(int regionId, string value)
         {
             Region region;
@@ -166,6 +152,7 @@ namespace Services
 
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.ChangeRegionHealthcareIndex, changedRegion: region, doubleValue: newHealthcareIndex));
         }
+
         public void AddRegionAbility(int regionId, RegionAbility ability)
         {
             Region region;
@@ -176,6 +163,7 @@ namespace Services
 
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.AddRegionAbility, changedRegion: region, ability: ability));
         }
+
         public void RemoveRegionAbility(int regionId, RegionAbility ability)
         {
             Region region;
@@ -185,6 +173,13 @@ namespace Services
                 throw new ArgumentException("Neplatný region");
 
             simulation.userActions.Enqueue(new UserAction(UserAction.ActionType.RemoveRegionAbility, changedRegion: region, ability: ability));
+        }
+
+        public Region GetRegion(int regionId)
+        {
+            if (simulation.regions.ContainsKey(regionId))
+                return simulation.regions[regionId];
+            else throw new ArgumentException("Neplatné id regionu"); //Nikdy by nemelo nastat
         }
     }
 }

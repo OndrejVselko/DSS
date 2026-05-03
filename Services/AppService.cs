@@ -46,6 +46,8 @@ namespace Services
         }
         public Dictionary<int, Region> GetAllRegions() => _simulationServices.GetAllRegions();
         public string GetRegionString(string input) => _simulationServices.GetRegionString(input);
+        public Region GetRegion(int regionId) => _simulationServices.GetRegion(regionId);
+
 
         // --- Sestavení simulace ---
         public void SetSimulation() => _simulationServices.SetSimulation();
@@ -57,7 +59,6 @@ namespace Services
         }
 
         public void SetRegionSpreadingSpeed(int regionId, string value) => _simulationServices.SetRegionSpreadingSpeed(regionId, value);
-        public void SetRegionDeathProbability(int regionId, string value) => _simulationServices.SetRegionDeathProbability(regionId, value);
         public void SetRegionHealthcareIndex(int regionId, string value) => _simulationServices.SetRegionHealthcareIndex(regionId, value);
         public void AddRegionAbility(int regionId, RegionAbility abiltiy) => _simulationServices.AddRegionAbility(regionId, abiltiy);
         public void RemoveRegionAbility(int regionId, RegionAbility abiltiy) => _simulationServices.RemoveRegionAbility(regionId, abiltiy);

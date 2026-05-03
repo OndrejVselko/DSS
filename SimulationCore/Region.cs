@@ -50,11 +50,6 @@ namespace SimulationCore
             UpdateRegionValues();
         }
 
-        public void ChangeHealtcareIndex (double healtcareIndex)
-        {
-            this.HealthcareIndex = healtcareIndex;
-        }
-
         public void UpdateRegionValues()
         {
             double spreadingSpeed = RegionSpreadingSpeed * DiseaseSpreadingSpeed;
@@ -94,6 +89,17 @@ namespace SimulationCore
         {
             DiseaseSpreadingSpeed = diseaseSpreadingSpeed;
             DiseaseDeathPropability = diseaseDeathProbability;
+        }
+
+        public void ChangeSpreadingSpeed(double newSpeed)
+        {
+            RegionSpreadingSpeed = newSpeed;
+            UpdateRegionValues();
+        }
+        public void ChangeHealtcareIndex(double healtcareIndex)
+        {
+            this.HealthcareIndex = healtcareIndex;
+            UpdateRegionValues();
         }
 
         public override string ToString()

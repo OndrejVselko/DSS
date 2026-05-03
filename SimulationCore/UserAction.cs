@@ -16,7 +16,6 @@ namespace SimulationCore
    
             ChangeDeathProbability,
             ChangeRegionSpreadingSpeed,
-            ChangeRegionDeathProbability,
             ChangeRegionHealthcareIndex,
             AddRegionAbility,
             RemoveRegionAbility,

@@ -163,6 +163,10 @@ namespace SimulationCore
                         if (action.changedRegion != null && action.doubleValue != null)
                             this.regions[action.changedRegion.Id].ChangeHealtcareIndex((double)action.doubleValue);
                         break;
+                    case (UserAction.ActionType.ChangeRegionSpreadingSpeed):
+                        if (action.changedRegion != null && action.doubleValue != null)
+                            this.regions[action.changedRegion.Id].ChangeSpreadingSpeed((double)action.doubleValue);
+                        break;
 
                     case (UserAction.ActionType.ChangeDeathProbability):
                         this.disease.ChangeDeathProbability((double)action.doubleValue!);

@@ -175,6 +175,50 @@ namespace ConsoleUI
             }
         }
 
+        static async Task SetRegionAbilities(int regionId)
+        {
+            Dictionary<int, RegionAbility> availableAbilities = appService.GetAvailableRegionAbilities();
+
+            // Načteme ID abilities, které region už má
+            Region region = appService.GetRegion(regionId);
+            List<int> selectedIds = region.Abilities.Select(a => a.Id).ToList();
+
+            bool adding = true;
+            while (adding)
+            {
+                Console.WriteLine("\n--- Dostupné vlastnosti regionu (Zadejte ID pro přidání, 0 pro dokončení) ---");
+                foreach (var ab in availableAbilities.Values)
+                {
+                    string status = selectedIds.Contains(ab.Id) ? "[VYBRÁNO]" : "";
+                    Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.PrimaryModifier})");
+                }
+
+                if (int.TryParse(Console.ReadLine(), out int id))
+                {
+                    if (id == 0)
+                    {
+                        adding = false;
+                    }
+                    else if (!availableAbilities.ContainsKey(id))
+                    {
+                        Console.WriteLine("Neznámé ID.");
+                    }
+                    else if (selectedIds.Contains(id))
+                    {
+                        appService.RemoveRegionAbility(regionId, availableAbilities[id]);
+                        selectedIds.Remove(id);
+                        Console.WriteLine($"Odebráno: {availableAbilities[id].Name}");
+                    }
+                    else
+                    {
+                        appService.AddRegionAbility(regionId, availableAbilities[id]);
+                        selectedIds.Add(id);
+                        Console.WriteLine($"Přidáno: {availableAbilities[id].Name}");
+                    }
+                }
+            }
+        }
+
         static async Task RegionsMenu()
         {
             Console.WriteLine("\nMenu regionů");
@@ -205,9 +249,8 @@ namespace ConsoleUI
             {
                 Console.WriteLine("""
                 [1] - Změnit zákl. rychlost šíření
-                [2] - Změnit zákl. pravděpodobnost úmrtí
-                [3] - Změnit index zdravotnictví
-                [4] - Změnit vlastnosti regionu
+                [2] - Změnit index zdravotnictví
+                [3] - Změnit vlastnosti regionu
                 [0] - Zpět
                 """);
                 input = Console.ReadLine();
@@ -234,22 +277,6 @@ namespace ConsoleUI
                     case "2":
                         while (true)
                         {
-                            Console.Write("Zadejte hodnotu <0;1>: ");
-                            try
-                            {
-                                appService.SetRegionDeathProbability(regionId, Console.ReadLine());
-                                break;
-                            }
-                            catch (ArgumentException ex)
-                            {
-                                Console.WriteLine(ex.Message);
-                            }
-                        }
-                        break;
-
-                    case "3":
-                        while (true)
-                        {
                             Console.Write("Zadejte hodnotu (kladné, desetinné): ");
                             try
                             {
@@ -263,7 +290,8 @@ namespace ConsoleUI
                         }
                         break;
 
-                    case "4":
+                    case "3":
+                        await SetRegionAbilities(regionId);
                         break;
 
                     default:
