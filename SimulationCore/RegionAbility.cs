@@ -20,5 +20,10 @@ namespace SimulationCore
             Description = description;
             PrimaryModifier = primaryModifier;
         }
+
+        public override string ToString()
+        {
+            return $"{Name}, {Description}, modifikátor: {PrimaryModifier}";
+        }
     }
 }

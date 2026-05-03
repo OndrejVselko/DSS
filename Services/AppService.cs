@@ -36,29 +36,31 @@ namespace Services
 
             _simulationServices.SetRegions(scenario.Regions.Values.ToList());
         }
-
         public Dictionary<int, DiseaseAbility> GetAvailableDiseaseAbilities()
         {
             return _availableDiseaseAbilities;
         }
-
         public Dictionary<int, RegionAbility> GetAvailableRegionAbilities()
         {
             return _availableRegionAbilities;
         }
-
         public Dictionary<int, Region> GetAllRegions() => _simulationServices.GetAllRegions();
-
+        public string GetRegionString(string input) => _simulationServices.GetRegionString(input);
 
         // --- Sestavení simulace ---
         public void SetSimulation() => _simulationServices.SetSimulation();
         public void SetDisease(string name, double speed, double deathProbability, int length) => _simulationServices.SetDisease(name, speed, deathProbability, length);
         public void SetDisease(int id) => _simulationServices.SetDisease(id);
-
         public void SetStartingRegion(string? input)
         {
             _simulationServices.setStartingRegion(input);
         }
+
+        public void SetRegionSpreadingSpeed(int regionId, string value) => _simulationServices.SetRegionSpreadingSpeed(regionId, value);
+        public void SetRegionDeathProbability(int regionId, string value) => _simulationServices.SetRegionDeathProbability(regionId, value);
+        public void SetRegionHealthcareIndex(int regionId, string value) => _simulationServices.SetRegionHealthcareIndex(regionId, value);
+        public void AddRegionAbility(int regionId, RegionAbility abiltiy) => _simulationServices.AddRegionAbility(regionId, abiltiy);
+        public void RemoveRegionAbility(int regionId, RegionAbility abiltiy) => _simulationServices.RemoveRegionAbility(regionId, abiltiy);
 
         // --- Ovládání simulace ---
 
@@ -66,7 +68,6 @@ namespace Services
         public void StopSimulation() => _simulationServices.stopSimulation();
         public void ChangeDefaultSpreadingSpeed(string? input) => _simulationServices.changeDefaultSpreadingSpeed(input);
         public void ChangeDeathProbability(string? input) => _simulationServices.changeDeathProbability(input);
-
         public void AddDiseaseAbilityToDisease(int id)
         {
             if (!_availableDiseaseAbilities.TryGetValue(id, out DiseaseAbility? ability))
@@ -74,7 +75,6 @@ namespace Services
 
             _simulationServices.AddDiseaseAbility(ability);
         }
-
         public void RemoveDiseaseAbilityFromDisease(int id)
         {
             if (!_availableDiseaseAbilities.TryGetValue(id, out DiseaseAbility? ability))

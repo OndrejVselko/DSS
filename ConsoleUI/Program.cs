@@ -1,5 +1,6 @@
 ﻿using Services;
 using SimulationCore;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ConsoleUI
@@ -43,7 +44,8 @@ namespace ConsoleUI
         static async Task NewSimulation()
         {
             Console.WriteLine("""
-            ---Nová Simulace---
+
+            Nová Simulace
             Zadejte cestu k souboru s daty: 
             """);
 
@@ -52,9 +54,7 @@ namespace ConsoleUI
             await CreateOrLoadDisease();
             await SetDiseaseAbilities();
             await SetStartingRegion();
-            await ShowRegionsForEdit();
             
-
             await SimulationMenu();
         }
 
@@ -150,13 +150,8 @@ namespace ConsoleUI
         
         static async Task SetStartingRegion()
         {
-            Dictionary<int, Region> regions = appService.GetAllRegions();
-            foreach (int key in regions.Keys)
-            {
-                Console.WriteLine($"[{key}] {regions[key].Name}");
-            }
-
-                while (true)
+            await ShowRegions();
+            while (true)
             {
                 Console.WriteLine("Zadejte číslo počátečního regionu:");
                 try
@@ -171,8 +166,114 @@ namespace ConsoleUI
             }
         }
 
-        static async Task ShowRegionsForEdit()
+        static async Task ShowRegions()
         {
+            Dictionary<int, Region> regions = appService.GetAllRegions();
+            foreach (int key in regions.Keys)
+            {
+                Console.WriteLine($"[{key}] {regions[key].Name}");
+            }
+        }
+
+        static async Task RegionsMenu()
+        {
+            Console.WriteLine("\nMenu regionů");
+            ShowRegions();
+            while (true)
+            {
+                Console.Write("Vyberte region (0 pro konec): ");
+                string input = Console.ReadLine();
+                if (input == "0")
+                    break;
+                try
+                {
+                    Console.WriteLine(appService.GetRegionString(input));
+                }
+                catch (ArgumentException e) {
+                    Console.WriteLine(e.Message);
+                    continue;
+                }
+                await EditRegionMenu(input);
+
+            }
+        }
+
+        static async Task EditRegionMenu(string input)
+        {
+            int regionId = Int32.Parse(input); // Volano az po kontrole v jiné funkci, mel by vzdy byt platny
+            while (true)
+            {
+                Console.WriteLine("""
+                [1] - Změnit zákl. rychlost šíření
+                [2] - Změnit zákl. pravděpodobnost úmrtí
+                [3] - Změnit index zdravotnictví
+                [4] - Změnit vlastnosti regionu
+                [0] - Zpět
+                """);
+                input = Console.ReadLine();
+                switch (input)
+                {
+                    case "0":
+                        return;
+                    case "1":
+                        while (true)
+                        {
+                            Console.Write("Zadejte hodnotu (kladné, desetinné): ");
+                            try
+                            {
+                                appService.SetRegionSpreadingSpeed(regionId, Console.ReadLine());
+                                break;
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                        }
+                        break;
+
+                    case "2":
+                        while (true)
+                        {
+                            Console.Write("Zadejte hodnotu <0;1>: ");
+                            try
+                            {
+                                appService.SetRegionDeathProbability(regionId, Console.ReadLine());
+                                break;
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                        }
+                        break;
+
+                    case "3":
+                        while (true)
+                        {
+                            Console.Write("Zadejte hodnotu (kladné, desetinné): ");
+                            try
+                            {
+                                appService.SetRegionHealthcareIndex(regionId, Console.ReadLine());
+                                break;
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                        }
+                        break;
+
+                    case "4":
+                        break;
+
+                    default:
+                        Console.WriteLine("Neplatná akce");
+                        break;
+                
+                }
+
+            }
+
 
         }
 
@@ -180,18 +281,21 @@ namespace ConsoleUI
         {
             appService.OnDaySimulated += Console.WriteLine;
             bool exit = false;
-            Console.WriteLine("""
-                ---Menu simulace---
+
+            while (!exit)
+            {
+                Console.WriteLine("""
+
+                Menu simulac
                 Příkazy: 
                 [0] - Spustit simulaci
                 [1] - Pozastavit simulaci
                 [2] - Změnit rychlost šíření
                 [3] - Změnit šanci na smrt
                 [4] - Upravit vlastnosti nemoce
+                [5] - Spravovat regiony
                 [9] - Breakpoint
                 """);
-            while (!exit)
-            {
                 string input = Console.ReadLine()?.ToLower().Trim() ?? string.Empty;
                 switch (input)
                 {
@@ -210,6 +314,9 @@ namespace ConsoleUI
                         break;
                     case "4":
                         await SetDiseaseAbilities();
+                        break;
+                    case "5":
+                        await RegionsMenu();
                         break;
                     case "9":
                         Console.WriteLine("Breakpoint");

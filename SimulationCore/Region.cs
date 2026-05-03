@@ -95,5 +95,26 @@ namespace SimulationCore
             DiseaseSpreadingSpeed = diseaseSpreadingSpeed;
             DiseaseDeathPropability = diseaseDeathProbability;
         }
+
+        public override string ToString()
+        {
+            string result = $"[{Id}] {Name}, populace: {Population}, index zdravotnictví: {HealthcareIndex} \n" +
+                $"nemocní: {Sick}, mrtví: {Dead}, očkovaní: {Vaccinated}\n" +
+                $"zákl. rychlost šíření: {RegionSpreadingSpeed}, rychlost šíření celkem: {TotalSpreadingSpeed}\n" +
+                $"zákl. šance na úmrtí: {RegionDeathPropability}, šance na úmrtí celkem: {TotalSpreadingSpeed}\n" +
+                $"Vlastnosti regionu: ";
+            if (Abilities.Count > 0) {
+                foreach (RegionAbility ability in Abilities)
+                {
+                    result += ability.ToString() + "\n";
+                }
+            }
+            else
+            {
+                result += "\\";
+            }
+            
+            return result;
+        }
     }
 }

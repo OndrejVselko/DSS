@@ -13,10 +13,13 @@ namespace SimulationCore
             ChangeDefaultSpreadingSpeed,
             AddDiseaseAbility,
             RemoveDiseaseAbility,
+   
+            ChangeDeathProbability,
+            ChangeRegionSpreadingSpeed,
+            ChangeRegionDeathProbability,
             ChangeRegionHealthcareIndex,
             AddRegionAbility,
             RemoveRegionAbility,
-            ChangeDeathProbability
         }
 
         public ActionType actionType;
