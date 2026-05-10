@@ -5,47 +5,63 @@ using System.Text.Json;
 
 namespace ConsoleUI
 {
+    /// <summary>
+    /// Console UI entry point and menus for the disease spreading simulator.
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// Central application service used by the UI (single instance).
+        /// </summary>
         static public AppService appService { get; set; }
 
+        /// <summary>
+        /// Program entry point; initializes the AppService and shows the main menu.
+        /// </summary>
         static async Task Main(string[] args)
         {
-            Console.WriteLine("---Disease spreading simulator---");
+            Console.Clear();
+            Console.WriteLine("---Disease spreading simulator---\n");
             appService = new AppService();
             await MainMenu();
         }
 
+        /// <summary>
+        /// Shows the main menu and handles top-level commands.
+        /// </summary>
         static async Task MainMenu()
         {
             bool exit = false;
             Console.WriteLine("""
                 ---Hlavní Menu---
                 Příkazy: 
-                [N] - Nová simulace
-                [E] - Ukončit aplikaci
+                [1] - Nová simulace
+                [0] - Ukončit aplikaci
                 """);
             while (!exit)
             {
                 string input = Console.ReadLine()?.ToLower().Trim() ?? string.Empty;
                 switch (input)
                 {
-                    case "e":
+                    case "0":
                         Console.WriteLine("---Konec---");
                         exit = true;
                         break;
-                    case "n":
+                    case "1":
                         await NewSimulation();
                         break;
                 }
             }
         }
 
+        /// <summary>
+        /// Walks through creating a new simulation (load data, disease, region).
+        /// </summary>
         static async Task NewSimulation()
         {
+            Console.Clear();
             Console.WriteLine("""
-
-            Nová Simulace
+            ---Vytvoření Nové Simulace---
             Zadejte cestu k souboru s daty: 
             """);
 
@@ -58,8 +74,12 @@ namespace ConsoleUI
             await SimulationMenu();
         }
 
+        /// <summary>
+        /// Lets the user create a new disease or (future) load one.
+        /// </summary>
         static async Task CreateOrLoadDisease()
         {
+            Console.Clear();
             Console.WriteLine("""
                 --- Nastavení nemoci ---
                 [1] - Vytvořit novou nemoc
@@ -78,8 +98,13 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Prompts the user for disease parameters and sets the disease in AppService.
+        /// </summary>
         static async Task CreateDisease()
         {
+            Console.Clear();
+            Console.WriteLine("--- Vytvoření nové nemoci ---");
             Console.Write("Název nemoci: ");
             string name = Console.ReadLine() ?? "Neznámá nemoc";
 
@@ -89,7 +114,7 @@ namespace ConsoleUI
             Console.Write("Šance na smrt (0-1): ");
             double.TryParse(Console.ReadLine(), out double deathProbability);
 
-            Console.Write("Délka onemocnění: ");
+            Console.Write("Délka onemocnění (dny): ");
             int.TryParse(Console.ReadLine(), out int length);
 
             while (true)
@@ -107,8 +132,14 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Shows available disease abilities and allows adding/removing them for the current disease.
+        /// </summary>
         static async Task SetDiseaseAbilities()
         {
+            Console.Clear();
+            Console.WriteLine("--- Nastavení vlastností nemoci ---");
+
             Dictionary<int, DiseaseAbility> availableAbilities = appService.GetAvailableDiseaseAbilities();
             List<int> selectedIds = new List<int>();
 
@@ -148,8 +179,13 @@ namespace ConsoleUI
             }
         }
         
+        /// <summary>
+        /// Prompts user to pick the starting region for the simulation.
+        /// </summary>
         static async Task SetStartingRegion()
         {
+            Console.Clear();
+            Console.WriteLine("--- Výběr počátečního regionu ---");
             await ShowRegions();
             while (true)
             {
@@ -166,6 +202,9 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Writes the list of regions to the console.
+        /// </summary>
         static async Task ShowRegions()
         {
             Dictionary<int, Region> regions = appService.GetAllRegions();
@@ -175,11 +214,16 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Lets the user add/remove abilities for a specific region.
+        /// </summary>
         static async Task SetRegionAbilities(int regionId)
         {
+            Console.Clear();
+            Console.WriteLine("--- Nastavení vlastností regionu ---");
+
             Dictionary<int, RegionAbility> availableAbilities = appService.GetAvailableRegionAbilities();
 
-            // Načteme ID abilities, které region už má
             Region region = appService.GetRegion(regionId);
             List<int> selectedIds = region.Abilities.Select(a => a.Id).ToList();
 
@@ -219,9 +263,13 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Shows the regions menu and allows selecting a region to edit.
+        /// </summary>
         static async Task RegionsMenu()
         {
-            Console.WriteLine("\nMenu regionů");
+            Console.Clear();
+            Console.WriteLine("\n---Menu regionů---");
             ShowRegions();
             while (true)
             {
@@ -242,11 +290,16 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Edit menu for a single region (change speed, healthcare index, abilities).
+        /// </summary>
         static async Task EditRegionMenu(string input)
         {
             int regionId = Int32.Parse(input); // Volano az po kontrole v jiné funkci, mel by vzdy byt platny
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine("--- Úprava regionu ---");
                 Console.WriteLine("""
                 [1] - Změnit zákl. rychlost šíření
                 [2] - Změnit index zdravotnictví
@@ -299,12 +352,13 @@ namespace ConsoleUI
                         break;
                 
                 }
-
             }
-
-
         }
 
+        /// <summary>
+        /// Simulation control menu (start/stop/change parameters/manage regions).
+        /// Note: subscribes to OnDaySimulated for console output.
+        /// </summary>
         static async Task SimulationMenu()
         {
             appService.OnDaySimulated += Console.WriteLine;
@@ -312,9 +366,8 @@ namespace ConsoleUI
 
             while (!exit)
             {
+                Console.WriteLine("--- Menu simulace ---");
                 Console.WriteLine("""
-
-                Menu simulac
                 Příkazy: 
                 [0] - Spustit simulaci
                 [1] - Pozastavit simulaci
@@ -356,6 +409,9 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// Loads simulation data from a file path provided by the user; retries on error.
+        /// </summary>
         static async Task LoadData()
         {
             while (true)
@@ -368,11 +424,11 @@ namespace ConsoleUI
                 }
                 catch (FileNotFoundException)
                 {
-                    Console.WriteLine("Soubor nebyl nalezen. Zkuste to znovu.");
+                    Console.Write("Soubor nebyl nalezen. Zkuste to znovu: ");
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Chyba při načítání: {e.Message}");
+                    Console.Write($"Chyba při načítání: {e.Message}. Zkuste to znovu: ");
                 }
             }
         }

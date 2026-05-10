@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,20 +9,29 @@ using SimulationCore;
 
 namespace Data
 {
+    /// <summary>
+    /// Container for scenario data loaded from JSON (regions, abilities, interactions).
+    /// </summary>
     public class ScenarioData
     {
-        public string ScenarioName { get; set; } = string.Empty;
-        public List<Region> Regions { get; set; } = new();
-        public List<RegionAbility> RegionAbilities { get; set; } = new();
-        public List<DiseaseAbility> DiseaseAbilities { get; set; } = new();
-        public List<InteractionDto> Interactions { get; set; } = new();
-    }
+        /// <summary>
+        /// List of regions included in the scenario.
+        /// </summary>
+        public List<SimulationCore.Region> Regions { get; set; } = new();
 
-    public class InteractionDto
-    {
-        public int DiseaseAbilityId { get; set; }
-        public int RegionAbilityId { get; set; }
-        public double SecondaryModifier { get; set; }
-        public string Comment { get; set; } = string.Empty;
+        /// <summary>
+        /// Abilities applicable to regions (DTO form).
+        /// </summary>
+        public List<AbilityDto> RegionAbilities { get; set; } = new();
+
+        /// <summary>
+        /// Abilities applicable to diseases (DTO form).
+        /// </summary>
+        public List<AbilityDto> DiseaseAbilities { get; set; } = new();
+
+        /// <summary>
+        /// Interactions between disease and region abilities.
+        /// </summary>
+        public List<InteractionDto> Interactions { get; set; } = new();
     }
 }
