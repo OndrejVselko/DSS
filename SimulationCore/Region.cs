@@ -11,6 +11,7 @@ namespace SimulationCore
     /// </summary>
     public class Region
     {
+        private readonly Random _random = new Random();
         /// <summary>Region identifier.</summary>
         public int Id { get; set; }
         /// <summary>Region name.</summary>
@@ -47,6 +48,15 @@ namespace SimulationCore
         /// <summary>Queue tracking recent sick counts (by day).</summary>
         public Queue<int> SickHistory;
 
+        public List<Region> NeighbouringRegions { get; set; } = new List<Region>();
+
+        public List<int> NeighbourIds { get; set; } = new();
+
+
+        public double RandomOccurrence { get; set; } = 0;
+
+
+
         /// <summary>
         /// Initializes region collections.
         /// </summary>
@@ -56,6 +66,12 @@ namespace SimulationCore
             Abilities = new List<RegionAbility>();
             VaccinatingCapacity = 0.001 * Population;
         }
+
+        public void SetNeighbouringRegions(List<Region> regions)
+        {
+            NeighbouringRegions = regions;
+        }
+
 
         /// <summary>
         /// Pre-fills sick history queue with zeros for the given days.
@@ -89,6 +105,16 @@ namespace SimulationCore
         /// <summary>
         /// Recomputes region-level totals using region and disease modifiers.
         /// </summary>
+
+        public void RecalculateRandomOccurrence(int globalSick, int globalPopulation)
+        {
+            double globalRatio = (double)globalSick / globalPopulation;
+            double neighbourSick = NeighbouringRegions.Sum(r => r.Sick);
+            double neighbourPopulation = NeighbouringRegions.Sum(r => r.Population);
+            double neighbourRatio = neighbourPopulation > 0 ? neighbourSick / neighbourPopulation : 0;
+
+            RandomOccurrence = Math.Max(Math.Min((globalRatio * 0.05) + (neighbourRatio * 0.95), 0.8), 0);
+        }
         public void UpdateRegionValues()
         {
             double spreadingSpeed = RegionSpreadingSpeed * DiseaseSpreadingSpeed;
@@ -137,8 +163,16 @@ namespace SimulationCore
                 Vaccinated += newVaccinated;
             }
 
+            if (_random.NextDouble() < RandomOccurrence && Population - Sick - Dead - Vaccinated > 0)
+            {
+                Sick += 1;
+                newInfections += 1;
+            }
+
+
             if (this.Sick < 0) 
                 this.Sick = 0;
+
             return new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
         }
 

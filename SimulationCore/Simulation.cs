@@ -33,6 +33,8 @@ namespace SimulationCore
         /// <summary>Queue of pending simulation commands to execute before each day.</summary>
         public Queue<ISimulationCommand> pendingCommands;
 
+
+        public int GlobalPopulation;
         /// <summary>
         /// Initializes default parameters and command queue.
         /// </summary>
@@ -67,6 +69,18 @@ namespace SimulationCore
             this.regions = new Dictionary<int, Region>();
             foreach (var region in regions)
                 this.regions[region.Id] = region;
+
+            AssignNeighbours();
+
+            GlobalPopulation = regions.Sum(x => x.Population);
+        }
+
+        public void AssignNeighbours()
+        {
+            foreach (var region in regions.Values)
+                foreach (var id in region.NeighbourIds)
+                    if (regions.TryGetValue(id, out var neighbour))
+                        region.NeighbouringRegions.Add(neighbour);
         }
 
         public void SetVaccine(Vaccine vaccine)
@@ -169,8 +183,12 @@ namespace SimulationCore
                 totalDeath += regionUpdate.TotalDead;
                 totalVaccinated += regionUpdate.TotalVaccinated;
             }
+            foreach (int key in this.regions.Keys)
+            {
+                regions[key].RecalculateRandomOccurrence(totalSick, GlobalPopulation);
+            }
 
-            return new StatisticUpdate(newSick, newDead, newVaccinated, totalSick, totalDeath, totalVaccinated);
+                return new StatisticUpdate(newSick, newDead, newVaccinated, totalSick, totalDeath, totalVaccinated);
         }
     }
 }
