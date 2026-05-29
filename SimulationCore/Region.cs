@@ -23,6 +23,11 @@ namespace SimulationCore
         public int Dead {  get; set; }
         /// <summary>Accumulated vaccinated individuals.</summary>
         public int Vaccinated {  get; set; }
+
+        public bool Vaccinating { get; set; }
+
+        public Vaccine vaccine { get; set; }
+        public double VaccinatingCapacity { get; set; }
         /// <summary>Healthcare quality index for the region.</summary>
         public double HealthcareIndex { get; set; }
         /// <summary>Effective total spreading speed for the region.</summary>
@@ -49,6 +54,7 @@ namespace SimulationCore
         {
             SickHistory = new Queue<int>();       
             Abilities = new List<RegionAbility>();
+            VaccinatingCapacity = 0.001 * Population;
         }
 
         /// <summary>
@@ -100,12 +106,21 @@ namespace SimulationCore
         /// </summary>
         public StatisticUpdate SimulateDay()
         {
+            double localDeathProtectionEfficiency = 0;
+            double localProtectionEfficiency = 0;
+            if (vaccine is not null)
+            {
+                localDeathProtectionEfficiency = vaccine.DeathProtectionEfficiency;
+                localProtectionEfficiency = vaccine.ProtectionEfficiency;
+            }
             int finishingSick = this.SickHistory.Dequeue();
 
             int deathGrowth = (int)Math.Floor(finishingSick * TotalDeathProbability);
+            deathGrowth -= (int)Math.Floor(((double)Vaccinated / Population) * deathGrowth * localDeathProtectionEfficiency);
             deathGrowth = Math.Min(deathGrowth, finishingSick);
 
             int newInfections = (int)Math.Floor(this.Sick * TotalSpreadingSpeed);
+            newInfections -= (int)Math.Floor(((double)Vaccinated / Population) * newInfections * localProtectionEfficiency);
             int susceptible = this.Population - this.Sick - this.Dead;
             newInfections = Math.Min(newInfections, susceptible);
 
@@ -115,9 +130,15 @@ namespace SimulationCore
 
             Dead += deathGrowth;
 
+            int newVaccinated = 0;
+            if (Vaccinating && Vaccinated < Population - Dead)
+            {
+                newVaccinated = Math.Min((int)(Math.Floor(Population * VaccinatingCapacity)), Population - Dead - Vaccinated);
+                Vaccinated += newVaccinated;
+            }
+
             if (this.Sick < 0) 
                 this.Sick = 0;
-            int newVaccinated = 0;
             return new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
         }
 
@@ -151,6 +172,27 @@ namespace SimulationCore
         /// <summary>
         /// Returns a multi-line string describing region state and abilities.
         /// </summary>
+
+        public void StartVaccinating()
+        {
+            Vaccinating = true;
+        }
+
+        public void StopVaccinating()
+        {
+            Vaccinating = false;
+        }
+
+        public void ChangeVaccinationCapacity(double newCapacity)
+        {
+            VaccinatingCapacity = newCapacity;
+        }
+
+        public void SetVaccine (Vaccine vaccine)
+        {
+            this.vaccine = vaccine;
+        }
+
         public override string ToString()
         {
             string result = $"[{Id}] {Name}, populace: {Population}, index zdravotnictví: {HealthcareIndex} \n" +

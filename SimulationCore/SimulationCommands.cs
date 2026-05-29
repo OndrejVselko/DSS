@@ -173,4 +173,85 @@ namespace SimulationCore
             _region.ChangeHealtcareIndex(_newIndex);
         }
     }
+
+    public class ChangeVaccineParametersCommand : ISimulationCommand { 
+        private readonly double? _newProtecitonEfficiency;
+        private readonly double? _newDeathProtecitonEfficiency;
+
+        
+        public ChangeVaccineParametersCommand(double? newProtecitonEfficiency, double? newDeathProtecitonEfficiency)
+        {
+            _newDeathProtecitonEfficiency = newDeathProtecitonEfficiency;
+            _newProtecitonEfficiency = newProtecitonEfficiency;
+        }
+
+        public void Execute(Simulation simulation)
+        {
+            simulation.vaccine.ChangeVaccineEfficiency(_newProtecitonEfficiency, _newDeathProtecitonEfficiency);
+        }
+    }
+
+    public class StartVaccinationSingleRegionCommand : ISimulationCommand
+    {
+        private readonly Region _region;
+
+        public StartVaccinationSingleRegionCommand(Region region)
+        {
+            _region = region;
+        }
+
+        public void Execute(Simulation simulation)
+        {
+            _region.StartVaccinating();
+        }
+    }
+
+    public class StopVaccinationSingleRegionCommand : ISimulationCommand
+    {
+        private readonly Region _region;
+
+
+        public StopVaccinationSingleRegionCommand(Region region)
+        {
+            _region = region;
+        }
+
+        public void Execute(Simulation simulation)
+        {
+            _region.StopVaccinating();
+        }
+    }
+
+    public class StartVaccinationAllRegionCommand : ISimulationCommand
+    {
+
+        public StartVaccinationAllRegionCommand()
+        {
+        }
+
+        public void Execute(Simulation simulation)
+        {
+            foreach (int key in simulation.regions.Keys)
+            {
+                simulation.regions[key].StartVaccinating();
+            }
+        }
+    }
+
+    public class StopVaccinationAllRegionCommand : ISimulationCommand
+    {
+        private readonly Region _region;
+
+        public StopVaccinationAllRegionCommand()
+        {
+        }
+
+        public void Execute(Simulation simulation)
+        {
+            foreach (int key in simulation.regions.Keys)
+            {
+                simulation.regions[key].StopVaccinating();
+            }   
+        }
+    }
 }

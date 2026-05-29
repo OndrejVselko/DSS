@@ -16,6 +16,10 @@ namespace SimulationCore
         public Disease disease { get; set; }
         /// <summary>Dictionary of regions keyed by id.</summary>
         public Dictionary<int, Region> regions { get; set; }
+
+        public Vaccine vaccine { get; set; }
+
+
         /// <summary>Simulation start date.</summary>
         public DateOnly startDate { get; set; }
         /// <summary>Current simulation date.</summary>
@@ -63,6 +67,15 @@ namespace SimulationCore
             this.regions = new Dictionary<int, Region>();
             foreach (var region in regions)
                 this.regions[region.Id] = region;
+        }
+
+        public void SetVaccine(Vaccine vaccine)
+        {
+            this.vaccine = vaccine;
+            foreach (int key in this.regions.Keys)
+            {
+                regions[key].SetVaccine(vaccine);
+            }
         }
 
         /// <summary>

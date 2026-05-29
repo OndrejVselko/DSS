@@ -126,9 +126,7 @@ namespace Services
             simulation.regions[regionId].Sick += 1;
         }
 
-        // --- Příkazy pro nemoc ---
-        // Command pattern: SimulationServices vytvoří konkrétní příkaz a zařadí ho do fronty.
-        // Simulation.SimulateDay() příkazy pak spouští – bez switch, bez enum.
+        // --- Prikazy pro nemoc ---
 
         /// <summary>
         /// Parses input and enqueues a command to change default spreading speed.
@@ -162,7 +160,7 @@ namespace Services
         public void RemoveDiseaseAbility(DiseaseAbility ability)
             => simulation.EnqueueCommand(new RemoveDiseaseAbilityCommand(ability));
 
-        // --- Příkazy pro regiony ---
+        // --- Prikazy pro regiony ---
 
         /// <summary>
         /// Validates and enqueues a command to change a region's spreading speed.
@@ -197,6 +195,65 @@ namespace Services
         /// </summary>
         public void RemoveRegionAbility(int regionId, RegionAbility ability)
             => simulation.EnqueueCommand(new RemoveRegionAbilityCommand(GetRegion(regionId), ability));
+
+        // --- Prikazy pro ockovani
+
+        public void SetVaccine(double protectionEfficiency, double deathProtectionEfficiency)
+        {
+            if (protectionEfficiency >= 0 && protectionEfficiency <= 1 && deathProtectionEfficiency >= 0 && deathProtectionEfficiency <= 1)
+            {
+                Vaccine vaccine = new Vaccine(protectionEfficiency, deathProtectionEfficiency);
+                simulation.SetVaccine(vaccine);
+            }
+            else
+            {
+                throw new ArgumentException("Hodnoty jsou mimo rozsah 0-1");
+            }
+        }
+
+
+        public void ChangeVaccineEfficiency(double? protectionEfficiency, double? deathProtectionEfficiency)
+        {
+            if (protectionEfficiency.HasValue)
+            {
+                if (!(protectionEfficiency >= 0 && protectionEfficiency <= 1))
+                {
+                    throw new ArgumentException("Hodnoty jsou mimo rozsah 0-1");
+                }
+            }
+
+            if (deathProtectionEfficiency.HasValue)
+            {
+                if (!(deathProtectionEfficiency >= 0 && deathProtectionEfficiency <= 1))
+                {
+                    throw new ArgumentException("Hodnoty jsou mimo rozsah 0-1");
+                }
+            }
+
+            simulation.EnqueueCommand(new ChangeVaccineParametersCommand(protectionEfficiency, deathProtectionEfficiency));
+        }
+
+        public void StartVaccinatingAllRegions()
+        {
+            if (simulation.vaccine is null)
+            {
+                throw new Exception("Neexistuje vakcína, nejprve ji vytvořte");
+            }
+
+            simulation.EnqueueCommand(new StartVaccinationAllRegionCommand());
+        }
+
+        public void StopVaccinatingAllRegions()
+        {
+            simulation.EnqueueCommand(new StopVaccinationAllRegionCommand());
+        }
+
+        public void StartVaccinatingSingleRegion(int regionId)
+            => simulation.EnqueueCommand(new StartVaccinationSingleRegionCommand(GetRegion(regionId)));
+
+        public void StopVaccinatingSingleRegion(int regionId)
+            => simulation.EnqueueCommand(new StopVaccinationSingleRegionCommand(GetRegion(regionId)));
+
 
         // --- Dotazy ---
 

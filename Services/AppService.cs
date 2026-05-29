@@ -167,6 +167,24 @@ namespace Services
             _simulationServices.AddDiseaseAbility(ability);
         }
 
+
+        public void SetVaccine(double protectionEfficiency, double deathProtectionEfficiency) => _simulationServices.SetVaccine(protectionEfficiency, deathProtectionEfficiency);
+
+        public void ChangeVaccineEfficiency(double? protectionEfficiency, double? deathProtectionEfficiency) => _simulationServices.ChangeVaccineEfficiency(protectionEfficiency, deathProtectionEfficiency);
+
+
+
+
+        public void StartVaccinatingAllRegions() => _simulationServices.StartVaccinatingAllRegions();
+
+
+        public void StopVaccinatingAllRegions() => _simulationServices?.StopVaccinatingAllRegions();
+
+        public void StartVaccinatingSingleRegion(int regionId) => _simulationServices.StartVaccinatingSingleRegion(regionId);
+
+        public void StopVaccinatingSingleRegion(int regionId) => _simulationServices.StopVaccinatingSingleRegion(regionId);
+
+
         /// <summary>
         /// Removes a disease ability from the current disease by ability id.
         /// </summary>
