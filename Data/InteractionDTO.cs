@@ -24,7 +24,9 @@ namespace Data
         /// <summary>
         /// Secondary numeric modifier applied when both abilities interact.
         /// </summary>
-        public double SecondaryModifier { get; set; }
+        public double SpreadingModifier { get; set; } = 1.0;
+
+        public double DeathModifier { get; set; } = 1.0;
 
         /// <summary>
         /// Optional comment describing the interaction.

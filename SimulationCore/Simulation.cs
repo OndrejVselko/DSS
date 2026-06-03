@@ -34,6 +34,9 @@ namespace SimulationCore
         public Queue<ISimulationCommand> pendingCommands;
 
 
+        public Dictionary<(int, int), Interaction> Interactions { get; set; } = new();
+
+
         public int GlobalPopulation;
         /// <summary>
         /// Initializes default parameters and command queue.
@@ -92,6 +95,11 @@ namespace SimulationCore
             }
         }
 
+        public void SetInteractions(Dictionary<(int, int), Interaction> interactions)
+        {
+            Interactions = interactions;
+        }
+
         /// <summary>
         /// Sets the simulation start date and current date when default requested.
         /// </summary>
@@ -124,7 +132,7 @@ namespace SimulationCore
         public void UpdateRegionsDiseaseValues()
         {
             foreach (var key in this.regions.Keys)
-                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.DeathProbability);
+                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.TotalDeathProbability);
         }
 
         /// <summary>Updates both disease and region-derived values for all regions.</summary>
@@ -132,7 +140,7 @@ namespace SimulationCore
         {
             foreach (var key in regions.Keys)
             {
-                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.DeathProbability);
+                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.TotalDeathProbability);
                 regions[key].UpdateRegionValues();
             }
         }

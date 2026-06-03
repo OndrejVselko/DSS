@@ -19,16 +19,16 @@ namespace SimulationCore
         /// <summary>Population count.</summary>
         public int Population { get; set; }
         /// <summary>Currently sick individuals.</summary>
-        public int Sick {  get; set; }
+        public int Sick { get; set; }
         /// <summary>Accumulated dead individuals.</summary>
-        public int Dead {  get; set; }
+        public int Dead { get; set; }
         /// <summary>Accumulated vaccinated individuals.</summary>
-        public int Vaccinated {  get; set; }
+        public int Vaccinated { get; set; }
 
         public bool Vaccinating { get; set; }
 
         public Vaccine vaccine { get; set; }
-        public double VaccinatingCapacity { get; set; }
+        public double TotalVaccinatingCapacity { get; set; }
         /// <summary>Healthcare quality index for the region.</summary>
         public double HealthcareIndex { get; set; }
         /// <summary>Effective total spreading speed for the region.</summary>
@@ -36,7 +36,7 @@ namespace SimulationCore
         /// <summary>Effective total death probability for the region.</summary>
         public double TotalDeathProbability { get; set; }
         /// <summary>Base region spreading speed.</summary>
-        public double RegionSpreadingSpeed {  get; set; }
+        public double RegionSpreadingSpeed { get; set; }
         /// <summary>Region-specific death multiplier.</summary>
         public double RegionDeathPropability { get; set; } = 1;
         /// <summary>Spreading speed contributed by disease.</summary>
@@ -52,8 +52,17 @@ namespace SimulationCore
 
         public List<int> NeighbourIds { get; set; } = new();
 
+        public double TotalRandomOccurrence { get; set; } = 0;
 
-        public double RandomOccurrence { get; set; } = 0;
+        public double BorderAbilityModifier { get; private set; } = 1.0;
+
+        public List<Interaction> ActiveInteractions;
+
+        public double InteractionSpreadingModifier;
+
+        public double InteractionDeathModifier;
+
+
 
 
 
@@ -62,9 +71,12 @@ namespace SimulationCore
         /// </summary>
         public Region()
         {
-            SickHistory = new Queue<int>();       
+            SickHistory = new Queue<int>();
             Abilities = new List<RegionAbility>();
-            VaccinatingCapacity = 0.001 * Population;
+            ActiveInteractions = new List<Interaction>(); 
+            TotalVaccinatingCapacity = 0.001 * Population;
+            InteractionSpreadingModifier = 1.0; 
+            InteractionDeathModifier = 1.0; 
         }
 
         public void SetNeighbouringRegions(List<Region> regions)
@@ -96,8 +108,8 @@ namespace SimulationCore
         /// <summary>
         /// Removes a region ability and updates region values.
         /// </summary>
-        public void RemoveAbility(RegionAbility ability) 
-        { 
+        public void RemoveAbility(RegionAbility ability)
+        {
             Abilities.Remove(ability);
             UpdateRegionValues();
         }
@@ -113,18 +125,30 @@ namespace SimulationCore
             double neighbourPopulation = NeighbouringRegions.Sum(r => r.Population);
             double neighbourRatio = neighbourPopulation > 0 ? neighbourSick / neighbourPopulation : 0;
 
-            RandomOccurrence = Math.Max(Math.Min((globalRatio * 0.05) + (neighbourRatio * 0.95), 0.8), 0);
+            double raw = (globalRatio * 0.05) + (neighbourRatio * 0.95);
+            TotalRandomOccurrence = Math.Max(Math.Min(raw * BorderAbilityModifier, 0.8), 0);
         }
         public void UpdateRegionValues()
         {
+            double deathProbability = HealthcareIndex * DiseaseDeathPropability;
             double spreadingSpeed = RegionSpreadingSpeed * DiseaseSpreadingSpeed;
-            foreach (RegionAbility ability in Abilities) {
-                spreadingSpeed *= ability.PrimaryModifier;
-            }
+            double borderModifier = 1.0;
+            double vaccinationCapacity = Population * 0.001;
 
-            spreadingSpeed *= 1;//  Tady bude místo jedničky funkce Interakce, která vrácí hodnotu pro region
+            foreach (RegionAbility ability in Abilities)
+            {
+                spreadingSpeed *= ability.SpreadingModifier;
+                deathProbability *= ability.DeathModifier;
+                borderModifier *= ability.BorderModifier;
+                vaccinationCapacity *= ability.VaccinationCapacityModifier;
+            }
+            spreadingSpeed *= InteractionSpreadingModifier; //  Tady bude místo jedničky funkce Interakce, která vrácí hodnotu pro region
+            deathProbability *= InteractionDeathModifier; //  Tady bude místo jedničky funkce Interakce, která vrácí hodnotu pro region
             TotalSpreadingSpeed = spreadingSpeed;
-            TotalDeathProbability = DiseaseDeathPropability;
+            TotalDeathProbability = deathProbability;
+            BorderAbilityModifier = borderModifier;
+            TotalVaccinatingCapacity = vaccinationCapacity;
+
         }
 
         /// <summary>
@@ -159,18 +183,18 @@ namespace SimulationCore
             int newVaccinated = 0;
             if (Vaccinating && Vaccinated < Population - Dead)
             {
-                newVaccinated = Math.Min((int)(Math.Floor(Population * VaccinatingCapacity)), Population - Dead - Vaccinated);
+                newVaccinated = Math.Min((int)(Math.Floor(Population * TotalVaccinatingCapacity)), Population - Dead - Vaccinated);
                 Vaccinated += newVaccinated;
             }
 
-            if (_random.NextDouble() < RandomOccurrence && Population - Sick - Dead - Vaccinated > 0)
+            if (_random.NextDouble() < TotalRandomOccurrence && Population - Sick - Dead - Vaccinated > 0)
             {
                 Sick += 1;
                 newInfections += 1;
             }
 
 
-            if (this.Sick < 0) 
+            if (this.Sick < 0)
                 this.Sick = 0;
 
             return new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
@@ -217,12 +241,7 @@ namespace SimulationCore
             Vaccinating = false;
         }
 
-        public void ChangeVaccinationCapacity(double newCapacity)
-        {
-            VaccinatingCapacity = newCapacity;
-        }
-
-        public void SetVaccine (Vaccine vaccine)
+        public void SetVaccine(Vaccine vaccine)
         {
             this.vaccine = vaccine;
         }
@@ -234,7 +253,8 @@ namespace SimulationCore
                 $"zákl. rychlost šíření: {RegionSpreadingSpeed}, rychlost šíření celkem: {TotalSpreadingSpeed}\n" +
                 $"zákl. šance na úmrtí: {RegionDeathPropability}, šance na úmrtí celkem: {TotalSpreadingSpeed}\n" +
                 $"Vlastnosti regionu: ";
-            if (Abilities.Count > 0) {
+            if (Abilities.Count > 0)
+            {
                 foreach (RegionAbility ability in Abilities)
                 {
                     result += ability.ToString() + "\n";
@@ -244,8 +264,54 @@ namespace SimulationCore
             {
                 result += "\\";
             }
-            
+
             return result;
+        }
+
+
+
+        public void AddInteraction(Interaction interaction)
+        {
+            ActiveInteractions.Add(interaction);
+            RecalculateInteractionModifiers();
+        }
+
+        public void RemoveInteraction(Interaction interaction)
+        {
+            if (ActiveInteractions.Contains(interaction))
+            {
+                ActiveInteractions.Remove(interaction);
+                RecalculateInteractionModifiers();
+            }
+        }
+
+        private void RecalculateInteractionModifiers()
+        {
+            double totalSpreadingInteraction = 1;
+            double totalDeathInteraction = 1;
+            foreach (Interaction interaction in ActiveInteractions)
+            {
+                totalDeathInteraction *= interaction.DeathModifier;
+                totalSpreadingInteraction *= interaction.SpreadingModifier;
+            }
+
+            InteractionSpreadingModifier = totalSpreadingInteraction;
+            InteractionDeathModifier = totalDeathInteraction;
+
+            UpdateRegionValues();
+        }
+
+        public String InteractionsToString()
+        {
+            string result = string.Empty;
+            foreach (Interaction interaction in ActiveInteractions)
+            {
+                result += interaction.ToString() + "\n";
+            }
+
+            if (result != string.Empty)
+                return result;
+            else return "Žádné interakce";
         }
     }
 }

@@ -49,28 +49,28 @@
     { "id": 46, "name": "Vatikán", "population": 800, "healthcareIndex": 0.90, "regionSpreadingSpeed": 0.8, "abilities": [], "neighbourIds": [16] }
   ],
   "RegionAbilities": [
-    { "Id": 1, "Name": "Zemědělská oblast", "Description": "Vysoká koncentrace farmářských zvířat.", "PrimaryModifier": 1.0 },
-    { "Id": 2, "Name": "Subarktické klima", "Description": "Mrazivé a suché prostředí.", "PrimaryModifier": 0.8 },
-    { "Id": 3, "Name": "Dopravní uzel", "Description": "Vysoká mobilita lidí, letiště, vlaky.", "PrimaryModifier": 2.0 },
-    { "Id": 4, "Name": "Tropický deštný prales", "Description": "Vysoká vlhkost a teplota, obrovské množství hmyzu.", "PrimaryModifier": 1.2 },
-    { "Id": 5, "Name": "Slum / Přelidněná čtvrť", "Description": "Špatná sanitace a extrémně vysoká hustota lidí.", "PrimaryModifier": 2.5 },
-    { "Id": 6, "Name": "Moderní metropole", "Description": "Vysoká úroveň hygieny, ale masivní využívání klimatizací.", "PrimaryModifier": 1.4 }
+    { "Id": 1, "Name": "Zemědělská oblast", "Description": "Vysoká koncentrace farmářských zvířat.", "spreadingModifier": 1.0, "deathModifier": 1.0, "borderModifier": 1.0, "vaccinationModifier": 1.0 },
+    { "Id": 2, "Name": "Subarktické klima", "Description": "Mrazivé a suché prostředí.", "spreadingModifier": 0.8, "deathModifier": 1.0, "borderModifier": 0.7, "vaccinationModifier": 0.9 },
+    { "Id": 3, "Name": "Dopravní uzel", "Description": "Vysoká mobilita lidí, letiště, vlaky.", "spreadingModifier": 2.0, "deathModifier": 1.0, "borderModifier": 2.5, "vaccinationModifier": 1.0 },
+    { "Id": 4, "Name": "Tropický deštný prales", "Description": "Vysoká vlhkost a teplota, obrovské množství hmyzu.", "spreadingModifier": 1.2, "deathModifier": 1.1, "borderModifier": 1.0, "vaccinationModifier": 0.8 },
+    { "Id": 5, "Name": "Slum / Přelidněná čtvrť", "Description": "Špatná sanitace a extrémně vysoká hustota lidí.", "spreadingModifier": 2.5, "deathModifier": 1.5, "borderModifier": 1.2, "vaccinationModifier": 0.6 },
+    { "Id": 6, "Name": "Moderní metropole", "Description": "Vysoká úroveň hygieny, ale masivní využívání klimatizací.", "spreadingModifier": 1.4, "deathModifier": 0.8, "borderModifier": 1.5, "vaccinationModifier": 1.2 }
   ],
   "DiseaseAbilities": [
-    { "Id": 1, "Name": "Zoonotický přenos", "Description": "Schopnost šířit se prostřednictvím hospodářských zvířat.", "PrimaryModifier": 1.2 },
-    { "Id": 2, "Name": "Odolnost vůči chladu", "Description": "Virus přežívá déle v nízkých teplotách.", "PrimaryModifier": 1.15 },
-    { "Id": 3, "Name": "Letecká kontaminace", "Description": "Vysoká stabilita v kapénkách na velké vzdálenosti.", "PrimaryModifier": 1.5 },
-    { "Id": 4, "Name": "Vodem šiřitelný patogen", "Description": "Nemoc dokáže přežít ve vodních zdrojích a potrubí.", "PrimaryModifier": 1.3 },
-    { "Id": 5, "Name": "Dlouhá inkubační doba", "Description": "Nakažení nevykazují symptomy, ale šíří nemoc dál.", "PrimaryModifier": 1.6 },
-    { "Id": 6, "Name": "Vektor: Hmyz", "Description": "Nemoc je přenášena komáry nebo klíšťaty.", "PrimaryModifier": 1.1 }
+    { "Id": 1, "Name": "Zoonotický přenos", "Description": "Schopnost šířit se prostřednictvím hospodářských zvířat.", "spreadingModifier": 1.2, "deathModifier": 1.0 },
+    { "Id": 2, "Name": "Odolnost vůči chladu", "Description": "Virus přežívá déle v nízkých teplotách.", "spreadingModifier": 1.15, "deathModifier": 1.0 },
+    { "Id": 3, "Name": "Letecká kontaminace", "Description": "Vysoká stabilita v kapénkách na velké vzdálenosti.", "spreadingModifier": 1.5, "deathModifier": 1.0 },
+    { "Id": 4, "Name": "Vodem šiřitelný patogen", "Description": "Nemoc dokáže přežít ve vodních zdrojích a potrubí.", "spreadingModifier": 1.3, "deathModifier": 1.1 },
+    { "Id": 5, "Name": "Dlouhá inkubační doba", "Description": "Nakažení nevykazují symptomy, ale šíří nemoc dál.", "spreadingModifier": 1.6, "deathModifier": 1.0 },
+    { "Id": 6, "Name": "Vektor: Hmyz", "Description": "Nemoc je přenášena komáry nebo klíšťaty.", "spreadingModifier": 1.1, "deathModifier": 1.05 }
   ],
   "Interactions": [
-    { "DiseaseAbilityId": 1, "RegionAbilityId": 1, "SecondaryModifier": 1.8, "Comment": "Kombinace zoonózy a farem je smrtící." },
-    { "DiseaseAbilityId": 2, "RegionAbilityId": 2, "SecondaryModifier": 1.4, "Comment": "V mrazu tato nemoc vyloženě prosperuje." },
-    { "DiseaseAbilityId": 3, "RegionAbilityId": 6, "SecondaryModifier": 1.7, "Comment": "Klimatizace v mrakodrapech rozvádí kapénky po celé budově." },
-    { "DiseaseAbilityId": 4, "RegionAbilityId": 5, "SecondaryModifier": 2.2, "Comment": "Špatná voda v přelidněném slumu = nekontrolovaná epidemie." },
-    { "DiseaseAbilityId": 6, "RegionAbilityId": 4, "SecondaryModifier": 2.0, "Comment": "V džungli je hmyzu tolik, že se nemoc šíří okamžitě." },
-    { "DiseaseAbilityId": 3, "RegionAbilityId": 2, "SecondaryModifier": 0.6, "Comment": "V extrémním mrazu kapénky okamžitě mrznou a padají k zemi." },
-    { "DiseaseAbilityId": 5, "RegionAbilityId": 3, "SecondaryModifier": 1.9, "Comment": "Lidé s dlouhou inkubační dobou stihnou proletět půl světa dřív." }
+    { "DiseaseAbilityId": 1, "RegionAbilityId": 1, "spreadingModifier": 1.8, "deathModifier": 1.0, "Comment": "Kombinace zoonózy a farem je smrtící." },
+    { "DiseaseAbilityId": 2, "RegionAbilityId": 2, "spreadingModifier": 1.4, "deathModifier": 1.0, "Comment": "V mrazu tato nemoc vyloženě prosperuje." },
+    { "DiseaseAbilityId": 3, "RegionAbilityId": 6, "spreadingModifier": 1.7, "deathModifier": 1.0, "Comment": "Klimatizace v mrakodrapech rozvádí kapénky po celé budově." },
+    { "DiseaseAbilityId": 4, "RegionAbilityId": 5, "spreadingModifier": 2.2, "deathModifier": 1.3, "Comment": "Špatná voda v přelidněném slumu = nekontrolovaná epidemie." },
+    { "DiseaseAbilityId": 6, "RegionAbilityId": 4, "spreadingModifier": 2.0, "deathModifier": 1.2, "Comment": "V džungli je hmyzu tolik, že se nemoc šíří okamžitě." },
+    { "DiseaseAbilityId": 3, "RegionAbilityId": 2, "spreadingModifier": 0.6, "deathModifier": 1.0, "Comment": "V extrémním mrazu kapénky okamžitě mrznou a padají k zemi." },
+    { "DiseaseAbilityId": 5, "RegionAbilityId": 3, "spreadingModifier": 1.9, "deathModifier": 1.0, "Comment": "Lidé s dlouhou inkubační dobou stihnou proletět půl světa dřív." }
   ]
 }

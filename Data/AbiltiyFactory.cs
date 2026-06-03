@@ -11,7 +11,7 @@ namespace Data
         /// Create a DiseaseAbility from a DTO.
         /// </summary>
         public IAbility Create(AbilityDto dto) =>
-            new DiseaseAbility(dto.Id, dto.Name, dto.Description, dto.PrimaryModifier);
+            new DiseaseAbility(dto.Id, dto.Name, dto.Description, dto.SpreadingModifier, dto.DeathModifier, dto.BorderModifier, dto.VaccinationCapacityModifier);
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace Data
         /// Create a RegionAbility from a DTO.
         /// </summary>
         public IAbility Create(AbilityDto dto) =>
-            new RegionAbility(dto.Id, dto.Name, dto.Description, dto.PrimaryModifier);
+            new RegionAbility(dto.Id, dto.Name, dto.Description, dto.SpreadingModifier, dto.DeathModifier, dto.BorderModifier, dto.VaccinationCapacityModifier);
     }
 
     /// <summary>

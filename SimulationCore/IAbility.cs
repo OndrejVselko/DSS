@@ -18,6 +18,9 @@ namespace SimulationCore
         /// <summary>Ability description.</summary>
         public string Description { get; set; }
         /// <summary>Primary numeric modifier.</summary>
-        public double PrimaryModifier { get; set; }
+        public double SpreadingModifier { get; set; }
+        public double DeathModifier { get; set; }
+        public double BorderModifier { get; set; }
+        public double VaccinationCapacityModifier { get; set; }
     }
 }

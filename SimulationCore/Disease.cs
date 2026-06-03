@@ -39,7 +39,8 @@ namespace SimulationCore
         /// <summary>
         /// Probability of death for infected individuals.
         /// </summary>
-        public double DeathProbability { get; set; }
+        public double DefaultDeathProbability { get; set; }
+        public double TotalDeathProbability { get; set; }
 
         /// <summary>
         /// Initializes a new disease with provided parameters.
@@ -47,8 +48,10 @@ namespace SimulationCore
         public Disease(string name, double defaultSpreadingSpeed, double deathProbability, int sicknessLength ) { 
             Name = name;
             DefaultSpreadingSpeed = defaultSpreadingSpeed;
+            TotalSpreadingSpeed = DefaultSpreadingSpeed;
             SicknessLength = sicknessLength;
-            DeathProbability = deathProbability;
+            DefaultDeathProbability = deathProbability;
+            TotalDeathProbability = DefaultDeathProbability;
             Abilities = new List<DiseaseAbility>();
         }
 
@@ -58,7 +61,7 @@ namespace SimulationCore
         public void AddAbility(DiseaseAbility ability)
         {
             Abilities.Add(ability);
-            UpdateTotalSpreadingSpeed();
+            UpdateTotals();
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace SimulationCore
             if (Abilities.Contains(ability))
             {
                 Abilities.Remove(ability);
-                UpdateTotalSpreadingSpeed();
+                UpdateTotals();
             }
         }
 
@@ -79,7 +82,7 @@ namespace SimulationCore
         public void ChangeDefaultSpreadingSpeed (double newSpreadingSpeed)
         {
             DefaultSpreadingSpeed = newSpreadingSpeed;
-            UpdateTotalSpreadingSpeed();
+            UpdateTotals();
         }
         
         /// <summary>
@@ -87,21 +90,26 @@ namespace SimulationCore
         /// </summary>
         public void ChangeDeathProbability(double newDeathProbability)
         {
-            DeathProbability = newDeathProbability;
+            DefaultDeathProbability = newDeathProbability;
+            UpdateTotals();
         }
 
         /// <summary>
         /// Recomputes TotalSpreadingSpeed by applying ability modifiers.
         /// </summary>
-        private void UpdateTotalSpreadingSpeed()
+        private void UpdateTotals()
         {
             double tss = DefaultSpreadingSpeed;
+            double dp = DefaultDeathProbability;
+
             foreach(DiseaseAbility ability in Abilities)
             {
-                tss *= ability.PrimaryModifier;
+                tss *= ability.SpreadingModifier;
+                dp *= ability.DeathModifier;
             }
 
             TotalSpreadingSpeed = tss;
+            TotalDeathProbability = dp;
         }
     }
 }

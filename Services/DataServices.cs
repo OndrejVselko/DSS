@@ -55,7 +55,7 @@ namespace Services
 
             var interactions = data.Interactions.ToDictionary(
                 i => (i.DiseaseAbilityId, i.RegionAbilityId),
-                i => new Interaction(i.DiseaseAbilityId, i.RegionAbilityId, i.SecondaryModifier, i.Comment)
+                i => new Interaction(i.DiseaseAbilityId, i.RegionAbilityId, i.SpreadingModifier, i.DeathModifier, i.Comment)
             );
 
             return new LoadedScenario(regions, diseaseAbilities, regionAbilities, interactions);

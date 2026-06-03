@@ -184,6 +184,8 @@ namespace Services
             simulation.EnqueueCommand(new ChangeRegionHealthcareIndexCommand(region, newHealthcareIndex));
         }
 
+        public void SetInteractions(Dictionary<(int, int), Interaction> interactions) => simulation.SetInteractions(interactions);
+
         /// <summary>
         /// Enqueues a command to add an ability to a region.
         /// </summary>

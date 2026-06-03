@@ -25,6 +25,17 @@ namespace SimulationCore
         {
             simulation.disease.AddAbility(_ability);
             simulation.UpdateAllRegions();
+
+            var relevantInteractions = simulation.Interactions
+                .Where(kvp => kvp.Key.Item1 == _ability.Id)
+                .Select(kvp => kvp.Value);
+
+            foreach (Region region in simulation.regions.Values)
+            {
+                foreach (Interaction interaction in relevantInteractions)
+                    if (region.Abilities.Any(a => a.Id == interaction.RegionAbilityId))
+                        region.AddInteraction(interaction);
+            }
         }
     }
 
@@ -45,6 +56,19 @@ namespace SimulationCore
         {
             simulation.disease.RemoveAbility(_ability);
             simulation.UpdateAllRegions();
+
+            var relevantInteractions = simulation.Interactions
+                .Where(kvp => kvp.Key.Item1 == _ability.Id)
+                .Select(kvp => kvp.Value);
+
+            foreach (Region region in simulation.regions.Values)
+            {
+                foreach (Interaction interaction in relevantInteractions)
+                {
+                    if (region.ActiveInteractions.Contains(interaction))
+                        region.RemoveInteraction(interaction);
+                }
+            }
         }
     }
 
@@ -108,6 +132,17 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.AddAbility(_ability);
+            var relevantInteractions = simulation.Interactions
+             .Where(kvp => kvp.Key.Item2 == _ability.Id)
+             .Select(kvp => kvp.Value);
+
+            foreach (var interaction in relevantInteractions)
+            {
+                if (simulation.disease.Abilities.Any(a => a.Id == interaction.DiseaseAbilityId))
+                {
+                    _region.AddInteraction(interaction);
+                }
+            }
         }
     }
 
@@ -129,6 +164,15 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.RemoveAbility(_ability);
+
+            var relevantInteractions = simulation.Interactions
+             .Where(kvp => kvp.Key.Item2 == _ability.Id)
+             .Select(kvp => kvp.Value);
+
+            foreach (var interaction in relevantInteractions)
+            {
+                _region.RemoveInteraction(interaction);
+            }
         }
     }
 

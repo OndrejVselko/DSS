@@ -29,6 +29,13 @@ namespace Data
         /// <summary>
         /// Primary numeric modifier for the ability.
         /// </summary>
-        public double PrimaryModifier { get; set; }
+        public double SpreadingModifier { get; set; } = 1.0;
+
+        public double DeathModifier { get; set; } = 1.0;
+
+        public double BorderModifier { get; set; } = 1.0;
+
+        public double VaccinationCapacityModifier { get; set; } = 1.0;
+
     }
 }

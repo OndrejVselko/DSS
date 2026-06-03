@@ -65,6 +65,9 @@ namespace Services
             _availableRegionAbilities = scenario.RegionAbilities;
             _interaction = scenario.Interactions;
 
+            _simulationServices.SetInteractions(scenario.Interactions);
+
+
             _simulationServices.SetRegions(scenario.Regions.Values.ToList());
         }
 
