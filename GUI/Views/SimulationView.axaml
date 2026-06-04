@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mapsui="clr-namespace:Mapsui.UI.Avalonia;assembly=Mapsui.UI.Avalonia"
+             xmlns:vm="clr-namespace:GUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
+             x:Class="GUI.Views.SimulationView">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+  </Design.DataContext>
+      <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="960"/>        <!-- mapa, zbyde místo -->
+            <ColumnDefinition Width="240"/>      <!-- pravý panel, fixní -->
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="560"/>          <!-- mapa -->
+            <RowDefinition Height="140"/>        <!-- spodní panel, fixní -->
+        </Grid.RowDefinitions>
+        <!-- Mapa -->
+<mapsui:MapControl Grid.Column="0" Grid.Row="0" x:Name="MapControl"/>
+        <!-- Spodní panel - region info -->
+        <Border Grid.Column="0" Grid.Row="1" Background="LightGray" BorderBrush="Black" BorderThickness="0,1,0,0"/>
+        <!-- Pravý panel - ovládání -->
+        <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Background="LightGray" BorderBrush="Black" BorderThickness="1,0,0,0"/>
+    </Grid>
+</UserControl>

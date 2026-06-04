@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GUI.MainMenuView">
+    <Grid>
+            <TextBlock Text="Disease Spreading Simulator" 
+                        FontSize="35" FontWeight="Bold"
+                        HorizontalAlignment="Center" Margin="0,75,0,0"/>
+
+            <StackPanel Margin="400,250,0,0" Spacing="25">
+                <Button Content="Nová simulace" Click="OnNewSimulationClicked" Width="400" FontSize="28" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
+                <Button Content="Prohlížení starých simulací" Click="OnOldSimulationsClicked" FontSize="28" Width="400" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
+                <Button Content="Ukončit" Click="OnExitClicked" Width="400" FontSize="28" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
+            </StackPanel>
+    </Grid>
+</UserControl>

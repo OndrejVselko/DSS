@@ -150,7 +150,7 @@ namespace ConsoleUI
                 foreach (var ab in availableAbilities.Values)
                 {
                     string status = selectedIds.Contains(ab.Id) ? "[VYBRÁNO]" : "";
-                    Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.PrimaryModifier})");
+                    Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.SpreadingModifier})");
                 }
 
                 if (int.TryParse(Console.ReadLine(), out int id))
@@ -234,7 +234,7 @@ namespace ConsoleUI
                 foreach (var ab in availableAbilities.Values)
                 {
                     string status = selectedIds.Contains(ab.Id) ? "[VYBRÁNO]" : "";
-                    Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.PrimaryModifier})");
+                    Console.WriteLine($"{status} [{ab.Id}] {ab.Name} (Mod: {ab.SpreadingModifier})");
                 }
 
                 if (int.TryParse(Console.ReadLine(), out int id))

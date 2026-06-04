@@ -16,6 +16,8 @@ namespace SimulationCore
         public int Id { get; set; }
         /// <summary>Region name.</summary>
         public string Name { get; set; }
+
+        public string IsoCode { get; set; } = string.Empty;
         /// <summary>Population count.</summary>
         public int Population { get; set; }
         /// <summary>Currently sick individuals.</summary>

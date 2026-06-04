@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="GUI.LoadJsonStepView">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+        <TextBlock Text="Načtení scénáře" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <TextBlock Text="Vyberte soubor se scénářem (.json)" HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+            <TextBox x:Name="PathTextBox" Width="400" IsReadOnly="True" Watermark="Cesta k souboru..."/>
+            <Button Content="Procházet" Click="OnBrowseClicked"/>
+        </StackPanel>
+        <TextBlock x:Name="StatusText" HorizontalAlignment="Center" Foreground="Red"/>
+    </StackPanel>
+</UserControl>
+
