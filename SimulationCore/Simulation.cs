@@ -36,6 +36,9 @@ namespace SimulationCore
 
         public Dictionary<(int, int), Interaction> Interactions { get; set; } = new();
 
+        private Dictionary<int, RegionAbility> _regionAbilities = new();
+
+
 
         public int GlobalPopulation;
         /// <summary>
@@ -74,8 +77,14 @@ namespace SimulationCore
                 this.regions[region.Id] = region;
 
             AssignNeighbours();
+            AssignAbilities();
 
             GlobalPopulation = regions.Sum(x => x.Population);
+        }
+
+        public void SetRegionAbilities(Dictionary<int, RegionAbility> regionAbilities)
+        {
+            _regionAbilities = regionAbilities;
         }
 
         public void AssignNeighbours()
@@ -84,6 +93,22 @@ namespace SimulationCore
                 foreach (var id in region.NeighbourIds)
                     if (regions.TryGetValue(id, out var neighbour))
                         region.NeighbouringRegions.Add(neighbour);
+        }
+
+        private void AssignAbilities()
+        {
+            foreach (var region in regions.Values)
+                foreach (var id in region.AbilityIds)
+                    if (_regionAbilities.TryGetValue(id, out var ability))
+                        region.AddAbility(ability);
+        }
+
+        public void AssignRegionAbilities(Dictionary<int, RegionAbility> regionAbilities)
+        {
+            foreach (var region in regions.Values)
+                foreach (var id in region.AbilityIds)
+                    if (regionAbilities.TryGetValue(id, out var ability))
+                        region.AddAbility(ability);
         }
 
         public void SetVaccine(Vaccine vaccine)

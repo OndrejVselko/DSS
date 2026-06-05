@@ -38,15 +38,7 @@ namespace SimulationCore
 
         public override string ToString()
         {
-            string text = $"{Name}, {Description}, modifikátory: ";
-            if (SpreadingModifier != 1.0)
-                text += "šíření = " + SpreadingModifier + ", ";
-            if (DeathModifier != 1.0)
-                text += "úmrtnost = " + DeathModifier + ", ";
-            if (BorderModifier != 1.0)
-                text += "Náhodný výskyt = " + BorderModifier + ", ";
-            if (VaccinationCapacityModifier != 1.0)
-                text += "Očkování = " + VaccinationCapacityModifier;
+            string text = $"{Name}";
 
             return text;
         }

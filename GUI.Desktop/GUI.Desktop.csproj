@@ -8,6 +8,12 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="App.axaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="App.axaml.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />

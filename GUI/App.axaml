@@ -1,20 +1,65 @@
-<Application xmlns="https://github.com/avaloniaui"
+﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="GUI.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
         <FluentTheme />
         <Style Selector="TextBlock">
-        <Setter Property="Foreground" Value="#222222"/>
-    </Style>
-    <Style Selector="Button">
-        <Setter Property="Foreground" Value="#222222"/>
-    </Style>
-    <Style Selector="Button:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="#2a2a4e"/>
-        <Setter Property="Foreground" Value="White"/>
-    </Style>
+            <Setter Property="Foreground" Value="#222222"/>
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Foreground" Value="#222222"/>
+        </Style>
+        <Style Selector="Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#2a2a4e"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Foreground" Value="#111111"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Foreground" Value="#111111"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
+        <Style Selector="TextBox /template/ Border">
+            <Setter Property="Background" Value="#EEEEEE"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border">
+            <Setter Property="Background" Value="#EEEEEE"/>
+        </Style>
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="Foreground" Value="#111111"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#CCCCCC"/>
+        </Style>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="#99BBBB"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border">
+            <Setter Property="Background" Value="#EEEEEE"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
+
+        <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+            <Setter Property="Background" Value="#99BBBB"/>
+            <Setter Property="BorderBrush" Value="#AAAAAA"/>
+        </Style>
+
+        <Style Selector="CheckBox /template/ Path">
+            <Setter Property="Stroke" Value="#111111"/>
+        </Style>
     </Application.Styles>
 </Application>

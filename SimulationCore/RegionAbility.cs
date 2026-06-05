@@ -45,7 +45,7 @@ namespace SimulationCore
         // Double comparing is safe here :)
         public override string ToString()
         {
-            string text = $"{Name}, {Description}, modifikátory: ";
+            string text = $"{Name}";/*, {Description}, modifikátory: ";
             if (SpreadingModifier != 1.0)
                 text += "šíření = " + SpreadingModifier + ", ";
             if (DeathModifier != 1.0)
@@ -54,7 +54,7 @@ namespace SimulationCore
                 text += "Náhodný výskyt = " + BorderModifier + ", ";
             if (VaccinationCapacityModifier != 1.0)
                 text += "Očkování = " + VaccinationCapacityModifier;
-
+            */
             return text;
         }
     }

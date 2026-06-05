@@ -91,6 +91,11 @@ namespace Services
         /// </summary>
         public void SetStartDate(DateOnly startDate = default) => simulation.SetStartDate(startDate);
 
+        public DateOnly GetDate()
+        {
+            return simulation.currentSimulationDate;
+        }
+
         /// <summary>
         /// Starts the simulation loop in a background task.
         /// </summary>
@@ -101,6 +106,9 @@ namespace Services
             _cts = new CancellationTokenSource();
             _ = Task.Run(() => simulation.Simulate(_cts.Token));
         }
+
+
+        public void SetRegionAbilities(Dictionary<int, RegionAbility> regionAbilities) => simulation.SetRegionAbilities(regionAbilities);
 
         /// <summary>
         /// Stops the running simulation and cancels the background task.
@@ -282,6 +290,45 @@ namespace Services
             if (simulation.regions.ContainsKey(regionId))
                 return simulation.regions[regionId];
             throw new ArgumentException("Neplatné id regionu."); // Nikdy by nemělo nastat
+        }
+
+        public string GetDiseaseName()
+        {
+            if(simulation.disease is not null)
+                return simulation.disease.Name;
+
+            return "";
+        }
+
+
+        public double GetDiseaseDefaultSpeed()
+        {
+            if (simulation.disease is not null)
+                return simulation.disease.DefaultSpreadingSpeed;
+
+            return double.NaN;
+        }
+
+        public double GetDiseaseTotalSpeed(){
+            if (simulation.disease is not null)
+                return simulation.disease.TotalSpreadingSpeed;
+
+            return double.NaN;
+        }
+
+        public double GetDiseaseDefaultDeath()
+        {
+            if (simulation.disease is not null)
+                return simulation.disease.DefaultDeathProbability;
+
+            return double.NaN;
+        }
+
+        public double GetDiseaseTotalDeath() {
+            if (simulation.disease is not null)
+                return simulation.disease.TotalDeathProbability;
+
+            return double.NaN;
         }
     }
 }

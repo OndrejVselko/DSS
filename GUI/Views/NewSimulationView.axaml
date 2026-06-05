@@ -18,10 +18,10 @@
                     HorizontalAlignment="Left" 
                     Margin="10,0,0,0"
                     Click="OnBackClicked"/>
-            <Button Grid.Column="1" Content="Další" 
-                    HorizontalAlignment="Right" 
-                    Margin="0,0,10,0"
-                    Click="OnNextClicked"/>
+            <Button x:Name="NextButton" Grid.Column="1" Content="Další" 
+                HorizontalAlignment="Right" 
+                Margin="0,0,10,0"
+                Click="OnNextClicked"/>
         </Grid>
     </Grid>
 </UserControl>

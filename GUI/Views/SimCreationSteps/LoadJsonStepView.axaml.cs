@@ -43,6 +43,8 @@ public partial class LoadJsonStepView : UserControl
             this.FindControl<TextBlock>("StatusText")!.Text = "Scénáø naèten úspìšnì.";
             this.FindControl<TextBlock>("StatusText")!.Foreground = Avalonia.Media.Brushes.Green;
             _parent.ScenarioLoaded = true;
+            _parent.SetNextEnabled(true);
+            _parent.ResetSteps(); ;
         }
         catch (System.Exception ex)
         {

@@ -1,8 +1,75 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
              x:Class="GUI.CreateDiseaseStepView">
-  Welcome to Avalonia!
+    <Grid ColumnDefinitions="*, *" Margin="20">
+        
+            <!-- Levý sloupec - formulář -->
+            <StackPanel Grid.Column="0" Spacing="12" VerticalAlignment="Center" Margin="0,0,20,0">
+                <TextBlock Text="Vytvoření nemoci" FontSize="20" FontWeight="Bold"/>
+            
+                <TextBlock Text="Název nemoci"/>
+                <TextBox x:Name="NameBox" CaretBrush="#111111" TextChanged="OnNameTextChanged"/>
+
+            
+                <TextBlock Text="Délka onemocnění (dny)"/>
+                <TextBox x:Name="LengthBox" CaretBrush="#111111" TextChanged="OnIntTextChanged"/>
+
+                <TextBlock Text="Za jak dlouho se člověk uzdraví nebo zemře. Celé číslo." 
+                           FontSize="11" Foreground="Gray"/>
+            
+
+               <TextBlock Text="Toto jsou základní hodnoty nemoci. Výsledné hodnoty budou ovlivněny vlastnostmi nemoci a charakteristikami jednotlivých regionů." 
+                    FontSize="11" Foreground="Gray" TextWrapping="Wrap"/>
+                <TextBlock Text="Rychlost šíření"/>
+                <TextBox x:Name="SpeedBox" CaretBrush="#111111" TextChanged="OnDoubleTextChanged"/>
+                <TextBlock Text="Jeden člověk nakazí přibližně n dalších. Desetinné číslo, min: 0." 
+                           FontSize="11" Foreground="Gray"/>
+            
+                <TextBlock Text="Úmrtnost (%)"/>
+                <TextBox x:Name="DeathBox" CaretBrush="#111111" TextChanged="OnDoubleTextChanged"/>
+                <TextBlock Text="Desetinné číslo, rozsah: 0-100." 
+                        FontSize="11" Foreground="Gray"/>
+                <TextBlock x:Name="ErrorText" Foreground="Red" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Pravý sloupec - ability -->
+            <Grid Grid.Column="1" RowDefinitions="Auto, *, Auto, *" >
+            
+                <!-- Horní řada - aktivní a dostupné -->
+                <Grid Grid.Row="0" Grid.RowSpan="2" ColumnDefinitions="*, Auto, *">
+                
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Aktivní vlastnosti" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <ListBox x:Name="ActiveAbilitiesBox" Height="300"
+                                 SelectionChanged="OnAbilitySelectionChanged"
+                                 DoubleTapped="OnActiveAbilityDoubleTapped"/>
+                    </StackPanel>
+                
+                    <Button Grid.Column="1" Content="↔" 
+                            VerticalAlignment="Center" Margin="8,0"
+                            Click="OnMoveAbilityClicked"/>
+                
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Dostupné vlastnosti" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <ListBox x:Name="AvailableAbilitiesBox" Height="300"
+                                 SelectionChanged="OnAbilitySelectionChanged"
+                                 DoubleTapped="OnAvailableAbilityDoubleTapped"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Popis vybrané vlastnosti -->
+                <Border Grid.Row="2" Grid.RowSpan="2" 
+                        BorderBrush="Gray" BorderThickness="1" 
+                        Margin="0,12,0,0" Padding="8" Height="200">
+                    <TextBlock x:Name="AbilityDescriptionText" 
+                               Text="Vyberte vlastnost pro zobrazení popisu." 
+                               TextWrapping="Wrap"
+                               />
+                </Border>
+            </Grid>
+    </Grid>
+
 </UserControl>

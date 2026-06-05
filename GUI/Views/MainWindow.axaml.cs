@@ -9,4 +9,16 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
+
+    public void SetSimulationSize()
+    {
+        Width = 1600;
+        Height = 900;
+    }
+
+    public void SetMenuSize()
+    {
+        Width = 1200;
+        Height = 700;
+    }
 }

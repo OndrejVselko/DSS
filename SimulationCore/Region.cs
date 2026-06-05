@@ -50,6 +50,8 @@ namespace SimulationCore
         /// <summary>Queue tracking recent sick counts (by day).</summary>
         public Queue<int> SickHistory;
 
+        public List<int> AbilityIds { get; set; } = new();
+
         public List<Region> NeighbouringRegions { get; set; } = new List<Region>();
 
         public List<int> NeighbourIds { get; set; } = new();
@@ -249,6 +251,11 @@ namespace SimulationCore
         }
 
         public override string ToString()
+        {
+            return Name;
+        }
+
+        public string ToStringFull()
         {
             string result = $"[{Id}] {Name}, populace: {Population}, index zdravotnictví: {HealthcareIndex} \n" +
                 $"nemocní: {Sick}, mrtví: {Dead}, očkovaní: {Vaccinated}\n" +

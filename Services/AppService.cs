@@ -57,7 +57,7 @@ namespace Services
         /// </summary>
         public async Task LoadData(string path)
         {
-            if (path == null) throw new ArgumentNullException("input");
+            if (path == null) throw new ArgumentNullException("path");
 
             var scenario = await _dataServices.LoadScenario(path);
 
@@ -65,10 +65,9 @@ namespace Services
             _availableRegionAbilities = scenario.RegionAbilities;
             _interaction = scenario.Interactions;
 
-            _simulationServices.SetInteractions(scenario.Interactions);
-
-
+            _simulationServices.SetRegionAbilities(scenario.RegionAbilities);
             _simulationServices.SetRegions(scenario.Regions.Values.ToList());
+            _simulationServices.SetInteractions(scenario.Interactions);
         }
 
         // --- Getters ---
@@ -129,6 +128,13 @@ namespace Services
             _simulationServices.setStartingRegion(input);
         }
 
+
+        public void SetStartDate()
+        {
+            _simulationServices.SetStartDate();
+        }
+
+        public DateOnly GetDate() => _simulationServices.GetDate();
         /// <summary>
         /// Sets region spreading speed via simulation service.
         /// </summary>
@@ -175,6 +181,14 @@ namespace Services
 
         public void ChangeVaccineEfficiency(double? protectionEfficiency, double? deathProtectionEfficiency) => _simulationServices.ChangeVaccineEfficiency(protectionEfficiency, deathProtectionEfficiency);
 
+        public string GetDiseaseName() => _simulationServices.GetDiseaseName();
+        public double GetDiseaseDefaultSpeed() => _simulationServices.GetDiseaseDefaultSpeed();
+
+        public double GetDiseaseTotalSpeed() => _simulationServices.GetDiseaseTotalSpeed();
+
+        public double GetDiseaseDefaultDeath() => _simulationServices.GetDiseaseDefaultDeath();
+
+        public double GetDiseaseTotalDeath() => _simulationServices.GetDiseaseTotalDeath();
 
 
 
