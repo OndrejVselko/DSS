@@ -1,4 +1,5 @@
 ﻿using SimulationCore;
+using Shared;
 
 namespace Services
 {
@@ -10,7 +11,7 @@ namespace Services
         /// <summary>
         /// Event forwarded from simulation to notify UI about simulated days.
         /// </summary>
-        public event Action<string>? OnDaySimulated;
+        public event Action<StatisticUpdate>? OnDaySimulated;
 
         /// <summary>
         /// Service responsible for running the simulation.
@@ -44,7 +45,7 @@ namespace Services
         {
             _simulationServices = new SimulationServices();
             _dataServices = new DataServices();
-            _simulationServices.OnDaySimulated += msg => OnDaySimulated?.Invoke(msg);
+            _simulationServices.OnDaySimulated += update => OnDaySimulated?.Invoke(update);
             _availableDiseaseAbilities = new();
             _availableRegionAbilities = new();
             _interaction = new();

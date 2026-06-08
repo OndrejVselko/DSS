@@ -5,7 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulationCore
+namespace Shared
 {
     /// <summary>
     /// Represents an interaction between a disease ability and a region ability.

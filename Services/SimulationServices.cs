@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace Services
 {
@@ -15,7 +16,7 @@ namespace Services
         /// <summary>
         /// Event raised when a day is simulated (for UI output).
         /// </summary>
-        public event Action<string>? OnDaySimulated;
+        public event Action<StatisticUpdate>? OnDaySimulated;
 
         /// <summary>
         /// Internal simulation instance.
@@ -38,7 +39,7 @@ namespace Services
         public void SetSimulation()
         {
             simulation = new Simulation();
-            simulation.OnDaySimulated += (msg) => OnDaySimulated?.Invoke(msg);
+            simulation.OnDaySimulated += (update) => OnDaySimulated?.Invoke(update);
         }
 
         /// <summary>

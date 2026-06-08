@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulationCore
+namespace Shared
 {
     /// <summary>
     /// Represents a disease with base parameters and applied abilities.
@@ -30,6 +30,7 @@ namespace SimulationCore
         /// Length of sickness in days.
         /// </summary>
         public int SicknessLength { get; set; }
+        public int ImmunityLength { get; set; } = 60;
 
         /// <summary>
         /// List of abilities applied to the disease.

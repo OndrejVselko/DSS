@@ -6,6 +6,7 @@ using SimulationCore;
 using System.Collections.ObjectModel;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using Shared;
 
 namespace GUI;
 

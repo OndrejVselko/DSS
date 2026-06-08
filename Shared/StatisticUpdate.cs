@@ -5,25 +5,22 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulationCore
+namespace Shared
 {
     /// <summary>
     /// Snapshot of statistic changes produced by a simulation day.
     /// </summary>
     public struct StatisticUpdate
     {
-        /// <summary>Current total sick count.</summary>
-        public int TotalSick;
-        /// <summary>Current total dead count.</summary>
-        public int TotalDead;
-        /// <summary>Current total vaccinated count.</summary>
-        public int TotalVaccinated;
-        /// <summary>New sick during the last simulated period.</summary>
-        public int NewSick;
-        /// <summary>New dead during the last simulated period.</summary>
-        public int NewDead;
-        /// <summary>New vaccinated during the last simulated period.</summary>
-        public int NewVaccinated;
+        public DateOnly Date { get; set; }
+        public int TotalSick { get; set; }
+        public int NewSick { get; set; }
+        public int TotalDead { get; set; }
+        public int NewDead { get; set; }
+        public int TotalVaccinated { get; set; }
+        public int NewVaccinated { get; set; }
+
+        public Dictionary<string, Region> RegionsByIso { get; set; } = new();
 
         /// <summary>
         /// Creates a statistic update record.
@@ -36,6 +33,17 @@ namespace SimulationCore
             NewSick = newSick;
             NewDead = newDead;
             NewVaccinated = newVaccinated;
+        }
+        public StatisticUpdate(DateOnly date, int newSick, int newDead, int newVaccinated, int totalSick, int totalDead, int totalVaccinated, Dictionary<string, Region> regionsByIso)
+        {
+            Date = date;
+            TotalSick = totalSick;
+            TotalDead = totalDead;
+            TotalVaccinated = totalVaccinated;
+            NewSick = newSick;
+            NewDead = newDead;
+            NewVaccinated = newVaccinated;
+            RegionsByIso = regionsByIso;
         }
 
         /// <summary>

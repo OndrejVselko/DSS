@@ -1,4 +1,5 @@
 ﻿using SimulationCore;
+using Shared;
 
 namespace Data
 {

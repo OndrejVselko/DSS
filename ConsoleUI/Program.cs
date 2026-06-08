@@ -2,6 +2,7 @@
 using SimulationCore;
 using System.Diagnostics;
 using System.Text.Json;
+using Shared;
 
 namespace ConsoleUI
 {

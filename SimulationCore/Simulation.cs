@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-
+using Shared;
 namespace SimulationCore
 {
     /// <summary>
@@ -10,7 +10,10 @@ namespace SimulationCore
         /// <summary>
         /// Event invoked after each simulated day with a textual report.
         /// </summary>
-        public event Action<string>? OnDaySimulated;
+        //public event Action<string>? OnDaySimulated;
+
+        public event Action<StatisticUpdate>? OnDaySimulated;
+
 
         /// <summary>Disease under simulation.</summary>
         public Disease disease { get; set; }
@@ -48,7 +51,7 @@ namespace SimulationCore
         {
             this.pendingCommands = new Queue<ISimulationCommand>();
             this.reportingInterval = 1;
-            this.dayLength = 1000;
+            this.dayLength = 100;
         }
 
         /// <summary>
@@ -150,7 +153,7 @@ namespace SimulationCore
         public void SetRegionQueues()
         {
             foreach (int key in this.regions.Keys)
-                regions[key].SetStartingQueue(this.disease.SicknessLength);
+                regions[key].SetStartingQueue(disease.ImmunityLength);
         }
 
         /// <summary>Updates disease values in all regions.</summary>
@@ -187,8 +190,8 @@ namespace SimulationCore
             while (this._isRunning && !ct.IsCancellationRequested)
             {
                 currentSimulationDate = currentSimulationDate.AddDays(1);
-                string dayString = currentSimulationDate.ToString() + "\n" + SimulateDay().ToString();
-                OnDaySimulated?.Invoke(dayString);
+                var update = SimulateDay();
+                OnDaySimulated?.Invoke(update);
 
                 try { await Task.Delay(dayLength, ct); }
                 catch (TaskCanceledException) { break; }
@@ -217,11 +220,14 @@ namespace SimulationCore
                 totalVaccinated += regionUpdate.TotalVaccinated;
             }
             foreach (int key in this.regions.Keys)
-            {
                 regions[key].RecalculateRandomOccurrence(totalSick, GlobalPopulation);
-            }
 
-                return new StatisticUpdate(newSick, newDead, newVaccinated, totalSick, totalDeath, totalVaccinated);
+            var regionsByIso = regions.Values
+                .Where(r => !string.IsNullOrEmpty(r.IsoCode))
+                .ToDictionary(r => r.IsoCode, r => r);
+
+            return new StatisticUpdate(currentSimulationDate, newSick, newDead, newVaccinated,
+                totalSick, totalDeath, totalVaccinated, regionsByIso);
         }
     }
 }

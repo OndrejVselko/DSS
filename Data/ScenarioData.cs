@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Shared;
 using SimulationCore;
 
 namespace Data
@@ -17,7 +17,7 @@ namespace Data
         /// <summary>
         /// List of regions included in the scenario.
         /// </summary>
-        public List<SimulationCore.Region> Regions { get; set; } = new();
+        public List<Shared.Region> Regions { get; set; } = new();
 
         /// <summary>
         /// Abilities applicable to regions (DTO form).

@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using SimulationCore;
 using System.Collections.ObjectModel;
+using Shared;
 
 namespace GUI;
 

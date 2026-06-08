@@ -4,83 +4,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulationCore
+namespace Shared
 {
-    /// <summary>
-    /// Represents a region in the simulation with demographics and abilities.
-    /// </summary>
     public class Region
     {
         private readonly Random _random = new Random();
-        /// <summary>Region identifier.</summary>
-        public int Id { get; set; }
-        /// <summary>Region name.</summary>
-        public string Name { get; set; }
 
+        public int Id { get; set; }
+        public string Name { get; set; }
         public string IsoCode { get; set; } = string.Empty;
-        /// <summary>Population count.</summary>
         public int Population { get; set; }
-        /// <summary>Currently sick individuals.</summary>
         public int Sick { get; set; }
-        /// <summary>Accumulated dead individuals.</summary>
         public int Dead { get; set; }
-        /// <summary>Accumulated vaccinated individuals.</summary>
         public int Vaccinated { get; set; }
+        public int Immune { get; set; }
+
+        // Fronta imunity — po vypršení se člověk stává znovu náchylným
+        public Queue<int> ImmunityHistory;
 
         public bool Vaccinating { get; set; }
-
         public Vaccine vaccine { get; set; }
         public double TotalVaccinatingCapacity { get; set; }
-        /// <summary>Healthcare quality index for the region.</summary>
         public double HealthcareIndex { get; set; }
-        /// <summary>Effective total spreading speed for the region.</summary>
         public double TotalSpreadingSpeed { get; set; }
-        /// <summary>Effective total death probability for the region.</summary>
         public double TotalDeathProbability { get; set; }
-        /// <summary>Base region spreading speed.</summary>
         public double RegionSpreadingSpeed { get; set; }
-        /// <summary>Region-specific death multiplier.</summary>
         public double RegionDeathPropability { get; set; } = 1;
-        /// <summary>Spreading speed contributed by disease.</summary>
         public double DiseaseSpreadingSpeed { get; set; }
-        /// <summary>Death probability contributed by disease.</summary>
         public double DiseaseDeathPropability { get; set; }
-        /// <summary>Abilities applied to the region.</summary>
         public List<RegionAbility> Abilities { get; set; }
-        /// <summary>Queue tracking recent sick counts (by day).</summary>
-        public Queue<int> SickHistory;
-
         public List<int> AbilityIds { get; set; } = new();
-
-        public List<Region> NeighbouringRegions { get; set; } = new List<Region>();
-
+        public List<Region> NeighbouringRegions { get; set; } = new();
         public List<int> NeighbourIds { get; set; } = new();
-
         public double TotalRandomOccurrence { get; set; } = 0;
-
         public double BorderAbilityModifier { get; private set; } = 1.0;
-
         public List<Interaction> ActiveInteractions;
-
         public double InteractionSpreadingModifier;
-
         public double InteractionDeathModifier;
 
+        // Délka imunity v dnech — nastavuje se z Disease před simulací
+        public int ImmunityLength { get; set; } = 60;
 
-
-
-
-        /// <summary>
-        /// Initializes region collections.
-        /// </summary>
         public Region()
         {
-            SickHistory = new Queue<int>();
             Abilities = new List<RegionAbility>();
-            ActiveInteractions = new List<Interaction>(); 
+            ActiveInteractions = new List<Interaction>();
+            ImmunityHistory = new Queue<int>();
             TotalVaccinatingCapacity = 0.001 * Population;
-            InteractionSpreadingModifier = 1.0; 
-            InteractionDeathModifier = 1.0; 
+            InteractionSpreadingModifier = 1.0;
+            InteractionDeathModifier = 1.0;
         }
 
         public void SetNeighbouringRegions(List<Region> regions)
@@ -88,39 +60,31 @@ namespace SimulationCore
             NeighbouringRegions = regions;
         }
 
-
         /// <summary>
-        /// Pre-fills sick history queue with zeros for the given days.
+        /// Inicializuje frontu imunity nulami.
         /// </summary>
-        public void SetStartingQueue(int days)
+        public void SetStartingQueue(int immunityLength)
         {
-            for (int i = 0; i < days; i++)
-            {
-                SickHistory.Enqueue(0);
-            }
+            ImmunityLength = immunityLength;
+            ImmunityHistory = new Queue<int>();
+            for (int i = 0; i < immunityLength; i++)
+                ImmunityHistory.Enqueue(0);
+
+            if (TotalVaccinatingCapacity == 0)
+                TotalVaccinatingCapacity = Population * 0.001;
         }
 
-        /// <summary>
-        /// Adds a region ability and updates region values.
-        /// </summary>
         public void AddAbility(RegionAbility ability)
         {
             Abilities.Add(ability);
             UpdateRegionValues();
         }
 
-        /// <summary>
-        /// Removes a region ability and updates region values.
-        /// </summary>
         public void RemoveAbility(RegionAbility ability)
         {
             Abilities.Remove(ability);
             UpdateRegionValues();
         }
-
-        /// <summary>
-        /// Recomputes region-level totals using region and disease modifiers.
-        /// </summary>
 
         public void RecalculateRandomOccurrence(int globalSick, int globalPopulation)
         {
@@ -132,6 +96,7 @@ namespace SimulationCore
             double raw = (globalRatio * 0.05) + (neighbourRatio * 0.95);
             TotalRandomOccurrence = Math.Max(Math.Min(raw * BorderAbilityModifier, 0.8), 0);
         }
+
         public void UpdateRegionValues()
         {
             double deathProbability = HealthcareIndex * DiseaseDeathPropability;
@@ -146,18 +111,15 @@ namespace SimulationCore
                 borderModifier *= ability.BorderModifier;
                 vaccinationCapacity *= ability.VaccinationCapacityModifier;
             }
-            spreadingSpeed *= InteractionSpreadingModifier; //  Tady bude místo jedničky funkce Interakce, která vrácí hodnotu pro region
-            deathProbability *= InteractionDeathModifier; //  Tady bude místo jedničky funkce Interakce, která vrácí hodnotu pro region
+
+            spreadingSpeed *= InteractionSpreadingModifier;
+            deathProbability *= InteractionDeathModifier;
             TotalSpreadingSpeed = spreadingSpeed;
             TotalDeathProbability = deathProbability;
             BorderAbilityModifier = borderModifier;
             TotalVaccinatingCapacity = vaccinationCapacity;
-
         }
 
-        /// <summary>
-        /// Simulates a single day for the region and returns statistics delta.
-        /// </summary>
         public StatisticUpdate SimulateDay()
         {
             double localDeathProtectionEfficiency = 0;
@@ -167,117 +129,104 @@ namespace SimulationCore
                 localDeathProtectionEfficiency = vaccine.DeathProtectionEfficiency;
                 localProtectionEfficiency = vaccine.ProtectionEfficiency;
             }
-            int finishingSick = this.SickHistory.Dequeue();
 
-            int deathGrowth = (int)Math.Floor(finishingSick * TotalDeathProbability);
-            deathGrowth -= (int)Math.Floor(((double)Vaccinated / Population) * deathGrowth * localDeathProtectionEfficiency);
-            deathGrowth = Math.Min(deathGrowth, finishingSick);
+            // --- Uzdravování ---
+            // Každý nakažený má šanci 1/SicknessLength na uzdravení tento den
+            // SicknessLength je délka nemoci — uložena přes ImmunityLength jako základ
+            // Používáme TotalSpreadingSpeed jako základ, ale pro uzdravování potřebujeme SicknessLength
+            // Ten je uložen v ImmunityHistory.Count (délka fronty = délka nemoci při SetStartingQueue)
+            int sicknessLength = Math.Max(ImmunityHistory.Count, 1);
+            double recoveryChance = 1.0 / sicknessLength;
+            int recovering = ProbabilisticFloor(Sick * recoveryChance);
+            recovering = Math.Min(recovering, Sick);
 
-            int newInfections = (int)Math.Floor(this.Sick * TotalSpreadingSpeed);
-            newInfections -= (int)Math.Floor(((double)Vaccinated / Population) * newInfections * localProtectionEfficiency);
-            int susceptible = this.Population - this.Sick - this.Dead;
-            newInfections = Math.Min(newInfections, susceptible);
+            // --- Úmrtí ---
+            int deathGrowth = ProbabilisticFloor(recovering * TotalDeathProbability);
+            deathGrowth -= ProbabilisticFloor(((double)Vaccinated / Math.Max(Population, 1)) * deathGrowth * localDeathProtectionEfficiency);
+            deathGrowth = Math.Clamp(deathGrowth, 0, recovering);
 
-            SickHistory.Enqueue(newInfections);
+            int newlyRecovered = recovering - deathGrowth;
 
-            Sick += newInfections - finishingSick;
+            // --- Imunita ---
+            // Uzdravení jdou do fronty imunity
+            int losingImmunity = ImmunityHistory.Dequeue();
+            ImmunityHistory.Enqueue(newlyRecovered);
+            Immune += newlyRecovered - losingImmunity;
+            Immune = Math.Max(Immune, 0);
 
+            // --- Nové nákazy ---
+            int susceptible = Math.Max(Population - Sick - Dead - Immune - Vaccinated, 0);
+
+            int newInfections = ProbabilisticFloor(Sick * TotalSpreadingSpeed * ((double)susceptible / Math.Max(Population, 1)));
+            newInfections -= ProbabilisticFloor(((double)Vaccinated / Math.Max(Population, 1)) * newInfections * localProtectionEfficiency);
+            newInfections = Math.Clamp(newInfections, 0, susceptible);
+
+            // --- Aktualizace stavu ---
+            Sick += newInfections - recovering;
+            Sick = Math.Max(Sick, 0);
             Dead += deathGrowth;
+            Dead = Math.Min(Dead, Population);
 
-            int newVaccinated = 0;
-            if (Vaccinating && Vaccinated < Population - Dead)
-            {
-                newVaccinated = Math.Min((int)(Math.Floor(Population * TotalVaccinatingCapacity)), Population - Dead - Vaccinated);
-                Vaccinated += newVaccinated;
-            }
-
-            if (_random.NextDouble() < TotalRandomOccurrence && Population - Sick - Dead - Vaccinated > 0)
+            // --- Náhodný výskyt ---
+            if (_random.NextDouble() < TotalRandomOccurrence && susceptible > 0)
             {
                 Sick += 1;
                 newInfections += 1;
             }
 
-
-            if (this.Sick < 0)
-                this.Sick = 0;
+            // --- Očkování ---
+            int newVaccinated = 0;
+            if (Vaccinating)
+            {
+                double capacity = TotalVaccinatingCapacity > 0
+                    ? TotalVaccinatingCapacity
+                    : Population * 0.001;
+                int remaining = Math.Max(Population - Dead - Vaccinated - Immune - Sick, 0);
+                newVaccinated = Math.Min(ProbabilisticFloor(Population * capacity), remaining);
+                Vaccinated = Math.Min(Vaccinated + newVaccinated, Population - Dead);
+            }
 
             return new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
         }
 
-        /// <summary>
-        /// Updates disease-related values used by the region.
-        /// </summary>
         public void UpdateDiseaseValues(double diseaseSpreadingSpeed, double diseaseDeathProbability)
         {
             DiseaseSpreadingSpeed = diseaseSpreadingSpeed;
             DiseaseDeathPropability = diseaseDeathProbability;
         }
 
-        /// <summary>
-        /// Changes base spreading speed for the region and recalculates totals.
-        /// </summary>
         public void ChangeSpreadingSpeed(double newSpeed)
         {
             RegionSpreadingSpeed = newSpeed;
             UpdateRegionValues();
         }
 
-        /// <summary>
-        /// Changes healthcare index for the region and recalculates totals.
-        /// </summary>
         public void ChangeHealtcareIndex(double healtcareIndex)
         {
-            this.HealthcareIndex = healtcareIndex;
+            HealthcareIndex = healtcareIndex;
             UpdateRegionValues();
         }
 
-        /// <summary>
-        /// Returns a multi-line string describing region state and abilities.
-        /// </summary>
+        public void StartVaccinating() => Vaccinating = true;
+        public void StopVaccinating() => Vaccinating = false;
+        public void SetVaccine(Vaccine vaccine) => this.vaccine = vaccine;
 
-        public void StartVaccinating()
-        {
-            Vaccinating = true;
-        }
-
-        public void StopVaccinating()
-        {
-            Vaccinating = false;
-        }
-
-        public void SetVaccine(Vaccine vaccine)
-        {
-            this.vaccine = vaccine;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
 
         public string ToStringFull()
         {
             string result = $"[{Id}] {Name}, populace: {Population}, index zdravotnictví: {HealthcareIndex} \n" +
-                $"nemocní: {Sick}, mrtví: {Dead}, očkovaní: {Vaccinated}\n" +
+                $"nemocní: {Sick}, mrtví: {Dead}, očkovaní: {Vaccinated}, imunní: {Immune}\n" +
                 $"zákl. rychlost šíření: {RegionSpreadingSpeed}, rychlost šíření celkem: {TotalSpreadingSpeed}\n" +
-                $"zákl. šance na úmrtí: {RegionDeathPropability}, šance na úmrtí celkem: {TotalSpreadingSpeed}\n" +
+                $"zákl. šance na úmrtí: {RegionDeathPropability}, šance na úmrtí celkem: {TotalDeathProbability}\n" +
                 $"Vlastnosti regionu: ";
             if (Abilities.Count > 0)
-            {
                 foreach (RegionAbility ability in Abilities)
-                {
                     result += ability.ToString() + "\n";
-                }
-            }
             else
-            {
                 result += "\\";
-            }
-
             return result;
         }
-
-
 
         public void AddInteraction(Interaction interaction)
         {
@@ -303,24 +252,26 @@ namespace SimulationCore
                 totalDeathInteraction *= interaction.DeathModifier;
                 totalSpreadingInteraction *= interaction.SpreadingModifier;
             }
-
             InteractionSpreadingModifier = totalSpreadingInteraction;
             InteractionDeathModifier = totalDeathInteraction;
-
             UpdateRegionValues();
         }
 
-        public String InteractionsToString()
+        public string InteractionsToString()
         {
             string result = string.Empty;
             foreach (Interaction interaction in ActiveInteractions)
-            {
                 result += interaction.ToString() + "\n";
-            }
+            return result != string.Empty ? result : "Žádné interakce";
+        }
 
-            if (result != string.Empty)
-                return result;
-            else return "Žádné interakce";
+        private int ProbabilisticFloor(double value)
+        {
+            if (value <= 0) return 0;
+            if (value >= int.MaxValue) return int.MaxValue;
+            int floor = (int)Math.Floor(value);
+            double remainder = value - floor;
+            return floor + (_random.NextDouble() < remainder ? 1 : 0);
         }
     }
 }
