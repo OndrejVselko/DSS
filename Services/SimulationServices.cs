@@ -222,7 +222,6 @@ namespace Services
             }
         }
 
-
         public void ChangeVaccineEfficiency(double? protectionEfficiency, double? deathProtectionEfficiency)
         {
             if (protectionEfficiency.HasValue)
@@ -323,6 +322,11 @@ namespace Services
                 return simulation.disease.DefaultDeathProbability;
 
             return double.NaN;
+        }
+
+        public (double, double) GetVaccineParameters()
+        {
+            return (simulation.vaccine.ProtectionEfficiency, simulation.vaccine.DeathProtectionEfficiency);
         }
 
         public double GetDiseaseTotalDeath() {

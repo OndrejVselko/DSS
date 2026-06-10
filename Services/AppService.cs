@@ -191,6 +191,8 @@ namespace Services
 
         public double GetDiseaseTotalDeath() => _simulationServices.GetDiseaseTotalDeath();
 
+        public (double, double) GetVaccineParameters() => _simulationServices.GetVaccineParameters();
+
 
 
         public void StartVaccinatingAllRegions() => _simulationServices.StartVaccinatingAllRegions();

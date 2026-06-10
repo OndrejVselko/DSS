@@ -100,38 +100,59 @@
             <ScrollViewer>
                 <StackPanel Margin="8" Spacing="8">
 
-                    <Grid ColumnDefinitions="Auto, *, *">
+                    <Grid ColumnDefinitions="Auto, Auto, *, Auto, Auto">
                         <Button x:Name="PlayPauseButton" Grid.Column="0" 
                                 Content="▶" Width="40" Height="40"
                                 Click="OnPlayPauseClicked"/>
                         <TextBlock x:Name="DateText" Grid.Column="1" 
                                    VerticalAlignment="Center" Margin="8,0"
                                    Text="--.--.----"/>
-                        <TextBlock x:Name="DiseaseNameText" Grid.Column="2"
-                                   VerticalAlignment="Center"
-                                   Text=""/>
+                        <TextBlock Grid.Column="2" Text="Rychlost dne:" 
+                                   VerticalAlignment="Center" Margin="8,0,4,0"
+                                   HorizontalAlignment="Right"/>
+                        <TextBox x:Name="DaySpeedBox" Grid.Column="3" Width="80" 
+                                 VerticalAlignment="Center"/>
+                        <Button Grid.Column="4" Content="✓" Margin="4,0,0,0"
+                                VerticalAlignment="Center" Click="OnDaySpeedConfirmed"/>
                     </Grid>
 
                     <Separator/>
 
-                    <TextBlock Text="Rychlost šíření" FontWeight="Bold"/>
-                    <Grid ColumnDefinitions="Auto, *, Auto, *">
-                        <TextBlock Grid.Column="0" Text="Základ:" VerticalAlignment="Center"/>
-                        <TextBox x:Name="SpreadingSpeedBox" Grid.Column="1" Margin="4,0"/>
-                        <Button Grid.Column="2" Content="✓" Margin="4,0"
-                                Click="OnSpreadingSpeedConfirmed"/>
-                        <TextBlock x:Name="TotalSpreadingText" Grid.Column="3" 
-                                   VerticalAlignment="Center" Text="Celkem: -"/>
-                    </Grid>
+                    <TextBlock x:Name="DiseaseNameText" FontWeight="Bold" Text=""/>
 
-                    <TextBlock Text="Šance na úmrtí" FontWeight="Bold"/>
-                    <Grid ColumnDefinitions="Auto, *, Auto, *">
-                        <TextBlock Grid.Column="0" Text="Základ:" VerticalAlignment="Center"/>
-                        <TextBox x:Name="DeathBox" Grid.Column="1" Margin="4,0"/>
-                        <Button Grid.Column="2" Content="✓" Margin="4,0"
-                                Click="OnDeathConfirmed"/>
-                        <TextBlock x:Name="TotalDeathText" Grid.Column="3"
-                                   VerticalAlignment="Center" Text="Celkem: -"/>
+                    <Grid ColumnDefinitions="*, *">
+                        <!-- Levá polovina: Rychlost šíření a úmrtnost -->
+                        <StackPanel Grid.Column="0" Spacing="8" Margin="0,0,8,0">
+                            <TextBlock Text="Rychlost šíření" FontWeight="Bold"/>
+                            <Grid ColumnDefinitions="Auto, *, Auto, *">
+                                <TextBlock Grid.Column="0" Text="Základ:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="SpreadingSpeedBox" Grid.Column="1" Margin="4,0"/>
+                                <Button Grid.Column="2" Content="✓" Margin="4,0"
+                                        Click="OnSpreadingSpeedConfirmed"/>
+                                <TextBlock x:Name="TotalSpreadingText" Grid.Column="3" 
+                                           VerticalAlignment="Center" Text="Celkem: -"/>
+                            </Grid>
+
+                            <TextBlock Text="Šance na úmrtí" FontWeight="Bold"/>
+                            <Grid ColumnDefinitions="Auto, *, Auto, *">
+                                <TextBlock Grid.Column="0" Text="Základ:" VerticalAlignment="Center"/>
+                                <TextBox x:Name="DeathBox" Grid.Column="1" Margin="4,0"/>
+                                <Button Grid.Column="2" Content="✓" Margin="4,0"
+                                        Click="OnDeathConfirmed"/>
+                                <TextBlock x:Name="TotalDeathText" Grid.Column="3"
+                                           VerticalAlignment="Center" Text="Celkem: -"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Pravá polovina: Nastavení vakcíny -->
+                        <StackPanel Grid.Column="1" Spacing="4" Margin="8,0,0,0" Width="200">
+                            <TextBlock Text="Nastavení vakcíny" FontWeight="Bold"/>
+                            <TextBlock Text="Účinnost proti přenosu (%):" FontSize="11"/>
+                            <TextBox x:Name="VaccineProtectionBox"  Width="100"/>
+                            <TextBlock Text="Účinnost proti úmrtí (%):" FontSize="11"/>
+                            <TextBox x:Name="VaccineDeathBox"  Width="100"/>
+                            <Button Content="Použít" HorizontalAlignment="Right" Click="OnVaccineConfirmed"/>
+                        </StackPanel>
                     </Grid>
 
                     <Separator/>
@@ -140,7 +161,7 @@
                     <Grid ColumnDefinitions="*, Auto, *">
                         <StackPanel Grid.Column="0">
                             <TextBlock Text="Aktivní" FontSize="11"/>
-                            <ListBox x:Name="ActiveDiseaseAbilitiesBox" Height="120"
+                            <ListBox x:Name="ActiveDiseaseAbilitiesBox" Height="150"
                                      SelectionChanged="OnDiseaseAbilitySelectionChanged"
                                      DoubleTapped="OnActiveDiseaseAbilityDoubleTapped"/>
                         </StackPanel>
@@ -148,7 +169,7 @@
                                 Margin="4,0" Click="OnMoveDiseaseAbilityClicked"/>
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="Dostupné" FontSize="11"/>
-                            <ListBox x:Name="AvailableDiseaseAbilitiesBox" Height="120"
+                            <ListBox x:Name="AvailableDiseaseAbilitiesBox" Height="150"
                                      SelectionChanged="OnDiseaseAbilitySelectionChanged"
                                      DoubleTapped="OnAvailableDiseaseAbilityDoubleTapped"/>
                         </StackPanel>
@@ -159,27 +180,10 @@
 
                     <Separator/>
 
-                    <TextBlock Text="Nastavení vakcíny" FontWeight="Bold"/>
-                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto">
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Účinnost proti přenosu (%):" FontSize="11" TextWrapping="Wrap"/>
-                        <TextBox x:Name="VaccineProtectionBox" Grid.Row="1" Grid.Column="0" Margin="0,2,4,0"/>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Účinnost proti úmrtí (%):" FontSize="11" TextWrapping="Wrap"/>
-                        <TextBox x:Name="VaccineDeathBox" Grid.Row="1" Grid.Column="1" Margin="4,2,0,0"/>
-                    </Grid>
-                    <Button Content="Použít" HorizontalAlignment="Right" Click="OnVaccineConfirmed"/>
-
-                    <Separator/>
+                   
 
                     <TextBlock Text="Denní výpis" FontWeight="Bold"/>
-                    <ListBox x:Name="LogBox" Height="120"/>
-
-                    <Separator/>
-
-                    <TextBlock Text="Rychlost simulace" FontWeight="Bold"/>
-                    <Grid ColumnDefinitions="*, Auto">
-                        <TextBox x:Name="DaySpeedBox" Grid.Column="0" Margin="0,0,4,0"/>
-                        <Button Grid.Column="1" Content="Použít" Click="OnDaySpeedConfirmed"/>
-                    </Grid>
+                    <ListBox x:Name="LogBox" Height="200"/>
 
                     <Separator/>
 

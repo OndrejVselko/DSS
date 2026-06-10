@@ -52,6 +52,7 @@ public partial class SimulationView : UserControl
         InitializeMap();
         InitializeAbilities();
         UpdateDiseaseValues();
+        InitializeVaccine();
 
         _appService.OnDaySimulated += OnDaySimulated;
 
@@ -64,15 +65,15 @@ public partial class SimulationView : UserControl
     {
         this.FindControl<TextBlock>("DiseaseNameText")!.Text = _appService.GetDiseaseName();
         this.FindControl<TextBox>("SpreadingSpeedBox")!.Text = _appService.GetDiseaseDefaultSpeed().ToString();
-        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Celkem: " + _appService.GetDiseaseTotalSpeed().ToString();
-        this.FindControl<TextBox>("DeathBox")!.Text = _appService.GetDiseaseDefaultDeath().ToString();
-        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Celkem: " + _appService.GetDiseaseTotalDeath().ToString();
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Celkem: " + _appService.GetDiseaseTotalSpeed().ToString("F2");
+        this.FindControl<TextBox>("DeathBox")!.Text = (_appService.GetDiseaseDefaultDeath() * 100).ToString();
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Celkem: " + (_appService.GetDiseaseTotalDeath() * 100).ToString("F2");
     }
 
     private void UpdateDiseaseTotals()
     {
-        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Celkem: " + _appService.GetDiseaseTotalSpeed().ToString();
-        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Celkem: " + _appService.GetDiseaseTotalDeath().ToString();
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Celkem: " + _appService.GetDiseaseTotalSpeed().ToString("F2");
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Celkem: " + (_appService.GetDiseaseTotalDeath() * 100).ToString("F2");
     }
 
     private void InitializeAbilities()
@@ -82,6 +83,13 @@ public partial class SimulationView : UserControl
 
         this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!.ItemsSource = _activeAbilities;
         this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!.ItemsSource = _availableAbilities;
+    }
+
+    public void InitializeVaccine()
+    {
+        (double, double) values = _appService.GetVaccineParameters();
+        this.FindControl<TextBox>("VaccineProtectionBox")!.Text += (values.Item1 * 100).ToString();
+        this.FindControl<TextBox>("VaccineDeathBox")!.Text += (values.Item2 * 100).ToString();
     }
 
     private void InitializeMap()
@@ -168,9 +176,14 @@ public partial class SimulationView : UserControl
     // --- Úmrtnost ---
     private void OnDeathConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        // Function expects string, not double. Temporary solution :(
         var text = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
-        try { _appService.ChangeDeathProbability(text); }
-        catch { }
+        if(double.TryParse(text, out var d))
+        {
+            try { _appService.ChangeDeathProbability((d / 100).ToString()); }
+            catch { }
+        }
+
     }
 
     // --- Ability ---
@@ -370,11 +383,11 @@ public partial class SimulationView : UserControl
             SetDeltaLabel("VaccinatedDeltaLabel", _lastUpdate.NewVaccinated, true);
 
             this.FindControl<TextBlock>("SpreadingLabel")!.Text =
-                $"Šíření: {region.RegionSpreadingSpeed:F3} / {region.TotalSpreadingSpeed:F3}";
+                $"Šíření: {region.RegionSpreadingSpeed:F2} / {region.TotalSpreadingSpeed:F2}";
             this.FindControl<TextBlock>("RandomOccurrenceLabel")!.Text =
-                $"Náhodný výskyt: {region.TotalRandomOccurrence:F3}";
+                $"Náhodný výskyt: {region.TotalRandomOccurrence:F2}";
             this.FindControl<TextBlock>("DeathLabel")!.Text =
-                $"Úmrtnost: {region.DiseaseDeathPropability:F3} / {region.TotalDeathProbability:F3}";
+                $"Úmrtnost: {region.DiseaseDeathPropability:F2} / {region.TotalDeathProbability:F2}";
             this.FindControl<TextBox>("HealthcareIndexBox")!.Text =
                 region.HealthcareIndex.ToString();
 
