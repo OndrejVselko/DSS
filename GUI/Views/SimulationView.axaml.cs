@@ -54,6 +54,13 @@ public partial class SimulationView : UserControl
         UpdateDiseaseValues();
         InitializeVaccine();
 
+        var regions = _appService.GetAllRegions().Values
+        .Where(r => !string.IsNullOrEmpty(r.IsoCode))
+        .ToDictionary(r => r.IsoCode, r => r);
+
+        _lastUpdate = new StatisticUpdate(DateOnly.MinValue, 0, 0, 0, 0, 0, 0, regions);
+
+
         _appService.OnDaySimulated += OnDaySimulated;
 
         this.FindControl<ListBox>("LogBox")!.ItemsSource = _logItems;
@@ -191,7 +198,12 @@ public partial class SimulationView : UserControl
     {
         var listBox = sender as ListBox;
         if (listBox?.SelectedItem is DiseaseAbility ability)
-            this.FindControl<TextBlock>("DiseaseAbilityDescText")!.Text = ability.Description;
+        {
+            string text = $"{ability.Name}\n{ability.Description}\n\n" +
+                          $"Modifikátor šíření: {ability.SpreadingModifier:F2}\n" +
+                          $"Modifikátor úmrtí: {ability.DeathModifier:F2}";
+            this.FindControl<TextBlock>("DiseaseAbilityDescText")!.Text = text;
+        }
     }
 
     private void OnActiveDiseaseAbilityDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
@@ -247,7 +259,8 @@ public partial class SimulationView : UserControl
     // --- Rychlost dne ---
     private void OnDaySpeedConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        // TODO: přidat do AppService
+        if (int.TryParse(this.FindControl<TextBox>("DaySpeedBox")!.Text, out int newSpeed))
+            _appService.ChangeSimulationSpeed(newSpeed);
     }
 
     // --- Ukončit ---
@@ -376,11 +389,11 @@ public partial class SimulationView : UserControl
                 $"Populace: {region.Population:N0}";
 
             SetStatLabel("SickLabel", region.Sick);
-            SetDeltaLabel("SickDeltaLabel", _lastUpdate.NewSick, false);
+            SetDeltaLabel("SickDeltaLabel", _lastUpdate.RegionsByIso[region.IsoCode].LastUpdate.NewSick, false);
             SetStatLabel("DeadLabel", region.Dead);
-            SetDeltaLabel("DeadDeltaLabel", _lastUpdate.NewDead, true);
+            SetDeltaLabel("DeadDeltaLabel", _lastUpdate.RegionsByIso[region.IsoCode].LastUpdate.NewDead, true);
             SetStatLabel("VaccinatedLabel", region.Vaccinated);
-            SetDeltaLabel("VaccinatedDeltaLabel", _lastUpdate.NewVaccinated, true);
+            SetDeltaLabel("VaccinatedDeltaLabel", _lastUpdate.RegionsByIso[region.IsoCode].LastUpdate.NewVaccinated, true);
 
             this.FindControl<TextBlock>("SpreadingLabel")!.Text =
                 $"Šíření: {region.RegionSpreadingSpeed:F2} / {region.TotalSpreadingSpeed:F2}";
@@ -528,5 +541,14 @@ public partial class SimulationView : UserControl
             _availableRegionAbilities.Add(ability);
             region.AddAbility(ability);
         }
+    }
+
+    private void OnDaySpeedTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var box = sender as TextBox;
+        if (box == null) return;
+        var text = box.Text ?? "";
+        if (!string.IsNullOrEmpty(text) && !uint.TryParse(text, out _))
+            box.Text = text[..^1];
     }
 }

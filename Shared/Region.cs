@@ -14,9 +14,9 @@ namespace Shared
         public string Name { get; set; }
         public string IsoCode { get; set; } = string.Empty;
         public int Population { get; set; }
-        public int Sick { get; set; }
-        public int Dead { get; set; }
-        public int Vaccinated { get; set; }
+        public int Sick { get; set; } = 0;
+        public int Dead { get; set; } = 0;
+        public int Vaccinated { get; set; } = 0;
         public int Immune { get; set; }
 
         // Fronta imunity — po vypršení se člověk stává znovu náchylným
@@ -41,6 +41,9 @@ namespace Shared
         public List<Interaction> ActiveInteractions;
         public double InteractionSpreadingModifier;
         public double InteractionDeathModifier;
+        public int SicknessLength { get; set; }
+
+        public StatisticUpdate LastUpdate { get; set; } = new StatisticUpdate(0, 0, 0, 0, 0, 0);
 
         // Délka imunity v dnech — nastavuje se z Disease před simulací
         public int ImmunityLength { get; set; } = 60;
@@ -63,8 +66,9 @@ namespace Shared
         /// <summary>
         /// Inicializuje frontu imunity nulami.
         /// </summary>
-        public void SetStartingQueue(int immunityLength)
+        public void SetStartingQueue(int sicknessLength, int immunityLength)
         {
+            SicknessLength = sicknessLength;
             ImmunityLength = immunityLength;
             ImmunityHistory = new Queue<int>();
             for (int i = 0; i < immunityLength; i++)
@@ -131,12 +135,7 @@ namespace Shared
             }
 
             // --- Uzdravování ---
-            // Každý nakažený má šanci 1/SicknessLength na uzdravení tento den
-            // SicknessLength je délka nemoci — uložena přes ImmunityLength jako základ
-            // Používáme TotalSpreadingSpeed jako základ, ale pro uzdravování potřebujeme SicknessLength
-            // Ten je uložen v ImmunityHistory.Count (délka fronty = délka nemoci při SetStartingQueue)
-            int sicknessLength = Math.Max(ImmunityHistory.Count, 1);
-            double recoveryChance = 1.0 / sicknessLength;
+            double recoveryChance = 1.0 / Math.Max(SicknessLength, 1);
             int recovering = ProbabilisticFloor(Sick * recoveryChance);
             recovering = Math.Min(recovering, Sick);
 
@@ -148,7 +147,6 @@ namespace Shared
             int newlyRecovered = recovering - deathGrowth;
 
             // --- Imunita ---
-            // Uzdravení jdou do fronty imunity
             int losingImmunity = ImmunityHistory.Dequeue();
             ImmunityHistory.Enqueue(newlyRecovered);
             Immune += newlyRecovered - losingImmunity;
@@ -186,7 +184,8 @@ namespace Shared
                 Vaccinated = Math.Min(Vaccinated + newVaccinated, Population - Dead);
             }
 
-            return new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
+            LastUpdate = new StatisticUpdate(newInfections, deathGrowth, newVaccinated, Sick, Dead, Vaccinated);
+            return LastUpdate;
         }
 
         public void UpdateDiseaseValues(double diseaseSpreadingSpeed, double diseaseDeathProbability)

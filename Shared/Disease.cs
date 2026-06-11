@@ -30,7 +30,7 @@ namespace Shared
         /// Length of sickness in days.
         /// </summary>
         public int SicknessLength { get; set; }
-        public int ImmunityLength { get; set; } = 60;
+        public int ImmunityLength { get; set; }
 
         /// <summary>
         /// List of abilities applied to the disease.
@@ -46,13 +46,14 @@ namespace Shared
         /// <summary>
         /// Initializes a new disease with provided parameters.
         /// </summary>
-        public Disease(string name, double defaultSpreadingSpeed, double deathProbability, int sicknessLength ) { 
+        public Disease(string name, double defaultSpreadingSpeed, double deathProbability, int sicknessLength, int immunityLength ) { 
             Name = name;
             DefaultSpreadingSpeed = defaultSpreadingSpeed;
             TotalSpreadingSpeed = DefaultSpreadingSpeed;
             SicknessLength = sicknessLength;
             DefaultDeathProbability = deathProbability;
             TotalDeathProbability = DefaultDeathProbability;
+            ImmunityLength = immunityLength;
             Abilities = new List<DiseaseAbility>();
         }
 

@@ -17,7 +17,14 @@
                 <TextBlock Text="Délka onemocnění (dny)"/>
                 <TextBox x:Name="LengthBox" CaretBrush="#111111" TextChanged="OnIntTextChanged"/>
 
+                
                 <TextBlock Text="Za jak dlouho se člověk uzdraví nebo zemře. Celé číslo." 
+                           FontSize="11" Foreground="Gray"/>
+
+                <TextBlock Text="Délka imunity (dny)"/>
+                <TextBox x:Name="ImmunityLengthBox" CaretBrush="#111111" TextChanged="OnIntTextChanged"/>
+
+                <TextBlock Text="Za jak dlouho se člověk může po uzdravení znovu nakazit. Celé číslo." 
                            FontSize="11" Foreground="Gray"/>
             
 

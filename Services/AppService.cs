@@ -114,7 +114,7 @@ namespace Services
         /// <summary>
         /// Sets disease in the simulation using explicit parameters.
         /// </summary>
-        public void SetDisease(string name, double speed, double deathProbability, int length) => _simulationServices.SetDisease(name, speed, deathProbability, length);
+        public void SetDisease(string name, double speed, double deathProbability, int length, int immunityLength) => _simulationServices.SetDisease(name, speed, deathProbability, length, immunityLength);
 
         /// <summary>
         /// Sets disease in the simulation by id (not implemented).
@@ -204,6 +204,7 @@ namespace Services
 
         public void StopVaccinatingSingleRegion(int regionId) => _simulationServices.StopVaccinatingSingleRegion(regionId);
 
+        public void ChangeSimulationSpeed(int speed) => _simulationServices.ChangeSimulationSpeed(speed);
 
         /// <summary>
         /// Removes a disease ability from the current disease by ability id.

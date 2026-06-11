@@ -21,7 +21,7 @@ namespace Services
         /// <summary>
         /// Internal simulation instance.
         /// </summary>
-        Simulation simulation { get; set; }
+        private Simulation _simulation { get; set; }
 
         /// <summary>
         /// Cancellation token source used to stop background simulation task.
@@ -38,8 +38,8 @@ namespace Services
         /// </summary>
         public void SetSimulation()
         {
-            simulation = new Simulation();
-            simulation.OnDaySimulated += (update) => OnDaySimulated?.Invoke(update);
+            _simulation = new Simulation();
+            _simulation.OnDaySimulated += (update) => OnDaySimulated?.Invoke(update);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Services
         /// <summary>
         /// Creates and sets a disease in the simulation with validation.
         /// </summary>
-        public void SetDisease(string name, double speed, double deathProbability, int length)
+        public void SetDisease(string name, double speed, double deathProbability, int length, int immunityLength)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Název nemoci nesmí být prázdný.");
@@ -67,7 +67,11 @@ namespace Services
             if (length <= 0)
                 throw new ArgumentOutOfRangeException(nameof(length), "Délka trvání nemoci musí být alespoň 1 den.");
 
-            simulation.SetDisease(new Disease(name, speed, deathProbability, length));
+            if (immunityLength <= 0)
+                throw new ArgumentOutOfRangeException(nameof(length), "Délka trvání imunity musí být alespoň 1 den.");
+
+
+            _simulation.SetDisease(new Disease(name, speed, deathProbability, length, immunityLength));
             SetRegionsQueues();
             UpdateRegionsDiseaseValues();
         }
@@ -75,26 +79,26 @@ namespace Services
         /// <summary>
         /// Sets regions in the simulation.
         /// </summary>
-        public void SetRegions(List<Region> regions) => simulation.SetRegions(regions);
+        public void SetRegions(List<Region> regions) => _simulation.SetRegions(regions);
 
         /// <summary>
         /// Prepares region queues inside simulation.
         /// </summary>
-        public void SetRegionsQueues() => simulation.SetRegionQueues();
+        public void SetRegionsQueues() => _simulation.SetRegionQueues();
 
         /// <summary>
         /// Updates region-level disease-related values.
         /// </summary>
-        public void UpdateRegionsDiseaseValues() => simulation.UpdateRegionsDiseaseValues();
+        public void UpdateRegionsDiseaseValues() => _simulation.UpdateRegionsDiseaseValues();
 
         /// <summary>
         /// Sets the simulation start date.
         /// </summary>
-        public void SetStartDate(DateOnly startDate = default) => simulation.SetStartDate(startDate);
+        public void SetStartDate(DateOnly startDate = default) => _simulation.SetStartDate(startDate);
 
         public DateOnly GetDate()
         {
-            return simulation.currentSimulationDate;
+            return _simulation.currentSimulationDate;
         }
 
         /// <summary>
@@ -103,20 +107,20 @@ namespace Services
         public void startSimulation()
         {
             if (_cts != null) return;
-            simulation.Run();
+            _simulation.Run();
             _cts = new CancellationTokenSource();
-            _ = Task.Run(() => simulation.Simulate(_cts.Token));
+            _ = Task.Run(() => _simulation.Simulate(_cts.Token));
         }
 
 
-        public void SetRegionAbilities(Dictionary<int, RegionAbility> regionAbilities) => simulation.SetRegionAbilities(regionAbilities);
+        public void SetRegionAbilities(Dictionary<int, RegionAbility> regionAbilities) => _simulation.SetRegionAbilities(regionAbilities);
 
         /// <summary>
         /// Stops the running simulation and cancels the background task.
         /// </summary>
         public void stopSimulation()
         {
-            simulation.Stop();
+            _simulation.Stop();
             _cts?.Cancel();
             _cts = null;
         }
@@ -129,10 +133,10 @@ namespace Services
             if (!int.TryParse(input, out int regionId))
                 throw new ArgumentException("Zadejte číslo.");
 
-            if (!simulation.regions.ContainsKey(regionId))
+            if (!_simulation.regions.ContainsKey(regionId))
                 throw new ArgumentException($"Region s id {regionId} neexistuje.");
 
-            simulation.regions[regionId].Sick += 1;
+            _simulation.regions[regionId].Sick += 1;
         }
 
         // --- Prikazy pro nemoc ---
@@ -144,7 +148,7 @@ namespace Services
         {
             if (input == null || !double.TryParse(input, out double defaultSpreadingSpeed))
                 throw new ArgumentException("Zadejte číselnou hodnotu.");
-            simulation.EnqueueCommand(new ChangeDefaultSpreadingSpeedCommand(defaultSpreadingSpeed));
+            _simulation.EnqueueCommand(new ChangeDefaultSpreadingSpeedCommand(defaultSpreadingSpeed));
         }
 
         /// <summary>
@@ -154,20 +158,20 @@ namespace Services
         {
             if (input == null || !double.TryParse(input, out double deathProbability) || !(deathProbability >= 0 && deathProbability <= 1))
                 throw new ArgumentException("Zadejte číselnou hodnotu.");
-            simulation.EnqueueCommand(new ChangeDeathProbabilityCommand(deathProbability));
+            _simulation.EnqueueCommand(new ChangeDeathProbabilityCommand(deathProbability));
         }
 
         /// <summary>
         /// Enqueues a command to add a disease ability to the current disease.
         /// </summary>
         public void AddDiseaseAbility(DiseaseAbility ability)
-            => simulation.EnqueueCommand(new AddDiseaseAbilityCommand(ability));
+            => _simulation.EnqueueCommand(new AddDiseaseAbilityCommand(ability));
 
         /// <summary>
         /// Enqueues a command to remove a disease ability from the current disease.
         /// </summary>
         public void RemoveDiseaseAbility(DiseaseAbility ability)
-            => simulation.EnqueueCommand(new RemoveDiseaseAbilityCommand(ability));
+            => _simulation.EnqueueCommand(new RemoveDiseaseAbilityCommand(ability));
 
         // --- Prikazy pro regiony ---
 
@@ -179,7 +183,7 @@ namespace Services
             Region region = GetRegion(regionId);
             if (!double.TryParse(value, out double newSpreadingSpeed) || newSpreadingSpeed < 0)
                 throw new ArgumentException("Neplatná hodnota.");
-            simulation.EnqueueCommand(new ChangeRegionSpreadingSpeedCommand(region, newSpreadingSpeed));
+            _simulation.EnqueueCommand(new ChangeRegionSpreadingSpeedCommand(region, newSpreadingSpeed));
         }
 
         /// <summary>
@@ -190,22 +194,22 @@ namespace Services
             Region region = GetRegion(regionId);
             if (!double.TryParse(value, out double newHealthcareIndex) || newHealthcareIndex < 0)
                 throw new ArgumentException("Neplatná hodnota.");
-            simulation.EnqueueCommand(new ChangeRegionHealthcareIndexCommand(region, newHealthcareIndex));
+            _simulation.EnqueueCommand(new ChangeRegionHealthcareIndexCommand(region, newHealthcareIndex));
         }
 
-        public void SetInteractions(Dictionary<(int, int), Interaction> interactions) => simulation.SetInteractions(interactions);
+        public void SetInteractions(Dictionary<(int, int), Interaction> interactions) => _simulation.SetInteractions(interactions);
 
         /// <summary>
         /// Enqueues a command to add an ability to a region.
         /// </summary>
         public void AddRegionAbility(int regionId, RegionAbility ability)
-            => simulation.EnqueueCommand(new AddRegionAbilityCommand(GetRegion(regionId), ability));
+            => _simulation.EnqueueCommand(new AddRegionAbilityCommand(GetRegion(regionId), ability));
 
         /// <summary>
         /// Enqueues a command to remove an ability from a region.
         /// </summary>
         public void RemoveRegionAbility(int regionId, RegionAbility ability)
-            => simulation.EnqueueCommand(new RemoveRegionAbilityCommand(GetRegion(regionId), ability));
+            => _simulation.EnqueueCommand(new RemoveRegionAbilityCommand(GetRegion(regionId), ability));
 
         // --- Prikazy pro ockovani
 
@@ -214,7 +218,7 @@ namespace Services
             if (protectionEfficiency >= 0 && protectionEfficiency <= 1 && deathProtectionEfficiency >= 0 && deathProtectionEfficiency <= 1)
             {
                 Vaccine vaccine = new Vaccine(protectionEfficiency, deathProtectionEfficiency);
-                simulation.SetVaccine(vaccine);
+                _simulation.SetVaccine(vaccine);
             }
             else
             {
@@ -240,29 +244,29 @@ namespace Services
                 }
             }
 
-            simulation.EnqueueCommand(new ChangeVaccineParametersCommand(protectionEfficiency, deathProtectionEfficiency));
+            _simulation.EnqueueCommand(new ChangeVaccineParametersCommand(protectionEfficiency, deathProtectionEfficiency));
         }
 
         public void StartVaccinatingAllRegions()
         {
-            if (simulation.vaccine is null)
+            if (_simulation.vaccine is null)
             {
                 throw new Exception("Neexistuje vakcína, nejprve ji vytvořte");
             }
 
-            simulation.EnqueueCommand(new StartVaccinationAllRegionCommand());
+            _simulation.EnqueueCommand(new StartVaccinationAllRegionCommand());
         }
 
         public void StopVaccinatingAllRegions()
         {
-            simulation.EnqueueCommand(new StopVaccinationAllRegionCommand());
+            _simulation.EnqueueCommand(new StopVaccinationAllRegionCommand());
         }
 
         public void StartVaccinatingSingleRegion(int regionId)
-            => simulation.EnqueueCommand(new StartVaccinationSingleRegionCommand(GetRegion(regionId)));
+            => _simulation.EnqueueCommand(new StartVaccinationSingleRegionCommand(GetRegion(regionId)));
 
         public void StopVaccinatingSingleRegion(int regionId)
-            => simulation.EnqueueCommand(new StopVaccinationSingleRegionCommand(GetRegion(regionId)));
+            => _simulation.EnqueueCommand(new StopVaccinationSingleRegionCommand(GetRegion(regionId)));
 
 
         // --- Dotazy ---
@@ -270,15 +274,15 @@ namespace Services
         /// <summary>
         /// Returns the internal regions dictionary.
         /// </summary>
-        public Dictionary<int, Region> GetAllRegions() => simulation.regions;
+        public Dictionary<int, Region> GetAllRegions() => _simulation.regions;
 
         /// <summary>
         /// Returns a string description of a region by input id or throws.
         /// </summary>
         public string GetRegionString(string input)
         {
-            if (int.TryParse(input, out int regionIndex) && simulation.regions.ContainsKey(regionIndex))
-                return simulation.regions[regionIndex].ToString();
+            if (int.TryParse(input, out int regionIndex) && _simulation.regions.ContainsKey(regionIndex))
+                return _simulation.regions[regionIndex].ToString();
             throw new ArgumentException("Neplatné id.");
         }
 
@@ -287,15 +291,15 @@ namespace Services
         /// </summary>
         public Region GetRegion(int regionId)
         {
-            if (simulation.regions.ContainsKey(regionId))
-                return simulation.regions[regionId];
+            if (_simulation.regions.ContainsKey(regionId))
+                return _simulation.regions[regionId];
             throw new ArgumentException("Neplatné id regionu."); // Nikdy by nemělo nastat
         }
 
         public string GetDiseaseName()
         {
-            if(simulation.disease is not null)
-                return simulation.disease.Name;
+            if(_simulation.disease is not null)
+                return _simulation.disease.Name;
 
             return "";
         }
@@ -303,37 +307,46 @@ namespace Services
 
         public double GetDiseaseDefaultSpeed()
         {
-            if (simulation.disease is not null)
-                return simulation.disease.DefaultSpreadingSpeed;
+            if (_simulation.disease is not null)
+                return _simulation.disease.DefaultSpreadingSpeed;
 
             return double.NaN;
         }
 
         public double GetDiseaseTotalSpeed(){
-            if (simulation.disease is not null)
-                return simulation.disease.TotalSpreadingSpeed;
+            if (_simulation.disease is not null)
+                return _simulation.disease.TotalSpreadingSpeed;
 
             return double.NaN;
         }
 
         public double GetDiseaseDefaultDeath()
         {
-            if (simulation.disease is not null)
-                return simulation.disease.DefaultDeathProbability;
+            if (_simulation.disease is not null)
+                return _simulation.disease.DefaultDeathProbability;
 
             return double.NaN;
         }
 
         public (double, double) GetVaccineParameters()
         {
-            return (simulation.vaccine.ProtectionEfficiency, simulation.vaccine.DeathProtectionEfficiency);
+            return (_simulation.vaccine.ProtectionEfficiency, _simulation.vaccine.DeathProtectionEfficiency);
         }
 
         public double GetDiseaseTotalDeath() {
-            if (simulation.disease is not null)
-                return simulation.disease.TotalDeathProbability;
+            if (_simulation.disease is not null)
+                return _simulation.disease.TotalDeathProbability;
 
             return double.NaN;
+        }
+
+
+        public void ChangeSimulationSpeed(int speed)
+        {
+            if (speed >= 0)
+                _simulation.EnqueueCommand(new ChangeSimulationSpeedCommand(speed));
+            else
+                throw new Exception("Hodnota musí být kladná nebo 0");
         }
     }
 }

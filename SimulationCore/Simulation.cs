@@ -51,7 +51,7 @@ namespace SimulationCore
         {
             this.pendingCommands = new Queue<ISimulationCommand>();
             this.reportingInterval = 1;
-            this.dayLength = 100;
+            this.dayLength = 1000;
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace SimulationCore
         public void SetRegionQueues()
         {
             foreach (int key in this.regions.Keys)
-                regions[key].SetStartingQueue(disease.ImmunityLength);
+                regions[key].SetStartingQueue(disease.SicknessLength, disease.ImmunityLength);
         }
 
         /// <summary>Updates disease values in all regions.</summary>

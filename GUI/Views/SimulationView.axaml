@@ -13,7 +13,7 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1000"/>        <ColumnDefinition Width="600"/>       </Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1000"/>     <ColumnDefinition Width="600"/>       </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="600"/>          <RowDefinition Height="300"/>        </Grid.RowDefinitions>
         
@@ -111,7 +111,7 @@
                                    VerticalAlignment="Center" Margin="8,0,4,0"
                                    HorizontalAlignment="Right"/>
                         <TextBox x:Name="DaySpeedBox" Grid.Column="3" Width="80" 
-                                 VerticalAlignment="Center"/>
+                                 VerticalAlignment="Center" TextChanged="OnDaySpeedTextChanged"/>
                         <Button Grid.Column="4" Content="✓" Margin="4,0,0,0"
                                 VerticalAlignment="Center" Click="OnDaySpeedConfirmed"/>
                     </Grid>
@@ -174,7 +174,7 @@
                                      DoubleTapped="OnAvailableDiseaseAbilityDoubleTapped"/>
                         </StackPanel>
                     </Grid>
-                    <Border BorderBrush="#CCCCCC" BorderThickness="1" Padding="4" Height="60">
+                    <Border BorderBrush="#CCCCCC" BorderThickness="1" Padding="4" Height="100">
                         <TextBlock x:Name="DiseaseAbilityDescText" TextWrapping="Wrap" FontSize="11"/>
                     </Border>
 

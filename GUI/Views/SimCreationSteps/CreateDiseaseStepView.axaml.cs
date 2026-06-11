@@ -30,9 +30,11 @@ public partial class CreateDiseaseStepView : UserControl
         var lengthText = this.FindControl<TextBox>("LengthBox")!.Text ?? "";
         var speedText = this.FindControl<TextBox>("SpeedBox")!.Text ?? "";
         var deathText = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
+        var immunityLengtText = this.FindControl<TextBox>("ImmunityLengthBox")!.Text ?? "";
 
         bool valid = !string.IsNullOrWhiteSpace(name)
             && int.TryParse(lengthText, out int length) && length >= 1
+            && int.TryParse(lengthText, out int immunityLengt) && immunityLengt >= 1
             && double.TryParse(speedText, out double speed) && speed > 0
             && double.TryParse(deathText, out double death) && death >= 0 && death <= 100;
 
@@ -130,8 +132,14 @@ public partial class CreateDiseaseStepView : UserControl
         var lengthText = this.FindControl<TextBox>("LengthBox")!.Text ?? "";
         var speedText = this.FindControl<TextBox>("SpeedBox")!.Text ?? "";
         var deathText = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
+        var immunityLengthText = this.FindControl<TextBox>("ImmunityLengthBox")!.Text ?? "";
 
         if (!int.TryParse(lengthText, out int length) || length < 1)
+        {
+            this.FindControl<TextBlock>("ErrorText")!.Text = "Délka onemocnìní musí být kladné celé èíslo.";
+            return false;
+        }
+        if (!int.TryParse(immunityLengthText, out int immunityLength) || immunityLength < 1)
         {
             this.FindControl<TextBlock>("ErrorText")!.Text = "Délka onemocnìní musí být kladné celé èíslo.";
             return false;
@@ -153,7 +161,7 @@ public partial class CreateDiseaseStepView : UserControl
         }
 
         this.FindControl<TextBlock>("ErrorText")!.Text = "";
-        _parent.AppService.SetDisease(name, speed, death / 100.0, length);
+        _parent.AppService.SetDisease(name, speed, death / 100.0, length, immunityLength);
         return true;
     }
 }

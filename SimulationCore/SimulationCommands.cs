@@ -299,4 +299,18 @@ namespace SimulationCore
             }   
         }
     }
+
+    public class ChangeSimulationSpeedCommand : ISimulationCommand
+    {
+        private readonly int _newSpeed;
+        public ChangeSimulationSpeedCommand(int newSpeed)
+        {
+            _newSpeed = newSpeed;
+        }
+
+        public void Execute(Simulation simulation)
+        {
+            simulation.changeDayLength(_newSpeed);
+        }
+    }
 }
