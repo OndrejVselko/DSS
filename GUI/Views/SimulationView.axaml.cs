@@ -62,6 +62,8 @@ public partial class SimulationView : UserControl
 
 
         _appService.OnDaySimulated += OnDaySimulated;
+        _appService.OnLogAdded += OnLogAdded;
+
 
         this.FindControl<ListBox>("LogBox")!.ItemsSource = _logItems;
         this.FindControl<TextBlock>("DateText")!.Text = _appService.GetDate().ToString();
@@ -138,7 +140,6 @@ public partial class SimulationView : UserControl
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             this.FindControl<TextBlock>("DateText")!.Text = update.Date.ToString();
-            _logItems.Insert(0, update.ToString());
             if (_logItems.Count > 50)
                 _logItems.RemoveAt(_logItems.Count - 1);
             UpdateMapColors(update.RegionsByIso);
@@ -153,6 +154,11 @@ public partial class SimulationView : UserControl
             _lastDead = update.TotalDead;
             _lastVaccinated = update.TotalVaccinated;
         });
+    }
+
+    private void OnLogAdded(Log log)
+    {
+        _logItems.Insert(0, log.ToString());
     }
 
     // --- Play/Pause ---
@@ -514,6 +520,7 @@ public partial class SimulationView : UserControl
         else if (availableBox.SelectedItem is RegionAbility)
             MoveFromAvailableToActiveRegion();
     }
+    
 
     private void MoveFromActiveToAvailableRegion()
     {

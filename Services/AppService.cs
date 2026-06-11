@@ -12,6 +12,7 @@ namespace Services
         /// Event forwarded from simulation to notify UI about simulated days.
         /// </summary>
         public event Action<StatisticUpdate>? OnDaySimulated;
+        public event Action<Log>? OnLogAdded;
 
         /// <summary>
         /// Service responsible for running the simulation.
@@ -46,6 +47,8 @@ namespace Services
             _simulationServices = new SimulationServices();
             _dataServices = new DataServices();
             _simulationServices.OnDaySimulated += update => OnDaySimulated?.Invoke(update);
+            _simulationServices.OnLogAdded += log => OnLogAdded?.Invoke(log);
+
             _availableDiseaseAbilities = new();
             _availableRegionAbilities = new();
             _interaction = new();
@@ -116,10 +119,6 @@ namespace Services
         /// </summary>
         public void SetDisease(string name, double speed, double deathProbability, int length, int immunityLength) => _simulationServices.SetDisease(name, speed, deathProbability, length, immunityLength);
 
-        /// <summary>
-        /// Sets disease in the simulation by id (not implemented).
-        /// </summary>
-        public void SetDisease(int id) => _simulationServices.SetDisease(id);
 
         /// <summary>
         /// Sets the starting region by parsing user input.

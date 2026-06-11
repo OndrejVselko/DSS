@@ -41,9 +41,12 @@ namespace SimulationCore
 
         private Dictionary<int, RegionAbility> _regionAbilities = new();
 
-
-
         public int GlobalPopulation;
+
+
+        public LogList Logs { get; set; } = new LogList();
+
+
         /// <summary>
         /// Initializes default parameters and command queue.
         /// </summary>
@@ -226,8 +229,17 @@ namespace SimulationCore
                 .Where(r => !string.IsNullOrEmpty(r.IsoCode))
                 .ToDictionary(r => r.IsoCode, r => r);
 
-            return new StatisticUpdate(currentSimulationDate, newSick, newDead, newVaccinated,
+            StatisticUpdate update = new StatisticUpdate(currentSimulationDate, newSick, newDead, newVaccinated,
                 totalSick, totalDeath, totalVaccinated, regionsByIso);
+
+            AddLog(currentSimulationDate, update.ToString());
+
+            return update;
+        }
+
+        public void AddLog(DateOnly date, string message, params string[] args)
+        {
+            Logs.Add(date, message, args);
         }
     }
 }

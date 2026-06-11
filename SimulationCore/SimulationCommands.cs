@@ -37,6 +37,9 @@ namespace SimulationCore
                     if (region.Abilities.Any(a => a.Id == interaction.RegionAbilityId))
                         region.AddInteraction(interaction);
             }
+
+            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost nemoci", _ability.Name);
+
         }
     }
 
@@ -70,6 +73,9 @@ namespace SimulationCore
                         region.RemoveInteraction(interaction);
                 }
             }
+
+            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost nemoci", _ability.Name);
+
         }
     }
 
@@ -90,6 +96,8 @@ namespace SimulationCore
         {
             simulation.disease.ChangeDefaultSpreadingSpeed(_newSpeed);
             simulation.UpdateAllRegions();
+            simulation.AddLog(simulation.currentSimulationDate, "Změna rychlosti šíření", _newSpeed.ToString());
+
         }
     }
 
@@ -110,6 +118,9 @@ namespace SimulationCore
         {
             simulation.disease.ChangeDeathProbability(_probability);
             simulation.UpdateAllRegions();
+
+            simulation.AddLog(simulation.currentSimulationDate, "Změna šance na úmrtí", _probability.ToString());
+
         }
     }
 
@@ -144,6 +155,8 @@ namespace SimulationCore
                     _region.AddInteraction(interaction);
                 }
             }
+            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost regionu", _region.Name, _ability.Name);
+
         }
     }
 
@@ -174,6 +187,8 @@ namespace SimulationCore
             {
                 _region.RemoveInteraction(interaction);
             }
+
+            simulation.AddLog(simulation.currentSimulationDate, "Odebrána vlastnost regionu", _region.Name, _ability.Name);
         }
     }
 
@@ -195,7 +210,10 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.ChangeSpreadingSpeed(_newSpeed);
+            simulation.AddLog(simulation.currentSimulationDate, "Změna rychlosti šíření regionu", _region.Name, _newSpeed.ToString());
         }
+
+
     }
 
     /// <summary>
@@ -216,6 +234,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.ChangeHealtcareIndex(_newIndex);
+            simulation.AddLog(simulation.currentSimulationDate, "Změna indexu zdravotnictví", _region.Name, _newIndex.ToString());
         }
     }
 
@@ -233,6 +252,9 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             simulation.vaccine.ChangeVaccineEfficiency(_newProtecitonEfficiency, _newDeathProtecitonEfficiency);
+            simulation.AddLog(simulation.currentSimulationDate, "Změna parametrů vakcíny",
+                _newProtecitonEfficiency?.ToString() ?? "-",
+                _newDeathProtecitonEfficiency?.ToString() ?? "-");
         }
     }
 
@@ -248,6 +270,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.StartVaccinating();
+            simulation.AddLog(simulation.currentSimulationDate, "Spuštěno očkování", _region.Name);
         }
     }
 
@@ -264,6 +287,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.StopVaccinating();
+            simulation.AddLog(simulation.currentSimulationDate, "Zastaveno očkování", _region.Name);
         }
     }
 
@@ -280,6 +304,8 @@ namespace SimulationCore
             {
                 simulation.regions[key].StartVaccinating();
             }
+            simulation.AddLog(simulation.currentSimulationDate, "Spuštěno očkování ve všech regionech");
+
         }
     }
 
@@ -296,7 +322,8 @@ namespace SimulationCore
             foreach (int key in simulation.regions.Keys)
             {
                 simulation.regions[key].StopVaccinating();
-            }   
+            }
+            simulation.AddLog(simulation.currentSimulationDate, "Zastaveno očkování ve všech regionech");
         }
     }
 
@@ -311,6 +338,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             simulation.changeDayLength(_newSpeed);
+            simulation.AddLog(simulation.currentSimulationDate, "Změna rychlosti simulace", _newSpeed.ToString());
         }
     }
 }

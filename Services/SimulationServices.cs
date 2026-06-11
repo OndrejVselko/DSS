@@ -17,6 +17,7 @@ namespace Services
         /// Event raised when a day is simulated (for UI output).
         /// </summary>
         public event Action<StatisticUpdate>? OnDaySimulated;
+        public event Action<Log>? OnLogAdded;
 
         /// <summary>
         /// Internal simulation instance.
@@ -40,15 +41,9 @@ namespace Services
         {
             _simulation = new Simulation();
             _simulation.OnDaySimulated += (update) => OnDaySimulated?.Invoke(update);
+            _simulation.Logs.OnLogAdded += (log) => OnLogAdded?.Invoke(log);
         }
 
-        /// <summary>
-        /// Sets disease by id (not implemented).
-        /// </summary>
-        public void SetDisease(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Creates and sets a disease in the simulation with validation.

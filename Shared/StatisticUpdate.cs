@@ -51,7 +51,7 @@ namespace Shared
         /// </summary>
         public override string ToString()
         {
-            return $"Nakazeni: {TotalSick} ({NewSick}); Mrtvi: {TotalDead} ({NewDead}); Ockovani: {TotalVaccinated} ({NewVaccinated})";
+            return $"Inf.: {TotalSick} ({NewSick}); Mrtvi: {TotalDead} ({NewDead}); Ock.: {TotalVaccinated} ({NewVaccinated})";
         } 
     }
 }
