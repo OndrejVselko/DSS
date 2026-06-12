@@ -10,7 +10,7 @@ public partial class NewSimulationView : UserControl
 {
     private readonly MainWindow _mainWindow;
     private int _currentStep = 0;
-    public AppService AppService { get; } = new AppService();
+    public AppService AppService { get; set; }
     public bool ScenarioLoaded { get; set; } = false;
 
     private CreateDiseaseStepView? _createDiseaseStep;
@@ -24,8 +24,9 @@ public partial class NewSimulationView : UserControl
     private string? _scenarioPath;
     // další hodnoty přibydou
 
-    public NewSimulationView(MainWindow mainWindow)
+    public NewSimulationView(MainWindow mainWindow, AppService service)
     {
+        this.AppService = service;
         _mainWindow = mainWindow;
         InitializeComponent();
         NavigateToStep(0);

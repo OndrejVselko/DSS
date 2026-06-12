@@ -8,7 +8,7 @@ namespace GUI;
 
 public partial class MainMenuView : UserControl
 {
-    private readonly AppService _appService;
+    private readonly AppService _appService = new AppService();
     private readonly MainWindow _mainWindow;
 
     public MainMenuView(MainWindow mainWindow)
@@ -19,12 +19,13 @@ public partial class MainMenuView : UserControl
 
     private void OnNewSimulationClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        _mainWindow.Content = new NewSimulationView(_mainWindow);
+        _mainWindow.Content = new NewSimulationView(_mainWindow, _appService);
     }
 
     private void OnOldSimulationsClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        // TODO
+        _mainWindow.Content = new SimulationHistoryView(_mainWindow, _appService);
+
     }
 
     private void OnExitClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

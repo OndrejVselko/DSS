@@ -61,5 +61,18 @@ namespace Services
 
             return new LoadedScenario(regions, diseaseAbilities, regionAbilities, interactions);
         }
+
+
+        private readonly SimulationRepository _repository = new();
+
+        public async Task SaveSimulationAsync(SimulationRecord record, List<LogEntry> entries)
+            => await _repository.SaveSimulationAsync(record, entries);
+
+        public async Task<List<SimulationRecord>> GetAllSimulationsAsync()
+            => await _repository.GetAllSimulationsAsync();
+
+        public void EnsureDatabase() => SimulationDbContext.EnsureCreated();
+
+        public async Task<List<LogEntry>> GetLogs(int simulationId) => _repository.GetLogsAsync(simulationId);
     }
 }

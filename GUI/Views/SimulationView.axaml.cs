@@ -38,6 +38,7 @@ public partial class SimulationView : UserControl
     private int _lastVaccinated = 0;
     private ObservableCollection<RegionAbility> _activeRegionAbilities = new();
     private ObservableCollection<RegionAbility> _availableRegionAbilities = new();
+    private string? _lastLoadedRegionIso = null;
 
 
 
@@ -53,6 +54,8 @@ public partial class SimulationView : UserControl
         InitializeAbilities();
         UpdateDiseaseValues();
         InitializeVaccine();
+        _appService.UpdateRegionsDiseaseValues();
+
 
         var regions = _appService.GetAllRegions().Values
         .Where(r => !string.IsNullOrEmpty(r.IsoCode))
@@ -67,6 +70,9 @@ public partial class SimulationView : UserControl
 
         this.FindControl<ListBox>("LogBox")!.ItemsSource = _logItems;
         this.FindControl<TextBlock>("DateText")!.Text = _appService.GetDate().ToString();
+
+        this.FindControl<ListBox>("ActiveAbilitiesRegionBox")!.ItemsSource = _activeRegionAbilities;
+        this.FindControl<ListBox>("AvailableAbilitiesRegionBox")!.ItemsSource = _availableRegionAbilities;
 
     }
 
@@ -270,9 +276,10 @@ public partial class SimulationView : UserControl
     }
 
     // --- Ukončit ---
-    private void OnStopSimulationClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void OnStopSimulationClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _appService.StopSimulation();
+        await _appService.SaveSimulationAsync(_appService.GetLogs());
         _mainWindow.SetMenuSize();
         _mainWindow.Content = new MainMenuView(_mainWindow);
     }
@@ -351,7 +358,6 @@ public partial class SimulationView : UserControl
     {
         var detailsPanel = this.FindControl<StackPanel>("RegionDetailsPanel")!;
         var vaccinatingCheck = this.FindControl<CheckBox>("VaccinatingCheckBox")!;
-
         var activePanel = this.FindControl<Grid>("ActiveAbilitiesRegionPanel")!;
         var moveButton = this.FindControl<Button>("MoveAbilityRegionButton")!;
         var availablePanel = this.FindControl<Grid>("AvailableAbilitiesRegionPanel")!;
@@ -359,7 +365,7 @@ public partial class SimulationView : UserControl
 
         if (region == null)
         {
-            // Celý svět
+            _lastLoadedRegionIso = null;
             detailsPanel.IsVisible = false;
             var allRegions = _appService.GetAllRegions().Values;
             this.FindControl<TextBlock>("RegionNameLabel")!.Text = "Celý svět";
@@ -377,9 +383,7 @@ public partial class SimulationView : UserControl
             SetStatLabel("VaccinatedLabel", vaccinated);
             SetDeltaLabel("VaccinatedDeltaLabel", vaccinated - _lastVaccinated, true);
 
-            // checkbox - true pokud všechny očkují
             vaccinatingCheck.IsChecked = allRegions.All(r => r.Vaccinating);
-
 
             activePanel.IsVisible = false;
             moveButton.IsVisible = false;
@@ -388,7 +392,6 @@ public partial class SimulationView : UserControl
         }
         else
         {
-            // Konkrétní region
             detailsPanel.IsVisible = true;
             this.FindControl<TextBlock>("RegionNameLabel")!.Text = region.Name;
             this.FindControl<TextBlock>("PopulationLabel")!.Text =
@@ -407,16 +410,27 @@ public partial class SimulationView : UserControl
                 $"Náhodný výskyt: {region.TotalRandomOccurrence:F2}";
             this.FindControl<TextBlock>("DeathLabel")!.Text =
                 $"Úmrtnost: {region.DiseaseDeathPropability:F2} / {region.TotalDeathProbability:F2}";
-            this.FindControl<TextBox>("HealthcareIndexBox")!.Text =
-                region.HealthcareIndex.ToString();
+
+            var healthcareBox = this.FindControl<TextBox>("HealthcareIndexBox")!;
+            if (!healthcareBox.IsFocused)
+                healthcareBox.Text = region.HealthcareIndex.ToString();
 
             vaccinatingCheck.IsChecked = region.Vaccinating;
 
-            List<RegionAbility> activeAbilities = new List<RegionAbility>();
-            if (region.Abilities is not null)
-                activeAbilities = region.Abilities.ToList();
-            this.FindControl<ListBox>("ActiveAbilitiesRegionBox")!.ItemsSource = activeAbilities;
-            this.FindControl<ListBox>("AvailableAbilitiesRegionBox")!.ItemsSource = _appService.GetAvailableRegionAbilities().Values.ToList().Except(activeAbilities).ToList();
+            // Načti abilities jen při změně regionu
+            if (region.IsoCode != _lastLoadedRegionIso)
+            {
+                _lastLoadedRegionIso = region.IsoCode;
+                _activeRegionAbilities.Clear();
+                _availableRegionAbilities.Clear();
+
+                foreach (var ability in region.Abilities)
+                    _activeRegionAbilities.Add(ability);
+
+                foreach (var ability in _appService.GetAvailableRegionAbilities().Values)
+                    if (!region.Abilities.Contains(ability))
+                        _availableRegionAbilities.Add(ability);
+            }
 
             activePanel.IsVisible = true;
             moveButton.IsVisible = true;
@@ -520,33 +534,33 @@ public partial class SimulationView : UserControl
         else if (availableBox.SelectedItem is RegionAbility)
             MoveFromAvailableToActiveRegion();
     }
-    
+
 
     private void MoveFromActiveToAvailableRegion()
     {
         var region = _appService.GetAllRegions().Values
-                .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
+            .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
         if (region == null) return;
         var box = this.FindControl<ListBox>("ActiveAbilitiesRegionBox")!;
         if (box.SelectedItem is RegionAbility ability)
         {
-            _availableRegionAbilities.Remove(ability);
+            _activeRegionAbilities.Remove(ability);
             _availableRegionAbilities.Add(ability);
-            region.RemoveAbility(ability);
+            _appService.RemoveRegionAbility(region.Id, ability);
         }
     }
 
     private void MoveFromAvailableToActiveRegion()
     {
         var region = _appService.GetAllRegions().Values
-                .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
+            .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
         if (region == null) return;
         var box = this.FindControl<ListBox>("AvailableAbilitiesRegionBox")!;
         if (box.SelectedItem is RegionAbility ability)
         {
             _availableRegionAbilities.Remove(ability);
-            _availableRegionAbilities.Add(ability);
-            region.AddAbility(ability);
+            _activeRegionAbilities.Add(ability);
+            _appService.AddRegionAbility(region.Id, ability);
         }
     }
 

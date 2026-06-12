@@ -1,5 +1,7 @@
-﻿using SimulationCore;
+﻿using Data;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Shared;
+using SimulationCore;
 
 namespace Services
 {
@@ -191,8 +193,7 @@ namespace Services
         public double GetDiseaseTotalDeath() => _simulationServices.GetDiseaseTotalDeath();
 
         public (double, double) GetVaccineParameters() => _simulationServices.GetVaccineParameters();
-
-
+        public LogList GetLogs() => _simulationServices.GetLogs();
 
         public void StartVaccinatingAllRegions() => _simulationServices.StartVaccinatingAllRegions();
 
@@ -202,6 +203,8 @@ namespace Services
         public void StartVaccinatingSingleRegion(int regionId) => _simulationServices.StartVaccinatingSingleRegion(regionId);
 
         public void StopVaccinatingSingleRegion(int regionId) => _simulationServices.StopVaccinatingSingleRegion(regionId);
+
+        public void UpdateRegionsDiseaseValues() => _simulationServices.UpdateRegionsDiseaseValues();
 
         public void ChangeSimulationSpeed(int speed) => _simulationServices.ChangeSimulationSpeed(speed);
 
@@ -227,5 +230,34 @@ namespace Services
         /// Stops the simulation run.
         /// </summary>
         public void StopSimulation() => _simulationServices.stopSimulation();
+
+        public void EnsureDatabase() => _dataServices.EnsureDatabase();
+
+
+        public async Task SaveSimulationAsync(LogList logs)
+        {
+            var record = new SimulationRecord
+            {
+                CreatedAt = DateTime.Now,
+                DiseaseName = _simulationServices.GetDiseaseName(),
+                DefaultSpreadingSpeed = _simulationServices.GetDiseaseDefaultSpeed(),
+                DefaultDeathProbability = _simulationServices.GetDiseaseDefaultDeath(),
+                SicknessLength = _simulationServices.GetDiseaseSicknessLength(),
+                ImmunityLength = _simulationServices.GetDiseaseImmunityLength()
+            };
+
+            var entries = logs.Select(l => new LogEntry
+            {
+                Day = l.SimulationDate.ToString(),
+                Content = l.ToString()
+            }).ToList();
+
+            await _dataServices.SaveSimulationAsync(record, entries);
+        }
+
+        public async Task<List<SimulationRecord>> GetAllSimulationsAsync() => await _dataServices.GetAllSimulationsAsync();
+
+        public async Task<List<LogEntry>> GetLogsAsync(int simulationId)
+            => await _dataServices.GetLogs(simulationId);
     }
 }

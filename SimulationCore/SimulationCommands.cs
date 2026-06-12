@@ -74,7 +74,7 @@ namespace SimulationCore
                 }
             }
 
-            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost nemoci", _ability.Name);
+            simulation.AddLog(simulation.currentSimulationDate, "Odebrána vlastnost nemoci", _ability.Name);
 
         }
     }
@@ -148,15 +148,16 @@ namespace SimulationCore
              .Where(kvp => kvp.Key.Item2 == _ability.Id)
              .Select(kvp => kvp.Value);
 
+            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost regionu", _region.Name, _ability.Name);
+
             foreach (var interaction in relevantInteractions)
             {
                 if (simulation.disease.Abilities.Any(a => a.Id == interaction.DiseaseAbilityId))
                 {
+                    simulation.AddLog(simulation.currentSimulationDate, _region.Name + " - nová interakce: " + _ability.Name + " + " +simulation.disease.Abilities[interaction.DiseaseAbilityId].Name + ", Modifikátory: " + interaction.SpreadingModifier + "|" + interaction.DeathModifier);
                     _region.AddInteraction(interaction);
                 }
             }
-            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost regionu", _region.Name, _ability.Name);
-
         }
     }
 

@@ -26,5 +26,6 @@ namespace Shared
             DeathModifier = deathModifier;
             Comment = comment;
         }
+
     }
 }

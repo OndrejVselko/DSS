@@ -53,7 +53,7 @@ namespace Shared
             Abilities = new List<RegionAbility>();
             ActiveInteractions = new List<Interaction>();
             ImmunityHistory = new Queue<int>();
-            TotalVaccinatingCapacity = 0.001 * Population;
+            TotalVaccinatingCapacity = 0.001;
             InteractionSpreadingModifier = 1.0;
             InteractionDeathModifier = 1.0;
         }
@@ -73,9 +73,6 @@ namespace Shared
             ImmunityHistory = new Queue<int>();
             for (int i = 0; i < immunityLength; i++)
                 ImmunityHistory.Enqueue(0);
-
-            if (TotalVaccinatingCapacity == 0)
-                TotalVaccinatingCapacity = Population * 0.001;
         }
 
         public void AddAbility(RegionAbility ability)
@@ -106,7 +103,7 @@ namespace Shared
             double deathProbability = HealthcareIndex * DiseaseDeathPropability;
             double spreadingSpeed = RegionSpreadingSpeed * DiseaseSpreadingSpeed;
             double borderModifier = 1.0;
-            double vaccinationCapacity = Population * 0.001;
+            double vaccinationCapacity = 0.001;
 
             foreach (RegionAbility ability in Abilities)
             {

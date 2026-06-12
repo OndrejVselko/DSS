@@ -335,6 +335,17 @@ namespace Services
             return double.NaN;
         }
 
+        public int GetDiseaseSicknessLength()
+        {
+            return _simulation.disease.SicknessLength;
+        }
+
+        public int GetDiseaseImmunityLength()
+        {
+            return _simulation.disease.ImmunityLength;
+        }
+
+        public LogList GetLogs() => _simulation.Logs;
 
         public void ChangeSimulationSpeed(int speed)
         {
