@@ -121,6 +121,17 @@ public partial class CreateDiseaseStepView : UserControl
             ValidateAndSetNext();
     }
 
+    private void OnPercentDoubleTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var box = sender as TextBox;
+        if (box == null) return;
+        var text = box.Text ?? "";
+        if (!string.IsNullOrEmpty(text) && (!double.TryParse(text, out double val) || val < 0 || val > 100))
+            box.Text = text[..^1];
+        else
+            ValidateAndSetNext();
+    } 
+
     private void OnNameTextChanged(object? sender, TextChangedEventArgs e)
     {
         ValidateAndSetNext();

@@ -9,12 +9,12 @@
         <TextBlock Text="Vytvoření vakcíny" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Účinnost ochrany před nákazou (%)"/>
-        <TextBox x:Name="ProtectionBox" TextChanged="OnDoubleTextChanged"/>
+        <TextBox x:Name="ProtectionBox" TextChanged="OnPercentDoubleTextChanged"/>
         <TextBlock Text="Pravděpodobnost, že vakcína ochrání očkovaného před nákazou."
                    FontSize="11" Foreground="Gray" TextWrapping="Wrap"/>
 
         <TextBlock Text="Účinnost ochrany před smrtí (%)"/>
-        <TextBox x:Name="DeathProtectionBox" TextChanged="OnDoubleTextChanged"/>
+        <TextBox x:Name="DeathProtectionBox" TextChanged="OnPercentDoubleTextChanged"/>
         <TextBlock Text="Pravděpodobnost, že vakcína ochrání očkovaného před smrtí."
                    FontSize="11" Foreground="Gray" TextWrapping="Wrap"/>
 

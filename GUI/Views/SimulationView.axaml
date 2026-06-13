@@ -42,25 +42,25 @@
                             <TextBlock x:Name="DeadDeltaLabel" Text="(0)" Foreground="Gray"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                            <TextBlock Text="Očkovaní:"/>
-                            <TextBlock x:Name="VaccinatedLabel" Text="-"/>
-                            <TextBlock x:Name="VaccinatedDeltaLabel" Text="(0)" Foreground="Gray"/>
-                            <CheckBox x:Name="VaccinatingCheckBox" Content="Očkuje" 
-                                      IsCheckedChanged="OnVaccinatingChanged"/>
-                        </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="Očkovaní:"/>
+                    <TextBlock x:Name="VaccinatedLabel" Text="-"/>
+                    <TextBlock x:Name="VaccinatedDeltaLabel" Text="(0)" Foreground="Gray"/>
+                </StackPanel>
+                <CheckBox x:Name="VaccinatingCheckBox" Content="Očkuje" 
+                          IsCheckedChanged="OnVaccinatingChanged"/>
                     </StackPanel>
 
                     <StackPanel Spacing="4" x:Name="RegionDetailsPanel" IsVisible="False">
                         <TextBlock x:Name="SpreadingLabel" Text="Šíření: - / -"/>
                         <TextBlock x:Name="RandomOccurrenceLabel" Text="Náhodný výskyt: -"/>
                         <TextBlock x:Name="DeathLabel" Text="Úmrtnost: - / -"/>
-                        
+    
                         <TextBlock Text="Index zdravotnictví:" Margin="0,4,0,0"/>
-                        <Grid ColumnDefinitions="*, Auto">
-                            <TextBox x:Name="HealthcareIndexBox" Grid.Column="0"/>
-                            <Button Grid.Column="1" Content="✓" Click="OnHealthcareConfirmed" Margin="4,0,0,0"/>
-                        </Grid>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBox x:Name="HealthcareIndexBox" Width="80" TextChanged="OnPositiveDoubleTextChanged"/>
+                            <Button Content="✓" Click="OnHealthcareConfirmed"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
@@ -100,7 +100,7 @@
             <ScrollViewer>
                 <StackPanel Margin="8" Spacing="8">
 
-                    <Grid ColumnDefinitions="Auto, Auto, *, Auto, Auto">
+                    <Grid ColumnDefinitions="Auto, Auto, *, Auto, Auto, Auto">
                         <Button x:Name="PlayPauseButton" Grid.Column="0" 
                                 Content="▶" Width="40" Height="40"
                                 Click="OnPlayPauseClicked"/>
@@ -114,44 +114,51 @@
                                  VerticalAlignment="Center" TextChanged="OnDaySpeedTextChanged"/>
                         <Button Grid.Column="4" Content="✓" Margin="4,0,0,0"
                                 VerticalAlignment="Center" Click="OnDaySpeedConfirmed"/>
+                        <Button Grid.Column="5" Content="📸" Margin="4,0,0,0"
+                                VerticalAlignment="Center" Click="OnScreenshotClicked"/>
                     </Grid>
 
                     <Separator/>
 
                     <TextBlock x:Name="DiseaseNameText" FontWeight="Bold" Text=""/>
 
-                    <Grid ColumnDefinitions="*, *">
-                        <!-- Levá polovina: Rychlost šíření a úmrtnost -->
-                        <StackPanel Grid.Column="0" Spacing="8" Margin="0,0,8,0">
-                            <TextBlock Text="Rychlost šíření" FontWeight="Bold"/>
-                            <Grid ColumnDefinitions="Auto, *, Auto, *">
-                                <TextBlock Grid.Column="0" Text="Základ:" VerticalAlignment="Center"/>
-                                <TextBox x:Name="SpreadingSpeedBox" Grid.Column="1" Margin="4,0"/>
-                                <Button Grid.Column="2" Content="✓" Margin="4,0"
-                                        Click="OnSpreadingSpeedConfirmed"/>
-                                <TextBlock x:Name="TotalSpreadingText" Grid.Column="3" 
-                                           VerticalAlignment="Center" Text="Celkem: -"/>
-                            </Grid>
+                   <Grid ColumnDefinitions="*, *">
+                        <!-- Levá polovina -->
+                        <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+                            <TextBlock Text="Nastavení nemoci" FontWeight="Bold"/>
+    
+                            <TextBlock Text="Rychlost šíření" FontSize="11"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="Základ:" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="SpreadingSpeedBox" Width="80" TextChanged="OnPositiveDoubleTextChanged"/>
+                                <Button Content="✓" Click="OnSpreadingSpeedConfirmed"/>
+                                <TextBlock x:Name="TotalSpreadingText" VerticalAlignment="Center" Text="Celkem: -"/>
+                            </StackPanel>
 
-                            <TextBlock Text="Šance na úmrtí" FontWeight="Bold"/>
-                            <Grid ColumnDefinitions="Auto, *, Auto, *">
-                                <TextBlock Grid.Column="0" Text="Základ:" VerticalAlignment="Center"/>
-                                <TextBox x:Name="DeathBox" Grid.Column="1" Margin="4,0"/>
-                                <Button Grid.Column="2" Content="✓" Margin="4,0"
-                                        Click="OnDeathConfirmed"/>
-                                <TextBlock x:Name="TotalDeathText" Grid.Column="3"
-                                           VerticalAlignment="Center" Text="Celkem: -"/>
-                            </Grid>
+                            <TextBlock Text="Šance na úmrtí" FontSize="11"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="Základ:" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="DeathBox" Width="80" TextChanged="OnPercentDoubleTextChanged"/>
+                                <Button Content="✓" Click="OnDeathConfirmed"/>
+                                <TextBlock x:Name="TotalDeathText" VerticalAlignment="Center" Text="Celkem: -"/>
+                            </StackPanel>
                         </StackPanel>
 
-                        <!-- Pravá polovina: Nastavení vakcíny -->
-                        <StackPanel Grid.Column="1" Spacing="4" Margin="8,0,0,0" Width="200">
+                        <!-- Pravá polovina -->
+                        <StackPanel Grid.Column="1" Spacing="4" Margin="8,0,0,0">
                             <TextBlock Text="Nastavení vakcíny" FontWeight="Bold"/>
+    
                             <TextBlock Text="Účinnost proti přenosu (%):" FontSize="11"/>
-                            <TextBox x:Name="VaccineProtectionBox"  Width="100"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox x:Name="VaccineProtectionBox" Width="80" TextChanged="OnPercentDoubleTextChanged"/>
+                                <Button Content="✓" Click="OnVaccineConfirmed"/>
+                            </StackPanel>
+    
                             <TextBlock Text="Účinnost proti úmrtí (%):" FontSize="11"/>
-                            <TextBox x:Name="VaccineDeathBox"  Width="100"/>
-                            <Button Content="Použít" HorizontalAlignment="Right" Click="OnVaccineConfirmed"/>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBox x:Name="VaccineDeathBox" Width="80" TextChanged="OnPercentDoubleTextChanged"/>
+                                <Button Content="✓" Click="OnVaccineConfirmed"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
 

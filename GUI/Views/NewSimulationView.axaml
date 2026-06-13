@@ -8,7 +8,8 @@
 
 
     <Grid RowDefinitions="*, 35">
-        
+        <Image Source="/Assets/background.png" Stretch="UniformToFill" Opacity="0.2" Grid.RowSpan="2"/>
+
         <!-- Kontejner pro kroky -->
         <ContentControl Grid.Row="0" x:Name="StepContainer"/>
         

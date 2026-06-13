@@ -28,6 +28,11 @@ public partial class MainMenuView : UserControl
 
     }
 
+    private void OnAboutClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _mainWindow.Content = new AboutView(_mainWindow);
+    }
+
     private void OnExitClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _mainWindow.Close();

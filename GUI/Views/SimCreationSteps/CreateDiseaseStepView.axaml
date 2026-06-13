@@ -36,7 +36,7 @@
                            FontSize="11" Foreground="Gray"/>
             
                 <TextBlock Text="Úmrtnost (%)"/>
-                <TextBox x:Name="DeathBox" CaretBrush="#111111" TextChanged="OnDoubleTextChanged"/>
+                <TextBox x:Name="DeathBox" CaretBrush="#111111" TextChanged="OnPercentDoubleTextChanged"/>
                 <TextBlock Text="Desetinné číslo, rozsah: 0-100." 
                         FontSize="11" Foreground="Gray"/>
                 <TextBlock x:Name="ErrorText" Foreground="Red" HorizontalAlignment="Center"/>

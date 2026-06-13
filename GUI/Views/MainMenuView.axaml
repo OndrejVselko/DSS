@@ -7,6 +7,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GUI.MainMenuView">
     <Grid>
+    <Image Source="/Assets/background.png" Stretch="UniformToFill" Opacity="0.2"/>
+
             <TextBlock Text="Disease Spreading Simulator" 
                         FontSize="35" FontWeight="Bold"
                         HorizontalAlignment="Center" Margin="0,75,0,0"/>
@@ -14,7 +16,11 @@
             <StackPanel Margin="400,250,0,0" Spacing="25">
                 <Button Content="Nová simulace" Click="OnNewSimulationClicked" Width="400" FontSize="28" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
                 <Button Content="Prohlížení starých simulací" Click="OnOldSimulationsClicked" FontSize="28" Width="400" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
+                <Button Content="O aplikaci" Click="OnAboutClicked" FontSize="28" Width="400" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
                 <Button Content="Ukončit" Click="OnExitClicked" Width="400" FontSize="28" HorizontalContentAlignment="Center" BorderBrush="#222222"/>
             </StackPanel>
+            <TextBlock Text="Ondřej Všelko, 2026"
+           HorizontalAlignment="Right" VerticalAlignment="Bottom"
+           Margin="0,0,16,16" FontSize="12" Foreground="Gray"/>
     </Grid>
 </UserControl>

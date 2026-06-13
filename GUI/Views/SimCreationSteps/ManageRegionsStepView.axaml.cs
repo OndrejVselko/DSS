@@ -156,7 +156,7 @@ public partial class ManageRegionsStepView : UserControl
         var box = sender as TextBox;
         if (box == null) return;
         var text = box.Text ?? "";
-        if (!string.IsNullOrEmpty(text) && !int.TryParse(text, out _))
+        if (!string.IsNullOrEmpty(text) && (!int.TryParse(text, out int val) || val < 0))
             box.Text = text[..^1];
     }
 
@@ -165,7 +165,7 @@ public partial class ManageRegionsStepView : UserControl
         var box = sender as TextBox;
         if (box == null) return;
         var text = box.Text ?? "";
-        if (!string.IsNullOrEmpty(text) && !double.TryParse(text, out _))
+        if (!string.IsNullOrEmpty(text) && (!double.TryParse(text, out double val) || val < 0))
             box.Text = text[..^1];
     }
 

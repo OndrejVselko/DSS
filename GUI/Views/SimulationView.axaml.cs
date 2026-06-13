@@ -5,6 +5,8 @@ using Mapsui.Layers;
 using Mapsui.Manipulations;
 using Mapsui.Nts;
 using Mapsui.Styles;
+using Mapsui.UI;
+using Mapsui.UI.Avalonia;
 using NetTopologySuite.IO;
 using Services;
 using Shared;
@@ -55,6 +57,9 @@ public partial class SimulationView : UserControl
         UpdateDiseaseValues();
         InitializeVaccine();
         _appService.UpdateRegionsDiseaseValues();
+
+        _mapControl.Map.Navigator.OverrideZoomBounds = new MMinMax(0.080, 0.4);
+        //System.Diagnostics.Debug.WriteLine($"Resolution: {_mapControl.Map.Navigator.Viewport.Resolution}");
 
 
         var regions = _appService.GetAllRegions().Values
@@ -173,13 +178,13 @@ public partial class SimulationView : UserControl
         if (_isRunning)
         {
             _appService.StopSimulation();
-            this.FindControl<Button>("PlayPauseButton")!.Content = "|>";
+            this.FindControl<Button>("PlayPauseButton")!.Content = "▶️";
             _isRunning = false;
         }
         else
         {
             _appService.StartSimulation();
-            this.FindControl<Button>("PlayPauseButton")!.Content = "||";
+            this.FindControl<Button>("PlayPauseButton")!.Content = "⏸️";
             _isRunning = true;
         }
     }
@@ -188,6 +193,8 @@ public partial class SimulationView : UserControl
     private void OnSpreadingSpeedConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var text = this.FindControl<TextBox>("SpreadingSpeedBox")!.Text ?? "";
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
         try { _appService.ChangeDefaultSpreadingSpeed(text); }
         catch { }
     }
@@ -197,7 +204,9 @@ public partial class SimulationView : UserControl
     {
         // Function expects string, not double. Temporary solution :(
         var text = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
-        if(double.TryParse(text, out var d))
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
+        if (double.TryParse(text, out var d))
         {
             try { _appService.ChangeDeathProbability((d / 100).ToString()); }
             catch { }
@@ -237,25 +246,31 @@ public partial class SimulationView : UserControl
 
     private void MoveFromActiveToAvailable()
     {
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
         var box = this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!;
         if (box.SelectedItem is DiseaseAbility ability)
         {
             _activeAbilities.Remove(ability);
             _availableAbilities.Add(ability);
             _appService.RemoveDiseaseAbilityFromDisease(ability.Id);
-            UpdateDiseaseValues();
         }
     }
 
     private void MoveFromAvailableToActive()
     {
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
         var box = this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!;
         if (box.SelectedItem is DiseaseAbility ability)
         {
             _availableAbilities.Remove(ability);
             _activeAbilities.Add(ability);
             _appService.AddDiseaseAbilityToDisease(ability.Id);
-            UpdateDiseaseValues();
         }
     }
 
@@ -407,9 +422,9 @@ public partial class SimulationView : UserControl
             this.FindControl<TextBlock>("SpreadingLabel")!.Text =
                 $"Šíření: {region.RegionSpreadingSpeed:F2} / {region.TotalSpreadingSpeed:F2}";
             this.FindControl<TextBlock>("RandomOccurrenceLabel")!.Text =
-                $"Náhodný výskyt: {region.TotalRandomOccurrence:F2}";
+                $"Náhodný výskyt: {(region.TotalRandomOccurrence * 100):F2} %";
             this.FindControl<TextBlock>("DeathLabel")!.Text =
-                $"Úmrtnost: {region.DiseaseDeathPropability:F2} / {region.TotalDeathProbability:F2}";
+                $"Úmrtnost: {(region.DiseaseDeathPropability * 100):F2} %/ {(region.TotalDeathProbability * 100):F2} %";
 
             var healthcareBox = this.FindControl<TextBox>("HealthcareIndexBox")!;
             if (!healthcareBox.IsFocused)
@@ -481,6 +496,8 @@ public partial class SimulationView : UserControl
 
     private void OnHealthcareConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
         if (_selectedRegionCode == null) return;
         var region = _appService.GetAllRegions().Values
             .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
@@ -538,6 +555,8 @@ public partial class SimulationView : UserControl
 
     private void MoveFromActiveToAvailableRegion()
     {
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
         var region = _appService.GetAllRegions().Values
             .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
         if (region == null) return;
@@ -552,6 +571,8 @@ public partial class SimulationView : UserControl
 
     private void MoveFromAvailableToActiveRegion()
     {
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
         var region = _appService.GetAllRegions().Values
             .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
         if (region == null) return;
@@ -571,5 +592,42 @@ public partial class SimulationView : UserControl
         var text = box.Text ?? "";
         if (!string.IsNullOrEmpty(text) && !uint.TryParse(text, out _))
             box.Text = text[..^1];
+    }
+
+    private void OnPositiveDoubleTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var box = sender as TextBox;
+        if (box == null) return;
+        var text = box.Text ?? "";
+        if (!string.IsNullOrEmpty(text) && (!double.TryParse(text, out double val) || val < 0))
+            box.Text = text[..^1];
+    }
+
+    private void OnPercentDoubleTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var box = sender as TextBox;
+        if (box == null) return;
+        var text = box.Text ?? "";
+        if (!string.IsNullOrEmpty(text) && (!double.TryParse(text, out double val) || val < 0 || val > 100))
+            box.Text = text[..^1];
+    }
+
+    private void OnScreenshotClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var screenshotsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "screenshots");
+        Directory.CreateDirectory(screenshotsDir);
+
+        var topLevel = TopLevel.GetTopLevel(this)!;
+        var pixelSize = new Avalonia.PixelSize((int)topLevel.Width, (int)topLevel.Height);
+        var size = new Avalonia.Size(topLevel.Width, topLevel.Height);
+        var dpiVector = new Avalonia.Vector(96, 96);
+
+        using var bitmap = new Avalonia.Media.Imaging.RenderTargetBitmap(pixelSize, dpiVector);
+        topLevel.Measure(size);
+        topLevel.Arrange(new Avalonia.Rect(size));
+        bitmap.Render(topLevel);
+
+        var path = Path.Combine(screenshotsDir, $"DSS_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.png");
+        bitmap.Save(path);
     }
 }

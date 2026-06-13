@@ -42,12 +42,12 @@ public partial class CreateVaccineStepView : UserControl
             && double.TryParse(deathProtectionText, out double deathProtection) && deathProtection >= 0 && deathProtection <= 100;
     }
 
-    private void OnDoubleTextChanged(object? sender, TextChangedEventArgs e)
+    private void OnPercentDoubleTextChanged(object? sender, TextChangedEventArgs e)
     {
         var box = sender as TextBox;
         if (box == null) return;
         var text = box.Text ?? "";
-        if (!string.IsNullOrEmpty(text) && !double.TryParse(text, out _))
+        if (!string.IsNullOrEmpty(text) && (!double.TryParse(text, out double val) || val < 0 || val > 100))
             box.Text = text[..^1];
         else
             _parent.SetNextEnabled(IsValid());
