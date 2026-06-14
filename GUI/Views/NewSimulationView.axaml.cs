@@ -86,7 +86,6 @@ public partial class NewSimulationView : UserControl
         else
         {
             _manageRegionsStep?.SaveAll();
-            AppService.SetStartDate();
             _mainWindow.SetSimulationSize();
             _mainWindow.Content = new SimulationView(AppService, _mainWindow);
         }

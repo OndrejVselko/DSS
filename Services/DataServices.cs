@@ -73,6 +73,6 @@ namespace Services
 
         public void EnsureDatabase() => SimulationDbContext.EnsureCreated();
 
-        public async Task<List<LogEntry>> GetLogs(int simulationId) => _repository.GetLogsAsync(simulationId);
+        public async Task<List<LogEntry>> GetLogs(int simulationId) => _repository.GetLogs(simulationId);
     }
 }

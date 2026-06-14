@@ -22,5 +22,7 @@ namespace Shared
         public double DeathModifier { get; set; }
         public double BorderModifier { get; set; }
         public double VaccinationCapacityModifier { get; set; }
+
+        public string ToString();
     }
 }

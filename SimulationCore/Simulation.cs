@@ -7,63 +7,32 @@ namespace SimulationCore
     /// </summary>
     public class Simulation
     {
-        /// <summary>
-        /// Event invoked after each simulated day with a textual report.
-        /// </summary>
-        //public event Action<string>? OnDaySimulated;
+
+        public Disease disease { get; set; }
+        public Dictionary<int, Region> regions { get; set; }
+        public Vaccine vaccine { get; set; }
+
+        public DateOnly startDate { get; set; }
+        public DateOnly currentSimulationDate { get; set; }
+        private bool _isRunning;
+        public int dayLength { get; set; }
+        public Queue<ISimulationCommand> pendingCommands;
+        public Dictionary<(int, int), Interaction> Interactions { get; set; } = new();
+        private Dictionary<int, RegionAbility> _regionAbilities = new();
+        public long GlobalPopulation;
+        public LogList Logs { get; set; } = new LogList();
 
         public event Action<StatisticUpdate>? OnDaySimulated;
 
-
-        /// <summary>Disease under simulation.</summary>
-        public Disease disease { get; set; }
-        /// <summary>Dictionary of regions keyed by id.</summary>
-        public Dictionary<int, Region> regions { get; set; }
-
-        public Vaccine vaccine { get; set; }
-
-
-        /// <summary>Simulation start date.</summary>
-        public DateOnly startDate { get; set; }
-        /// <summary>Current simulation date.</summary>
-        public DateOnly currentSimulationDate { get; set; }
-        private bool _isRunning;
-        /// <summary>Interval in days for reporting (unused currently).</summary>
-        public int reportingInterval;
-        /// <summary>Milliseconds per simulated day.</summary>
-        public int dayLength { get; set; }
-
-        /// <summary>Queue of pending simulation commands to execute before each day.</summary>
-        public Queue<ISimulationCommand> pendingCommands;
-
-
-        public Dictionary<(int, int), Interaction> Interactions { get; set; } = new();
-
-        private Dictionary<int, RegionAbility> _regionAbilities = new();
-
-        public int GlobalPopulation;
-
-
-        public LogList Logs { get; set; } = new LogList();
-
-
-        /// <summary>
-        /// Initializes default parameters and command queue.
-        /// </summary>
         public Simulation()
         {
             this.pendingCommands = new Queue<ISimulationCommand>();
-            this.reportingInterval = 1;
             this.dayLength = 1000;
+            this.startDate = DateOnly.FromDateTime(DateTime.Now);
+            this.currentSimulationDate = DateOnly.FromDateTime(DateTime.Now);
         }
 
-        /// <summary>
-        /// Enqueues a simulation command to be applied before the next simulated day.
-        /// </summary>
-        public void EnqueueCommand(ISimulationCommand command)
-        {
-            pendingCommands.Enqueue(command);
-        }
+        // SETTING METHODS
 
         /// <summary>
         /// Sets the active disease instance.
@@ -91,6 +60,13 @@ namespace SimulationCore
         public void SetRegionAbilities(Dictionary<int, RegionAbility> regionAbilities)
         {
             _regionAbilities = regionAbilities;
+        }
+
+        /// <summary>Prepares region queues using disease sickness length.</summary>
+        public void SetRegionQueues()
+        {
+            foreach (int key in this.regions.Keys)
+                regions[key].SetStartingQueue(disease.SicknessLength, disease.ImmunityLength);
         }
 
         public void AssignNeighbours()
@@ -131,17 +107,8 @@ namespace SimulationCore
             Interactions = interactions;
         }
 
-        /// <summary>
-        /// Sets the simulation start date and current date when default requested.
-        /// </summary>
-        public void SetStartDate(DateOnly startDate = default)
-        {
-            if (startDate == default)
-            {
-                this.startDate = DateOnly.FromDateTime(DateTime.Now);
-                this.currentSimulationDate = DateOnly.FromDateTime(DateTime.Now);
-            }
-        }
+
+        // CONTROLING METHODS
 
         /// <summary>Marks the simulation as running.</summary>
         public void Run() => this._isRunning = true;
@@ -149,16 +116,28 @@ namespace SimulationCore
         /// <summary>Marks the simulation as stopped.</summary>
         public void Stop() => this._isRunning = false;
 
-        /// <summary>Indicates whether the simulation is running.</summary>
-        public bool IsRunning() => this._isRunning;
 
-        /// <summary>Prepares region queues using disease sickness length.</summary>
-        public void SetRegionQueues()
+        /// <summary>Changes simulated day length (ms) with validation.</summary>
+        public void changeDayLength(int ms)
         {
-            foreach (int key in this.regions.Keys)
-                regions[key].SetStartingQueue(disease.SicknessLength, disease.ImmunityLength);
+            if (ms > 0)
+                this.dayLength = ms;
+            else
+                Console.WriteLine("Neplatný čas");
         }
 
+        public void AddLog(DateOnly date, string message, params string[] args)
+        {
+            Logs.Add(date, message, args);
+        }
+        public void EnqueueCommand(ISimulationCommand command)
+        {
+            pendingCommands.Enqueue(command);
+        }
+
+
+
+        // UPDATING METHODS
         /// <summary>Updates disease values in all regions.</summary>
         public void UpdateRegionsDiseaseValues()
         {
@@ -176,14 +155,8 @@ namespace SimulationCore
             }
         }
 
-        /// <summary>Changes simulated day length (ms) with validation.</summary>
-        public void changeDayLength(int ms)
-        {
-            if (ms > 0)
-                this.dayLength = ms;
-            else
-                Console.WriteLine("Neplatný čas");
-        }
+
+        // SIMULATION METHODS
 
         /// <summary>
         /// Background simulation loop advancing dates and invoking OnDaySimulated.
@@ -222,6 +195,7 @@ namespace SimulationCore
                 totalDeath += regionUpdate.TotalDead;
                 totalVaccinated += regionUpdate.TotalVaccinated;
             }
+
             foreach (int key in this.regions.Keys)
                 regions[key].RecalculateRandomOccurrence(totalSick, GlobalPopulation);
 
@@ -235,11 +209,6 @@ namespace SimulationCore
             AddLog(currentSimulationDate, update.ToString());
 
             return update;
-        }
-
-        public void AddLog(DateOnly date, string message, params string[] args)
-        {
-            Logs.Add(date, message, args);
         }
     }
 }

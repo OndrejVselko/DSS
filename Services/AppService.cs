@@ -130,12 +130,6 @@ namespace Services
             _simulationServices.setStartingRegion(input);
         }
 
-
-        public void SetStartDate()
-        {
-            _simulationServices.SetStartDate();
-        }
-
         public DateOnly GetDate() => _simulationServices.GetDate();
         /// <summary>
         /// Sets region spreading speed via simulation service.

@@ -19,8 +19,6 @@ namespace Shared
         public int Vaccinated { get; set; } = 0;
         public int Immune { get; set; }
 
-        // Fronta imunity — po vypršení se člověk stává znovu náchylným
-        public Queue<int> ImmunityHistory;
 
         public bool Vaccinating { get; set; }
         public Vaccine vaccine { get; set; }
@@ -32,6 +30,9 @@ namespace Shared
         public double RegionDeathPropability { get; set; } = 1;
         public double DiseaseSpreadingSpeed { get; set; }
         public double DiseaseDeathPropability { get; set; }
+        public Queue<int> ImmunityHistory;
+        public int ImmunityLength { get; set; }
+
         public List<RegionAbility> Abilities { get; set; }
         public List<int> AbilityIds { get; set; } = new();
         public List<Region> NeighbouringRegions { get; set; } = new();
@@ -43,10 +44,7 @@ namespace Shared
         public double InteractionDeathModifier;
         public int SicknessLength { get; set; }
 
-        public StatisticUpdate LastUpdate { get; set; } = new StatisticUpdate(0, 0, 0, 0, 0, 0);
-
-        // Délka imunity v dnech — nastavuje se z Disease před simulací
-        public int ImmunityLength { get; set; } = 60;
+        public StatisticUpdate LastUpdate { get; set; } = new StatisticUpdate(0, 0, 0, 0, 0, 0)
 
         public Region()
         {
@@ -56,11 +54,6 @@ namespace Shared
             TotalVaccinatingCapacity = 0.001;
             InteractionSpreadingModifier = 1.0;
             InteractionDeathModifier = 1.0;
-        }
-
-        public void SetNeighbouringRegions(List<Region> regions)
-        {
-            NeighbouringRegions = regions;
         }
 
         /// <summary>
@@ -87,7 +80,7 @@ namespace Shared
             UpdateRegionValues();
         }
 
-        public void RecalculateRandomOccurrence(int globalSick, int globalPopulation)
+        public void RecalculateRandomOccurrence(int globalSick, long globalPopulation)
         {
             double globalRatio = (double)globalSick / globalPopulation;
             double neighbourSick = NeighbouringRegions.Sum(r => r.Sick);

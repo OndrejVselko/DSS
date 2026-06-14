@@ -119,7 +119,7 @@ namespace SimulationCore
             simulation.disease.ChangeDeathProbability(_probability);
             simulation.UpdateAllRegions();
 
-            simulation.AddLog(simulation.currentSimulationDate, "Změna šance na úmrtí", _probability.ToString());
+            simulation.AddLog(simulation.currentSimulationDate, "Změna šance na úmrtí", (_probability * 100).ToString());
 
         }
     }
@@ -239,6 +239,8 @@ namespace SimulationCore
         }
     }
 
+    // Vaccine commands
+
     public class ChangeVaccineParametersCommand : ISimulationCommand { 
         private readonly double? _newProtecitonEfficiency;
         private readonly double? _newDeathProtecitonEfficiency;
@@ -254,8 +256,8 @@ namespace SimulationCore
         {
             simulation.vaccine.ChangeVaccineEfficiency(_newProtecitonEfficiency, _newDeathProtecitonEfficiency);
             simulation.AddLog(simulation.currentSimulationDate, "Změna parametrů vakcíny",
-                _newProtecitonEfficiency?.ToString() ?? "-",
-                _newDeathProtecitonEfficiency?.ToString() ?? "-");
+                (_newProtecitonEfficiency * 100)?.ToString() ?? "-",
+                (_newDeathProtecitonEfficiency * 100)?.ToString() ?? "-");
         }
     }
 
@@ -328,6 +330,8 @@ namespace SimulationCore
         }
     }
 
+
+    // Simulation commands
     public class ChangeSimulationSpeedCommand : ISimulationCommand
     {
         private readonly int _newSpeed;

@@ -86,10 +86,6 @@ namespace Services
         /// </summary>
         public void UpdateRegionsDiseaseValues() => _simulation.UpdateRegionsDiseaseValues();
 
-        /// <summary>
-        /// Sets the simulation start date.
-        /// </summary>
-        public void SetStartDate(DateOnly startDate = default) => _simulation.SetStartDate(startDate);
 
         public DateOnly GetDate()
         {

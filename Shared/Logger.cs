@@ -26,8 +26,6 @@ namespace Shared
                     Args.Add(arg.ToString());
                 }
             }
-
-
         }
 
         public string ToString()

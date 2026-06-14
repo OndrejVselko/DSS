@@ -23,7 +23,7 @@ namespace Data
                 .ToListAsync();
         }
 
-        public List<LogEntry> GetLogsAsync(int simulationId)
+        public List<LogEntry> GetLogs(int simulationId)
         {
             using var context = new SimulationDbContext();
             return context.LogEntries

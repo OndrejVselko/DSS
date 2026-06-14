@@ -22,7 +22,6 @@ namespace Data
         public int SimulationRecordId { get; set; }
         public string Day { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
-
         public SimulationRecord SimulationRecord { get; set; } = null!;
     }
 }
