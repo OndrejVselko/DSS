@@ -1,103 +1,3352 @@
 {
-  "ScenarioName": "Globální Pandemie 2026",
+  "ScenarioName": "world",
   "Regions": [
-    { "id": 1, "name": "Fidži", "isoCode": "FJI", "population": 889953, "healthcareIndex": 0.52, "regionSpreadingSpeed": 0.95, "abilityIds": [23], "neighbourIds": [] },
-    { "id": 2, "name": "Tanzanie", "isoCode": "TZA", "population": 58005463, "healthcareIndex": 0.41, "regionSpreadingSpeed": 1.15, "abilityIds": [19], "neighbourIds": [3, 4, 114, 115, 116] },
-    { "id": 3, "name": "Keňa", "isoCode": "KEN", "population": 52570000, "healthcareIndex": 0.45, "regionSpreadingSpeed": 1.20, "abilityIds": [19], "neighbourIds": [2, 4, 5, 6, 10] },
-    { "id": 4, "name": "Uganda", "isoCode": "UGA", "population": 44270000, "healthcareIndex": 0.38, "regionSpreadingSpeed": 1.10, "abilityIds": [19], "neighbourIds": [2, 3, 5, 8, 9] },
-    { "id": 5, "name": "Etiopie", "isoCode": "ETH", "population": 112000000, "healthcareIndex": 0.35, "regionSpreadingSpeed": 1.25, "abilityIds": [19], "neighbourIds": [3, 6, 8, 10, 11] },
-    { "id": 6, "name": "Somálsko", "isoCode": "SOM", "population": 15440000, "healthcareIndex": 0.18, "regionSpreadingSpeed": 1.30, "abilityIds": [19], "neighbourIds": [3, 5, 48] },
-    { "id": 8, "name": "Jižní Súdán", "isoCode": "SSD", "population": 11060000, "healthcareIndex": 0.22, "regionSpreadingSpeed": 1.15, "abilityIds": [19], "neighbourIds": [4, 5, 9, 10, 15] },
-    { "id": 9, "name": "Kongo (DRK)", "isoCode": "COD", "population": 86790000, "healthcareIndex": 0.31, "regionSpreadingSpeed": 1.10, "abilityIds": [18], "neighbourIds": [4, 8, 15, 21, 114] },
-    { "id": 10, "name": "Súdán", "isoCode": "SDN", "population": 42810000, "healthcareIndex": 0.36, "regionSpreadingSpeed": 1.05, "abilityIds": [17], "neighbourIds": [5, 8, 12, 15, 38] },
-    { "id": 12, "name": "Egypt", "isoCode": "EGY", "population": 100400000, "healthcareIndex": 0.62, "regionSpreadingSpeed": 1.35, "abilityIds": [17], "neighbourIds": [10, 17, 37] },
-    { "id": 15, "name": "Středoafrická rep.", "isoCode": "CAF", "population": 47450000, "healthcareIndex": 0.25, "regionSpreadingSpeed": 1.00, "abilityIds": [18], "neighbourIds": [8, 9, 10, 21] },
-    { "id": 16, "name": "Čína", "isoCode": "CHN", "population": 1400050000, "healthcareIndex": 0.78, "regionSpreadingSpeed": 1.65, "abilityIds": [16, 20], "neighbourIds": [63, 69, 75, 90, 111] },
-    { "id": 17, "name": "Libye", "isoCode": "LBY", "population": 67770000, "healthcareIndex": 0.50, "regionSpreadingSpeed": 1.00, "abilityIds": [17], "neighbourIds": [12, 24] },
-    { "id": 21, "name": "Kamerun", "isoCode": "CMR", "population": 25880000, "healthcareIndex": 0.44, "regionSpreadingSpeed": 1.15, "abilityIds": [18], "neighbourIds": [9, 15, 23, 29] },
-    { "id": 23, "name": "Gabon", "isoCode": "GAB", "population": 2170000, "healthcareIndex": 0.56, "regionSpreadingSpeed": 0.95, "abilityIds": [18], "neighbourIds": [15, 21, 29] },
-    { "id": 24, "name": "Alžírsko", "isoCode": "DZA", "population": 43050000, "healthcareIndex": 0.64, "regionSpreadingSpeed": 1.10, "abilityIds": [17], "neighbourIds": [17, 120] },
-    { "id": 29, "name": "Rovníková Guinea", "isoCode": "GNQ", "population": 1360000, "healthcareIndex": 0.40, "regionSpreadingSpeed": 0.90, "abilityIds": [18], "neighbourIds": [21, 23] },
-    { "id": 37, "name": "Irák", "isoCode": "IRQ", "population": 39310000, "healthcareIndex": 0.48, "regionSpreadingSpeed": 1.20, "abilityIds": [17], "neighbourIds": [12, 38, 46, 47] },
-    { "id": 38, "name": "Saúdská Arábie", "isoCode": "SAU", "population": 34270000, "healthcareIndex": 0.79, "regionSpreadingSpeed": 1.25, "abilityIds": [17], "neighbourIds": [10, 37, 47, 48, 49, 50, 51] },
-    { "id": 46, "name": "Írán", "isoCode": "IRN", "population": 82910000, "healthcareIndex": 0.69, "regionSpreadingSpeed": 1.30, "abilityIds": [17], "neighbourIds": [37, 48, 73] },
-    { "id": 47, "name": "Kuvajt", "isoCode": "KWT", "population": 4200000, "healthcareIndex": 0.81, "regionSpreadingSpeed": 1.15, "abilityIds": [17], "neighbourIds": [37, 38] },
-    { "id": 48, "name": "Jemen", "isoCode": "YEM", "population": 29160000, "healthcareIndex": 0.28, "regionSpreadingSpeed": 1.05, "abilityIds": [17], "neighbourIds": [6, 38, 49] },
-    { "id": 49, "name": "Omán", "isoCode": "OMN", "population": 4970000, "healthcareIndex": 0.74, "regionSpreadingSpeed": 1.10, "abilityIds": [17], "neighbourIds": [38, 48, 50] },
-    { "id": 50, "name": "Spojené arabské emiráty", "isoCode": "ARE", "population": 9770000, "healthcareIndex": 0.86, "regionSpreadingSpeed": 1.40, "abilityIds": [17, 20], "neighbourIds": [38, 49, 51] },
-    { "id": 51, "name": "Katar", "isoCode": "QAT", "population": 2830000, "healthcareIndex": 0.88, "regionSpreadingSpeed": 1.35, "abilityIds": [17, 20], "neighbourIds": [38, 50] },
-    { "id": 52, "name": "Kypr", "isoCode": "CYP", "population": 1190000, "healthcareIndex": 0.80, "regionSpreadingSpeed": 1.00, "abilityIds": [23], "neighbourIds": [] },
-    { "id": 63, "name": "Rusko", "isoCode": "RUS", "population": 144400000, "healthcareIndex": 0.71, "regionSpreadingSpeed": 1.20, "abilityIds": [22], "neighbourIds": [16, 73, 75, 100] },
-    { "id": 69, "name": "Indie", "isoCode": "IND", "population": 1366000000, "healthcareIndex": 0.54, "regionSpreadingSpeed": 1.70, "abilityIds": [16], "neighbourIds": [16, 90, 93] },
-    { "id": 73, "name": "Kazachstán", "isoCode": "KAZ", "population": 18510000, "healthcareIndex": 0.63, "regionSpreadingSpeed": 1.00, "abilityIds": [25], "neighbourIds": [46, 63, 75] },
-    { "id": 75, "name": "Mongolsko", "isoCode": "MNG", "population": 3225000, "healthcareIndex": 0.55, "regionSpreadingSpeed": 0.85, "abilityIds": [25], "neighbourIds": [16, 63, 73] },
-    { "id": 90, "name": "Bangladéš", "isoCode": "BGD", "population": 163000000, "healthcareIndex": 0.42, "regionSpreadingSpeed": 1.60, "abilityIds": [16, 24], "neighbourIds": [16, 69] },
-    { "id": 93, "name": "Srí Lanka", "isoCode": "LKA", "population": 21800000, "healthcareIndex": 0.66, "regionSpreadingSpeed": 1.10, "abilityIds": [23], "neighbourIds": [69] },
-    { "id": 96, "name": "Thajsko", "isoCode": "THA", "population": 69630000, "healthcareIndex": 0.75, "regionSpreadingSpeed": 1.30, "abilityIds": [24], "neighbourIds": [111, 112] },
-    { "id": 100, "name": "Německo", "isoCode": "DEU", "population": 83130000, "healthcareIndex": 0.94, "regionSpreadingSpeed": 1.35, "abilityIds": [20], "neighbourIds": [63, 110, 120] },
-    { "id": 110, "name": "Itálie", "isoCode": "ITA", "population": 60360000, "healthcareIndex": 0.89, "regionSpreadingSpeed": 1.40, "abilityIds": [20], "neighbourIds": [100, 120] },
-    { "id": 111, "name": "Vietnam", "isoCode": "VNM", "population": 96460000, "healthcareIndex": 0.60, "regionSpreadingSpeed": 1.35, "abilityIds": [18, 24], "neighbourIds": [16, 96] },
-    { "id": 112, "name": "Malajsie", "isoCode": "MYS", "population": 31950000, "healthcareIndex": 0.77, "regionSpreadingSpeed": 1.25, "abilityIds": [18, 24], "neighbourIds": [96, 127] },
-    { "id": 113, "name": "Jižní Korea", "isoCode": "KOR", "population": 51710000, "healthcareIndex": 0.92, "regionSpreadingSpeed": 1.45, "abilityIds": [20], "neighbourIds": [160] },
-    { "id": 114, "name": "Zambie", "isoCode": "ZMB", "population": 17860000, "healthcareIndex": 0.40, "regionSpreadingSpeed": 1.05, "abilityIds": [19], "neighbourIds": [2, 9, 115, 116, 129] },
-    { "id": 115, "name": "Mosambik", "isoCode": "MOZ", "population": 30370000, "healthcareIndex": 0.33, "regionSpreadingSpeed": 1.10, "abilityIds": [19], "neighbourIds": [2, 114, 116, 129] },
-    { "id": 116, "name": "Malawi", "isoCode": "MWI", "population": 18630000, "healthcareIndex": 0.36, "regionSpreadingSpeed": 1.05, "abilityIds": [19], "neighbourIds": [2, 114, 115] },
-    { "id": 120, "name": "Francie", "isoCode": "FRA", "population": 67060000, "healthcareIndex": 0.93, "regionSpreadingSpeed": 1.35, "abilityIds": [20], "neighbourIds": [24, 100, 110] },
-    { "id": 127, "name": "Indonésie", "isoCode": "IDN", "population": 270600000, "healthcareIndex": 0.58, "regionSpreadingSpeed": 1.40, "abilityIds": [18, 24], "neighbourIds": [112, 161, 162] },
-    { "id": 129, "name": "Zimbabwe", "isoCode": "ZWE", "population": 14650000, "healthcareIndex": 0.39, "regionSpreadingSpeed": 1.10, "abilityIds": [19], "neighbourIds": [114, 115] },
-    { "id": 136, "name": "Brazílie", "isoCode": "BRA", "population": 211000000, "healthcareIndex": 0.65, "regionSpreadingSpeed": 1.35, "abilityIds": [18, 21], "neighbourIds": [138, 139, 141, 142, 144] },
-    { "id": 138, "name": "Venezuela", "isoCode": "VEN", "population": 28510000, "healthcareIndex": 0.32, "regionSpreadingSpeed": 1.20, "abilityIds": [21], "neighbourIds": [136, 139] },
-    { "id": 139, "name": "Kolumbie", "isoCode": "COL", "population": 50340000, "healthcareIndex": 0.72, "regionSpreadingSpeed": 1.25, "abilityIds": [18, 21], "neighbourIds": [136, 138, 141] },
-    { "id": 141, "name": "Peru", "isoCode": "PER", "population": 32510000, "healthcareIndex": 0.61, "regionSpreadingSpeed": 1.15, "abilityIds": [18, 21], "neighbourIds": [136, 139, 142] },
-    { "id": 142, "name": "Bolívie", "isoCode": "BOL", "population": 11510000, "healthcareIndex": 0.47, "regionSpreadingSpeed": 1.05, "abilityIds": [21], "neighbourIds": [136, 141, 144] },
-    { "id": 144, "name": "Argentina", "isoCode": "ARG", "population": 44940000, "healthcareIndex": 0.76, "regionSpreadingSpeed": 1.15, "abilityIds": [21], "neighbourIds": [136, 142] },
-    { "id": 154, "name": "Mexiko", "isoCode": "MEX", "population": 127600000, "healthcareIndex": 0.67, "regionSpreadingSpeed": 1.30, "abilityIds": [21], "neighbourIds": [155] },
-    { "id": 155, "name": "USA", "isoCode": "USA", "population": 328200000, "healthcareIndex": 0.91, "regionSpreadingSpeed": 1.45, "abilityIds": [20], "neighbourIds": [154, 156] },
-    { "id": 156, "name": "Kanada", "isoCode": "CAN", "population": 37590000, "healthcareIndex": 0.95, "regionSpreadingSpeed": 1.00, "abilityIds": [20, 22], "neighbourIds": [155, 157] },
-    { "id": 157, "name": "Grónsko", "isoCode": "GRL", "population": 56000, "healthcareIndex": 0.74, "regionSpreadingSpeed": 0.55, "abilityIds": [22], "neighbourIds": [156, 158] },
-    { "id": 158, "name": "Island", "isoCode": "ISL", "population": 361000, "healthcareIndex": 0.97, "regionSpreadingSpeed": 0.80, "abilityIds": [23], "neighbourIds": [157] },
-    { "id": 159, "name": "Madagaskar", "isoCode": "MDG", "population": 26970000, "healthcareIndex": 0.30, "regionSpreadingSpeed": 0.90, "abilityIds": [23], "neighbourIds": [] },
-    { "id": 160, "name": "Japonsko", "isoCode": "JPN", "population": 126300000, "healthcareIndex": 0.96, "regionSpreadingSpeed": 1.50, "abilityIds": [20, 23], "neighbourIds": [113] },
-    { "id": 161, "name": "Filipíny", "isoCode": "PHL", "population": 108100000, "healthcareIndex": 0.55, "regionSpreadingSpeed": 1.35, "abilityIds": [23], "neighbourIds": [127] },
-    { "id": 162, "name": "Austrálie", "isoCode": "AUS", "population": 25360000, "healthcareIndex": 0.93, "regionSpreadingSpeed": 1.10, "abilityIds": [20, 23], "neighbourIds": [127, 163] },
-    { "id": 163, "name": "Nový Zéland", "isoCode": "NZL", "population": 4910000, "healthcareIndex": 0.94, "regionSpreadingSpeed": 0.90, "abilityIds": [23], "neighbourIds": [162] },
-    { "id": 164, "name": "Kuba", "isoCode": "CUB", "population": 11330000, "healthcareIndex": 0.73, "regionSpreadingSpeed": 1.05, "abilityIds": [23], "neighbourIds": [165] },
-    { "id": 165, "name": "Jamajka", "isoCode": "JAM", "population": 2940000, "healthcareIndex": 0.61, "regionSpreadingSpeed": 1.00, "abilityIds": [23], "neighbourIds": [164] }
+    {
+      "id": 1,
+      "name": "Fidži",
+      "isoCode": "FJ",
+      "population": 889953,
+      "healthcareIndex": 0.52,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 2,
+      "name": "Tanzanie",
+      "isoCode": "TZ",
+      "population": 58005463,
+      "healthcareIndex": 0.41,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        3,
+        4,
+        9,
+        114,
+        115,
+        116,
+        210,
+        270
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Keňa",
+      "isoCode": "KE",
+      "population": 52570000,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        2,
+        4,
+        5,
+        6,
+        8
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Uganda",
+      "isoCode": "UG",
+      "population": 44270000,
+      "healthcareIndex": 0.38,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        2,
+        3,
+        8,
+        9,
+        270
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Etiopie",
+      "isoCode": "ET",
+      "population": 112000000,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        3,
+        6,
+        8,
+        10,
+        266,
+        269
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Somálsko",
+      "isoCode": "SO",
+      "population": 15440000,
+      "healthcareIndex": 0.18,
+      "regionSpreadingSpeed": 1.3,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        3,
+        5,
+        269
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Jižní Súdán",
+      "isoCode": "SS",
+      "population": 11060000,
+      "healthcareIndex": 0.22,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        3,
+        4,
+        5,
+        9,
+        10,
+        15
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Kongo (DRK)",
+      "isoCode": "CD",
+      "population": 86790000,
+      "healthcareIndex": 0.31,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        18
+      ],
+      "neighbourIds": [
+        2,
+        4,
+        8,
+        15,
+        114,
+        207,
+        209,
+        210,
+        270
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Súdán",
+      "isoCode": "SD",
+      "population": 42810000,
+      "healthcareIndex": 0.36,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        5,
+        8,
+        12,
+        15,
+        17,
+        170,
+        266
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Egypt",
+      "isoCode": "EG",
+      "population": 100400000,
+      "healthcareIndex": 0.62,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        10,
+        17,
+        211,
+        213
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Středoafrická rep.",
+      "isoCode": "CF",
+      "population": 47450000,
+      "healthcareIndex": 0.25,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        18
+      ],
+      "neighbourIds": [
+        8,
+        9,
+        10,
+        21,
+        170,
+        207
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Čína",
+      "isoCode": "CN",
+      "population": 1400050000,
+      "healthcareIndex": 0.78,
+      "regionSpreadingSpeed": 1.65,
+      "abilityIds": [
+        16,
+        20
+      ],
+      "neighbourIds": [
+        63,
+        69,
+        73,
+        75,
+        111,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Libye",
+      "isoCode": "LY",
+      "population": 67770000,
+      "healthcareIndex": 0.5,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        10,
+        12,
+        24,
+        170,
+        197,
+        215
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Kamerun",
+      "isoCode": "CM",
+      "population": 25880000,
+      "healthcareIndex": 0.44,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        18
+      ],
+      "neighbourIds": [
+        15,
+        23,
+        29,
+        170,
+        198,
+        207
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Gabon",
+      "isoCode": "GA",
+      "population": 2170000,
+      "healthcareIndex": 0.56,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        18
+      ],
+      "neighbourIds": [
+        21,
+        29,
+        207
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Alžírsko",
+      "isoCode": "DZ",
+      "population": 43050000,
+      "healthcareIndex": 0.64,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        17,
+        166,
+        194,
+        195,
+        197,
+        215,
+        268
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Rovníková Guinea",
+      "isoCode": "GQ",
+      "population": 1360000,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        18
+      ],
+      "neighbourIds": [
+        21,
+        23
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Irák",
+      "isoCode": "IQ",
+      "population": 39310000,
+      "healthcareIndex": 0.48,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        38,
+        46,
+        47,
+        216,
+        229,
+        244
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Saúdská Arábie",
+      "isoCode": "SA",
+      "population": 34270000,
+      "healthcareIndex": 0.79,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        37,
+        47,
+        48,
+        49,
+        50,
+        51,
+        216
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Írán",
+      "isoCode": "IR",
+      "population": 82910000,
+      "healthcareIndex": 0.69,
+      "regionSpreadingSpeed": 1.3,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        37,
+        224,
+        225,
+        228,
+        230,
+        244,
+        259
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Kuvajt",
+      "isoCode": "KW",
+      "population": 4200000,
+      "healthcareIndex": 0.81,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        37,
+        38
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Jemen",
+      "isoCode": "YE",
+      "population": 29160000,
+      "healthcareIndex": 0.28,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        38,
+        49
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Omán",
+      "isoCode": "OM",
+      "population": 4970000,
+      "healthcareIndex": 0.74,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        38,
+        48,
+        50
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Spojené arabské emiráty",
+      "isoCode": "AE",
+      "population": 9770000,
+      "healthcareIndex": 0.86,
+      "regionSpreadingSpeed": 1.4,
+      "abilityIds": [
+        17,
+        20
+      ],
+      "neighbourIds": [
+        38,
+        49
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Katar",
+      "isoCode": "QA",
+      "population": 2830000,
+      "healthcareIndex": 0.88,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        17,
+        20
+      ],
+      "neighbourIds": [
+        38
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Kypr",
+      "isoCode": "CY",
+      "population": 1190000,
+      "healthcareIndex": 0.8,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 63,
+      "name": "Rusko",
+      "isoCode": "RU",
+      "population": 144400000,
+      "healthcareIndex": 0.71,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        22
+      ],
+      "neighbourIds": [
+        16,
+        73,
+        75,
+        175,
+        221,
+        232,
+        233,
+        234,
+        239,
+        240,
+        241,
+        259,
+        260,
+        263
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Indie",
+      "isoCode": "IN",
+      "population": 1366000000,
+      "healthcareIndex": 0.54,
+      "regionSpreadingSpeed": 1.7,
+      "abilityIds": [
+        16
+      ],
+      "neighbourIds": [
+        16,
+        90,
+        220,
+        222,
+        223,
+        224
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Kazachstán",
+      "isoCode": "KZ",
+      "population": 18510000,
+      "healthcareIndex": 0.63,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        25
+      ],
+      "neighbourIds": [
+        16,
+        63,
+        167,
+        227,
+        228
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Mongolsko",
+      "isoCode": "MN",
+      "population": 3225000,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 0.85,
+      "abilityIds": [
+        25
+      ],
+      "neighbourIds": [
+        16,
+        63
+      ]
+    },
+    {
+      "id": 90,
+      "name": "Bangladéš",
+      "isoCode": "BD",
+      "population": 163000000,
+      "healthcareIndex": 0.42,
+      "regionSpreadingSpeed": 1.6,
+      "abilityIds": [
+        16,
+        24
+      ],
+      "neighbourIds": [
+        69,
+        220
+      ]
+    },
+    {
+      "id": 93,
+      "name": "Srí Lanka",
+      "isoCode": "LK",
+      "population": 21800000,
+      "healthcareIndex": 0.66,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": [
+        69
+      ]
+    },
+    {
+      "id": 96,
+      "name": "Thajsko",
+      "isoCode": "TH",
+      "population": 69630000,
+      "healthcareIndex": 0.75,
+      "regionSpreadingSpeed": 1.3,
+      "abilityIds": [
+        24
+      ],
+      "neighbourIds": [
+        112,
+        218,
+        219,
+        220
+      ]
+    },
+    {
+      "id": 100,
+      "name": "Německo",
+      "isoCode": "DE",
+      "population": 83130000,
+      "healthcareIndex": 0.94,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        20
+      ],
+      "neighbourIds": [
+        120,
+        234,
+        235,
+        247,
+        248,
+        249,
+        250,
+        257,
+        265
+      ]
+    },
+    {
+      "id": 110,
+      "name": "Itálie",
+      "isoCode": "IT",
+      "population": 60360000,
+      "healthcareIndex": 0.89,
+      "regionSpreadingSpeed": 1.4,
+      "abilityIds": [
+        20
+      ],
+      "neighbourIds": [
+        120,
+        235,
+        247,
+        262
+      ]
+    },
+    {
+      "id": 111,
+      "name": "Vietnam",
+      "isoCode": "VN",
+      "population": 96460000,
+      "healthcareIndex": 0.6,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        18,
+        24
+      ],
+      "neighbourIds": [
+        16,
+        218,
+        219
+      ]
+    },
+    {
+      "id": 112,
+      "name": "Malajsie",
+      "isoCode": "MY",
+      "population": 31950000,
+      "healthcareIndex": 0.77,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        18,
+        24
+      ],
+      "neighbourIds": [
+        96,
+        127,
+        261
+      ]
+    },
+    {
+      "id": 113,
+      "name": "Jižní Korea",
+      "isoCode": "KR",
+      "population": 51710000,
+      "healthcareIndex": 0.92,
+      "regionSpreadingSpeed": 1.45,
+      "abilityIds": [
+        20
+      ],
+      "neighbourIds": [
+        221
+      ]
+    },
+    {
+      "id": 114,
+      "name": "Zambie",
+      "isoCode": "ZM",
+      "population": 17860000,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        2,
+        9,
+        115,
+        116,
+        129,
+        191,
+        192,
+        209
+      ]
+    },
+    {
+      "id": 115,
+      "name": "Mosambik",
+      "isoCode": "MZ",
+      "population": 30370000,
+      "healthcareIndex": 0.33,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        2,
+        114,
+        116,
+        129,
+        177,
+        208
+      ]
+    },
+    {
+      "id": 116,
+      "name": "Malawi",
+      "isoCode": "MW",
+      "population": 18630000,
+      "healthcareIndex": 0.36,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        2,
+        114,
+        115
+      ]
+    },
+    {
+      "id": 120,
+      "name": "Francie",
+      "isoCode": "FR",
+      "population": 67060000,
+      "healthcareIndex": 0.93,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        20
+      ],
+      "neighbourIds": [
+        100,
+        110,
+        247,
+        248,
+        249,
+        252
+      ]
+    },
+    {
+      "id": 127,
+      "name": "Indonésie",
+      "isoCode": "ID",
+      "population": 270600000,
+      "healthcareIndex": 0.58,
+      "regionSpreadingSpeed": 1.4,
+      "abilityIds": [
+        18,
+        24
+      ],
+      "neighbourIds": [
+        112,
+        168,
+        176
+      ]
+    },
+    {
+      "id": 129,
+      "name": "Zimbabwe",
+      "isoCode": "ZW",
+      "population": 14650000,
+      "healthcareIndex": 0.39,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        114,
+        115,
+        177,
+        191
+      ]
+    },
+    {
+      "id": 136,
+      "name": "Brazílie",
+      "isoCode": "BR",
+      "population": 211000000,
+      "healthcareIndex": 0.65,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        18,
+        21
+      ],
+      "neighbourIds": [
+        138,
+        139,
+        141,
+        142,
+        144,
+        179,
+        187,
+        188,
+        267
+      ]
+    },
+    {
+      "id": 138,
+      "name": "Venezuela",
+      "isoCode": "VE",
+      "population": 28510000,
+      "healthcareIndex": 0.32,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        21
+      ],
+      "neighbourIds": [
+        136,
+        139,
+        187
+      ]
+    },
+    {
+      "id": 139,
+      "name": "Kolumbie",
+      "isoCode": "CO",
+      "population": 50340000,
+      "healthcareIndex": 0.72,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        18,
+        21
+      ],
+      "neighbourIds": [
+        136,
+        138,
+        141,
+        180,
+        189
+      ]
+    },
+    {
+      "id": 141,
+      "name": "Peru",
+      "isoCode": "PE",
+      "population": 32510000,
+      "healthcareIndex": 0.61,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        18,
+        21
+      ],
+      "neighbourIds": [
+        136,
+        139,
+        142,
+        169,
+        189
+      ]
+    },
+    {
+      "id": 142,
+      "name": "Bolívie",
+      "isoCode": "BO",
+      "population": 11510000,
+      "healthcareIndex": 0.47,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        21
+      ],
+      "neighbourIds": [
+        136,
+        141,
+        144,
+        169,
+        267
+      ]
+    },
+    {
+      "id": 144,
+      "name": "Argentina",
+      "isoCode": "AR",
+      "population": 44940000,
+      "healthcareIndex": 0.76,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        21
+      ],
+      "neighbourIds": [
+        136,
+        142,
+        169,
+        179,
+        267
+      ]
+    },
+    {
+      "id": 154,
+      "name": "Mexiko",
+      "isoCode": "MX",
+      "population": 127600000,
+      "healthcareIndex": 0.67,
+      "regionSpreadingSpeed": 1.3,
+      "abilityIds": [
+        21
+      ],
+      "neighbourIds": [
+        155,
+        185,
+        186
+      ]
+    },
+    {
+      "id": 155,
+      "name": "USA",
+      "isoCode": "US",
+      "population": 328200000,
+      "healthcareIndex": 0.91,
+      "regionSpreadingSpeed": 1.45,
+      "abilityIds": [
+        20
+      ],
+      "neighbourIds": [
+        154,
+        156
+      ]
+    },
+    {
+      "id": 156,
+      "name": "Kanada",
+      "isoCode": "CA",
+      "population": 37590000,
+      "healthcareIndex": 0.95,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        20,
+        22
+      ],
+      "neighbourIds": [
+        155
+      ]
+    },
+    {
+      "id": 157,
+      "name": "Grónsko",
+      "isoCode": "GL",
+      "population": 56000,
+      "healthcareIndex": 0.74,
+      "regionSpreadingSpeed": 0.55,
+      "abilityIds": [
+        22
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 158,
+      "name": "Island",
+      "isoCode": "IS",
+      "population": 361000,
+      "healthcareIndex": 0.97,
+      "regionSpreadingSpeed": 0.8,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 159,
+      "name": "Madagaskar",
+      "isoCode": "MG",
+      "population": 26970000,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 160,
+      "name": "Japonsko",
+      "isoCode": "JP",
+      "population": 126300000,
+      "healthcareIndex": 0.96,
+      "regionSpreadingSpeed": 1.5,
+      "abilityIds": [
+        20,
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 161,
+      "name": "Filipíny",
+      "isoCode": "PH",
+      "population": 108100000,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 1.35,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 162,
+      "name": "Austrálie",
+      "isoCode": "AU",
+      "population": 25360000,
+      "healthcareIndex": 0.93,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        20,
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 163,
+      "name": "Nový Zéland",
+      "isoCode": "NZ",
+      "population": 4910000,
+      "healthcareIndex": 0.94,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 164,
+      "name": "Kuba",
+      "isoCode": "CU",
+      "population": 11330000,
+      "healthcareIndex": 0.73,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 165,
+      "name": "Jamajka",
+      "isoCode": "JM",
+      "population": 2940000,
+      "healthcareIndex": 0.61,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 166,
+      "name": "Západní Sahara",
+      "isoCode": "EH",
+      "population": 652271,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 0.8,
+      "abilityIds": [
+        17,
+        25
+      ],
+      "neighbourIds": [
+        24,
+        195,
+        268
+      ]
+    },
+    {
+      "id": 167,
+      "name": "Uzbekistán",
+      "isoCode": "UZ",
+      "population": 32955400,
+      "healthcareIndex": 0.5,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        25,
+        17
+      ],
+      "neighbourIds": [
+        73,
+        225,
+        226,
+        227,
+        228
+      ]
+    },
+    {
+      "id": 168,
+      "name": "Papua-Nová Guinea",
+      "isoCode": "PG",
+      "population": 8606316,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 0.8,
+      "abilityIds": [
+        18,
+        23
+      ],
+      "neighbourIds": [
+        127
+      ]
+    },
+    {
+      "id": 169,
+      "name": "Chile",
+      "isoCode": "CL",
+      "population": 18729160,
+      "healthcareIndex": 1.0,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        21,
+        22
+      ],
+      "neighbourIds": [
+        141,
+        142,
+        144
+      ]
+    },
+    {
+      "id": 170,
+      "name": "Čad",
+      "isoCode": "TD",
+      "population": 15477751,
+      "healthcareIndex": 0.2,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        25,
+        17
+      ],
+      "neighbourIds": [
+        10,
+        15,
+        17,
+        21,
+        197,
+        198
+      ]
+    },
+    {
+      "id": 171,
+      "name": "Haiti",
+      "isoCode": "HT",
+      "population": 11123176,
+      "healthcareIndex": 0.25,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        23,
+        19
+      ],
+      "neighbourIds": [
+        172
+      ]
+    },
+    {
+      "id": 172,
+      "name": "Dominikánská republika",
+      "isoCode": "DO",
+      "population": 10627165,
+      "healthcareIndex": 0.6,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        23,
+        21
+      ],
+      "neighbourIds": [
+        171
+      ]
+    },
+    {
+      "id": 173,
+      "name": "Bahamy",
+      "isoCode": "BS",
+      "population": 385640,
+      "healthcareIndex": 0.75,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        23,
+        21
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 174,
+      "name": "Falklandy",
+      "isoCode": "FK",
+      "population": 2840,
+      "healthcareIndex": 1.2,
+      "regionSpreadingSpeed": 0.6,
+      "abilityIds": [
+        23,
+        22
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 175,
+      "name": "Norsko",
+      "isoCode": "NO",
+      "population": 5311916,
+      "healthcareIndex": 1.9,
+      "regionSpreadingSpeed": 0.85,
+      "abilityIds": [
+        2,
+        22
+      ],
+      "neighbourIds": [
+        63,
+        231,
+        263
+      ]
+    },
+    {
+      "id": 176,
+      "name": "Východní Timor",
+      "isoCode": "TL",
+      "population": 1340000,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        23,
+        18
+      ],
+      "neighbourIds": [
+        127
+      ]
+    },
+    {
+      "id": 177,
+      "name": "Jihoafrická republika",
+      "isoCode": "ZA",
+      "population": 57779622,
+      "healthcareIndex": 0.9,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        20,
+        19
+      ],
+      "neighbourIds": [
+        115,
+        129,
+        178,
+        191,
+        192,
+        208
+      ]
+    },
+    {
+      "id": 178,
+      "name": "Lesotho",
+      "isoCode": "LS",
+      "population": 2108132,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        19,
+        25
+      ],
+      "neighbourIds": [
+        177
+      ]
+    },
+    {
+      "id": 179,
+      "name": "Uruguay",
+      "isoCode": "UY",
+      "population": 3449299,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        21
+      ],
+      "neighbourIds": [
+        136,
+        144
+      ]
+    },
+    {
+      "id": 180,
+      "name": "Panama",
+      "isoCode": "PA",
+      "population": 4176873,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        21,
+        20
+      ],
+      "neighbourIds": [
+        139,
+        181
+      ]
+    },
+    {
+      "id": 181,
+      "name": "Kostarika",
+      "isoCode": "CR",
+      "population": 4999441,
+      "healthcareIndex": 0.85,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        18,
+        21
+      ],
+      "neighbourIds": [
+        180,
+        182
+      ]
+    },
+    {
+      "id": 182,
+      "name": "Nikaragua",
+      "isoCode": "NI",
+      "population": 6465513,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        21,
+        18
+      ],
+      "neighbourIds": [
+        181,
+        183
+      ]
+    },
+    {
+      "id": 183,
+      "name": "Honduras",
+      "isoCode": "HN",
+      "population": 9587522,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        21,
+        18
+      ],
+      "neighbourIds": [
+        182,
+        184,
+        185
+      ]
+    },
+    {
+      "id": 184,
+      "name": "Salvador",
+      "isoCode": "SV",
+      "population": 6420744,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        21,
+        19
+      ],
+      "neighbourIds": [
+        183,
+        185
+      ]
+    },
+    {
+      "id": 185,
+      "name": "Guatemala",
+      "isoCode": "GT",
+      "population": 17247807,
+      "healthcareIndex": 0.5,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        21,
+        18
+      ],
+      "neighbourIds": [
+        154,
+        183,
+        184,
+        186
+      ]
+    },
+    {
+      "id": 186,
+      "name": "Belize",
+      "isoCode": "BZ",
+      "population": 383071,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        18,
+        21
+      ],
+      "neighbourIds": [
+        154,
+        185
+      ]
+    },
+    {
+      "id": 187,
+      "name": "Guyana",
+      "isoCode": "GY",
+      "population": 779004,
+      "healthcareIndex": 0.5,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        136,
+        138,
+        188
+      ]
+    },
+    {
+      "id": 188,
+      "name": "Surinam",
+      "isoCode": "SR",
+      "population": 575991,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        136,
+        187
+      ]
+    },
+    {
+      "id": 189,
+      "name": "Ekvádor",
+      "isoCode": "EC",
+      "population": 17084357,
+      "healthcareIndex": 0.65,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        21,
+        18
+      ],
+      "neighbourIds": [
+        139,
+        141
+      ]
+    },
+    {
+      "id": 190,
+      "name": "Portoriko",
+      "isoCode": "PR",
+      "population": 3195153,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        23,
+        20
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 191,
+      "name": "Botswana",
+      "isoCode": "BW",
+      "population": 2254126,
+      "healthcareIndex": 0.6,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        25,
+        19
+      ],
+      "neighbourIds": [
+        114,
+        129,
+        177,
+        192
+      ]
+    },
+    {
+      "id": 192,
+      "name": "Namibie",
+      "isoCode": "NA",
+      "population": 2448255,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        25,
+        19
+      ],
+      "neighbourIds": [
+        114,
+        177,
+        191,
+        209
+      ]
+    },
+    {
+      "id": 193,
+      "name": "Senegal",
+      "isoCode": "SN",
+      "population": 15854360,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17,
+        19
+      ],
+      "neighbourIds": [
+        194,
+        195,
+        202,
+        203,
+        214
+      ]
+    },
+    {
+      "id": 194,
+      "name": "Mali",
+      "isoCode": "ML",
+      "population": 19077690,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        25,
+        17
+      ],
+      "neighbourIds": [
+        24,
+        193,
+        195,
+        197,
+        201,
+        202,
+        206
+      ]
+    },
+    {
+      "id": 195,
+      "name": "Mauritánie",
+      "isoCode": "MR",
+      "population": 4403319,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        17,
+        25
+      ],
+      "neighbourIds": [
+        24,
+        166,
+        193,
+        194
+      ]
+    },
+    {
+      "id": 196,
+      "name": "Benin",
+      "isoCode": "BJ",
+      "population": 11485048,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        197,
+        198,
+        199,
+        206
+      ]
+    },
+    {
+      "id": 197,
+      "name": "Niger",
+      "isoCode": "NE",
+      "population": 22442948,
+      "healthcareIndex": 0.25,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        25,
+        17
+      ],
+      "neighbourIds": [
+        17,
+        24,
+        170,
+        194,
+        196,
+        198,
+        206
+      ]
+    },
+    {
+      "id": 198,
+      "name": "Nigérie",
+      "isoCode": "NG",
+      "population": 195874740,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        16,
+        18,
+        19
+      ],
+      "neighbourIds": [
+        21,
+        170,
+        196,
+        197
+      ]
+    },
+    {
+      "id": 199,
+      "name": "Togo",
+      "isoCode": "TG",
+      "population": 7889094,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        196,
+        200,
+        206
+      ]
+    },
+    {
+      "id": 200,
+      "name": "Ghana",
+      "isoCode": "GH",
+      "population": 29767108,
+      "healthcareIndex": 0.5,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        199,
+        201,
+        206
+      ]
+    },
+    {
+      "id": 201,
+      "name": "Pobřeží slonoviny",
+      "isoCode": "CI",
+      "population": 25069229,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        194,
+        200,
+        202,
+        204,
+        206
+      ]
+    },
+    {
+      "id": 202,
+      "name": "Guinea",
+      "isoCode": "GN",
+      "population": 12414318,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        193,
+        194,
+        201,
+        203,
+        204,
+        205
+      ]
+    },
+    {
+      "id": 203,
+      "name": "Guinea-Bissau",
+      "isoCode": "GW",
+      "population": 1874309,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        193,
+        202
+      ]
+    },
+    {
+      "id": 204,
+      "name": "Libérie",
+      "isoCode": "LR",
+      "population": 4818977,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        201,
+        202,
+        205
+      ]
+    },
+    {
+      "id": 205,
+      "name": "Sierra Leone",
+      "isoCode": "SL",
+      "population": 7650154,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        202,
+        204
+      ]
+    },
+    {
+      "id": 206,
+      "name": "Burkina Faso",
+      "isoCode": "BF",
+      "population": 19751535,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        19,
+        25
+      ],
+      "neighbourIds": [
+        194,
+        196,
+        197,
+        199,
+        200,
+        201
+      ]
+    },
+    {
+      "id": 207,
+      "name": "Kongo",
+      "isoCode": "CG",
+      "population": 5244363,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        9,
+        15,
+        21,
+        23,
+        209
+      ]
+    },
+    {
+      "id": 208,
+      "name": "eSwatini",
+      "isoCode": "SZ",
+      "population": 1136191,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        19
+      ],
+      "neighbourIds": [
+        115,
+        177
+      ]
+    },
+    {
+      "id": 209,
+      "name": "Angola",
+      "isoCode": "AO",
+      "population": 30809762,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        18,
+        19
+      ],
+      "neighbourIds": [
+        9,
+        114,
+        192,
+        207
+      ]
+    },
+    {
+      "id": 210,
+      "name": "Burundi",
+      "isoCode": "BI",
+      "population": 11175378,
+      "healthcareIndex": 0.25,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        19,
+        18
+      ],
+      "neighbourIds": [
+        2,
+        9,
+        270
+      ]
+    },
+    {
+      "id": 211,
+      "name": "Izrael",
+      "isoCode": "IL",
+      "population": 8882800,
+      "healthcareIndex": 1.4,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        20,
+        17
+      ],
+      "neighbourIds": [
+        12,
+        212,
+        213,
+        216,
+        229
+      ]
+    },
+    {
+      "id": 212,
+      "name": "Libanon",
+      "isoCode": "LB",
+      "population": 6848925,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        7,
+        17
+      ],
+      "neighbourIds": [
+        211,
+        229
+      ]
+    },
+    {
+      "id": 213,
+      "name": "Palestina",
+      "isoCode": "PS",
+      "population": 4569087,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        17,
+        4
+      ],
+      "neighbourIds": [
+        12,
+        211,
+        216
+      ]
+    },
+    {
+      "id": 214,
+      "name": "Gambie",
+      "isoCode": "GM",
+      "population": 2280102,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        17,
+        19
+      ],
+      "neighbourIds": [
+        193
+      ]
+    },
+    {
+      "id": 215,
+      "name": "Tunisko",
+      "isoCode": "TN",
+      "population": 11565204,
+      "healthcareIndex": 0.65,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17,
+        7
+      ],
+      "neighbourIds": [
+        17,
+        24
+      ]
+    },
+    {
+      "id": 216,
+      "name": "Jordánsko",
+      "isoCode": "JO",
+      "population": 9956011,
+      "healthcareIndex": 0.6,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        37,
+        38,
+        211,
+        213,
+        229
+      ]
+    },
+    {
+      "id": 217,
+      "name": "Vanuatu",
+      "isoCode": "VU",
+      "population": 292680,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 0.75,
+      "abilityIds": [
+        23,
+        18
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 218,
+      "name": "Kambodža",
+      "isoCode": "KH",
+      "population": 16249798,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        18,
+        24
+      ],
+      "neighbourIds": [
+        96,
+        111,
+        219
+      ]
+    },
+    {
+      "id": 219,
+      "name": "Laos",
+      "isoCode": "LA",
+      "population": 7061507,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        18,
+        25
+      ],
+      "neighbourIds": [
+        16,
+        96,
+        111,
+        218,
+        220
+      ]
+    },
+    {
+      "id": 220,
+      "name": "Myanmar",
+      "isoCode": "MM",
+      "population": 53708395,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        18,
+        24
+      ],
+      "neighbourIds": [
+        16,
+        69,
+        90,
+        96,
+        219
+      ]
+    },
+    {
+      "id": 221,
+      "name": "Severní Korea",
+      "isoCode": "KP",
+      "population": 25549819,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        22,
+        25
+      ],
+      "neighbourIds": [
+        16,
+        63,
+        113
+      ]
+    },
+    {
+      "id": 222,
+      "name": "Bhútán",
+      "isoCode": "BT",
+      "population": 754394,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 0.85,
+      "abilityIds": [
+        25,
+        5
+      ],
+      "neighbourIds": [
+        16,
+        69
+      ]
+    },
+    {
+      "id": 223,
+      "name": "Nepál",
+      "isoCode": "NP",
+      "population": 28087871,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        25,
+        19
+      ],
+      "neighbourIds": [
+        16,
+        69
+      ]
+    },
+    {
+      "id": 224,
+      "name": "Pákistán",
+      "isoCode": "PK",
+      "population": 212215030,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        16,
+        17
+      ],
+      "neighbourIds": [
+        16,
+        46,
+        69,
+        225
+      ]
+    },
+    {
+      "id": 225,
+      "name": "Afghánistán",
+      "isoCode": "AF",
+      "population": 37172386,
+      "healthcareIndex": 0.2,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        17,
+        25
+      ],
+      "neighbourIds": [
+        16,
+        46,
+        167,
+        224,
+        226,
+        228
+      ]
+    },
+    {
+      "id": 226,
+      "name": "Tádžikistán",
+      "isoCode": "TJ",
+      "population": 9100837,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        25,
+        22
+      ],
+      "neighbourIds": [
+        16,
+        167,
+        225,
+        227
+      ]
+    },
+    {
+      "id": 227,
+      "name": "Kyrgyzstán",
+      "isoCode": "KG",
+      "population": 6322800,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        25,
+        22
+      ],
+      "neighbourIds": [
+        16,
+        73,
+        167,
+        226
+      ]
+    },
+    {
+      "id": 228,
+      "name": "Turkmenistán",
+      "isoCode": "TM",
+      "population": 5850908,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 0.95,
+      "abilityIds": [
+        25,
+        17
+      ],
+      "neighbourIds": [
+        46,
+        73,
+        167,
+        225
+      ]
+    },
+    {
+      "id": 229,
+      "name": "Sýrie",
+      "isoCode": "SY",
+      "population": 16906283,
+      "healthcareIndex": 0.3,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17
+      ],
+      "neighbourIds": [
+        37,
+        211,
+        212,
+        216,
+        244
+      ]
+    },
+    {
+      "id": 230,
+      "name": "Arménie",
+      "isoCode": "AM",
+      "population": 2951776,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        12,
+        25
+      ],
+      "neighbourIds": [
+        46,
+        244,
+        259,
+        260
+      ]
+    },
+    {
+      "id": 231,
+      "name": "Švédsko",
+      "isoCode": "SE",
+      "population": 10175214,
+      "healthcareIndex": 1.8,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        2,
+        8
+      ],
+      "neighbourIds": [
+        175,
+        263
+      ]
+    },
+    {
+      "id": 232,
+      "name": "Bělorusko",
+      "isoCode": "BY",
+      "population": 9483499,
+      "healthcareIndex": 0.85,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        1,
+        9
+      ],
+      "neighbourIds": [
+        63,
+        233,
+        234,
+        239,
+        240
+      ]
+    },
+    {
+      "id": 233,
+      "name": "Ukrajina",
+      "isoCode": "UA",
+      "population": 44622516,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        1,
+        25
+      ],
+      "neighbourIds": [
+        63,
+        232,
+        234,
+        236,
+        237,
+        238,
+        264
+      ]
+    },
+    {
+      "id": 234,
+      "name": "Polsko",
+      "isoCode": "PL",
+      "population": 37974750,
+      "healthcareIndex": 1.0,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        9,
+        1
+      ],
+      "neighbourIds": [
+        63,
+        100,
+        232,
+        233,
+        239,
+        264,
+        265
+      ]
+    },
+    {
+      "id": 235,
+      "name": "Rakousko",
+      "isoCode": "AT",
+      "population": 8840521,
+      "healthcareIndex": 1.7,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        12,
+        3
+      ],
+      "neighbourIds": [
+        100,
+        110,
+        236,
+        247,
+        262,
+        264,
+        265
+      ]
+    },
+    {
+      "id": 236,
+      "name": "Maďarsko",
+      "isoCode": "HU",
+      "population": 9775564,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        3,
+        4
+      ],
+      "neighbourIds": [
+        233,
+        235,
+        238,
+        246,
+        262,
+        264,
+        273
+      ]
+    },
+    {
+      "id": 237,
+      "name": "Moldavsko",
+      "isoCode": "MD",
+      "population": 2706049,
+      "healthcareIndex": 0.6,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        1
+      ],
+      "neighbourIds": [
+        233,
+        238
+      ]
+    },
+    {
+      "id": 238,
+      "name": "Rumunsko",
+      "isoCode": "RO",
+      "population": 19466145,
+      "healthcareIndex": 0.8,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        1,
+        9
+      ],
+      "neighbourIds": [
+        233,
+        236,
+        237,
+        242,
+        273
+      ]
+    },
+    {
+      "id": 239,
+      "name": "Litva",
+      "isoCode": "LT",
+      "population": 2801543,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        9
+      ],
+      "neighbourIds": [
+        63,
+        232,
+        234,
+        240
+      ]
+    },
+    {
+      "id": 240,
+      "name": "Lotyšsko",
+      "isoCode": "LV",
+      "population": 1927174,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        7
+      ],
+      "neighbourIds": [
+        63,
+        232,
+        239,
+        241
+      ]
+    },
+    {
+      "id": 241,
+      "name": "Estonsko",
+      "isoCode": "EE",
+      "population": 1321977,
+      "healthcareIndex": 1.3,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        8,
+        7
+      ],
+      "neighbourIds": [
+        63,
+        240
+      ]
+    },
+    {
+      "id": 242,
+      "name": "Bulharsko",
+      "isoCode": "BG",
+      "population": 7025037,
+      "healthcareIndex": 0.75,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        1,
+        7
+      ],
+      "neighbourIds": [
+        238,
+        243,
+        244,
+        272,
+        273
+      ]
+    },
+    {
+      "id": 243,
+      "name": "Řecko",
+      "isoCode": "GR",
+      "population": 10731726,
+      "healthcareIndex": 1.2,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        11,
+        15,
+        7
+      ],
+      "neighbourIds": [
+        242,
+        244,
+        245,
+        272
+      ]
+    },
+    {
+      "id": 244,
+      "name": "Turecko",
+      "isoCode": "TR",
+      "population": 82319724,
+      "healthcareIndex": 0.8,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        3,
+        11,
+        20
+      ],
+      "neighbourIds": [
+        37,
+        46,
+        229,
+        230,
+        242,
+        243,
+        259,
+        260
+      ]
+    },
+    {
+      "id": 245,
+      "name": "Albánie",
+      "isoCode": "AL",
+      "population": 2866376,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        7,
+        11
+      ],
+      "neighbourIds": [
+        243,
+        272,
+        274,
+        275
+      ]
+    },
+    {
+      "id": 246,
+      "name": "Chorvatsko",
+      "isoCode": "HR",
+      "population": 4087843,
+      "healthcareIndex": 1.0,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        7,
+        15
+      ],
+      "neighbourIds": [
+        236,
+        262,
+        271,
+        273,
+        274
+      ]
+    },
+    {
+      "id": 247,
+      "name": "Švýcarsko",
+      "isoCode": "CH",
+      "population": 8513227,
+      "healthcareIndex": 1.85,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        12,
+        10
+      ],
+      "neighbourIds": [
+        100,
+        110,
+        120,
+        235
+      ]
+    },
+    {
+      "id": 248,
+      "name": "Lucembursko",
+      "isoCode": "LU",
+      "population": 607950,
+      "healthcareIndex": 1.8,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        10,
+        20
+      ],
+      "neighbourIds": [
+        100,
+        120,
+        249
+      ]
+    },
+    {
+      "id": 249,
+      "name": "Belgie",
+      "isoCode": "BE",
+      "population": 11433256,
+      "healthcareIndex": 1.5,
+      "regionSpreadingSpeed": 1.3,
+      "abilityIds": [
+        10,
+        20,
+        3
+      ],
+      "neighbourIds": [
+        100,
+        120,
+        248,
+        250
+      ]
+    },
+    {
+      "id": 250,
+      "name": "Nizozemsko",
+      "isoCode": "NL",
+      "population": 17231624,
+      "healthcareIndex": 1.6,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        10,
+        20,
+        4
+      ],
+      "neighbourIds": [
+        100,
+        249
+      ]
+    },
+    {
+      "id": 251,
+      "name": "Portugalsko",
+      "isoCode": "PT",
+      "population": 10283822,
+      "healthcareIndex": 1.4,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        7,
+        11
+      ],
+      "neighbourIds": [
+        252
+      ]
+    },
+    {
+      "id": 252,
+      "name": "Španělsko",
+      "isoCode": "ES",
+      "population": 46796540,
+      "healthcareIndex": 1.5,
+      "regionSpreadingSpeed": 1.2,
+      "abilityIds": [
+        11,
+        15,
+        20
+      ],
+      "neighbourIds": [
+        120,
+        251,
+        268
+      ]
+    },
+    {
+      "id": 253,
+      "name": "Irsko",
+      "isoCode": "IE",
+      "population": 4867309,
+      "healthcareIndex": 1.5,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        5,
+        7
+      ],
+      "neighbourIds": [
+        258
+      ]
+    },
+    {
+      "id": 254,
+      "name": "Nová Kaledonie",
+      "isoCode": "NC",
+      "population": 284060,
+      "healthcareIndex": 0.9,
+      "regionSpreadingSpeed": 0.85,
+      "abilityIds": [
+        23
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 255,
+      "name": "Šalamounovy ostrovy",
+      "isoCode": "SB",
+      "population": 652858,
+      "healthcareIndex": 0.35,
+      "regionSpreadingSpeed": 0.75,
+      "abilityIds": [
+        23,
+        18
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 256,
+      "name": "Tchaj-wan",
+      "isoCode": "TW",
+      "population": 23570000,
+      "healthcareIndex": 1.3,
+      "regionSpreadingSpeed": 1.4,
+      "abilityIds": [
+        16,
+        20
+      ],
+      "neighbourIds": []
+    },
+    {
+      "id": 257,
+      "name": "Dánsko",
+      "isoCode": "DK",
+      "population": 5793636,
+      "healthcareIndex": 1.85,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        2,
+        5
+      ],
+      "neighbourIds": [
+        100
+      ]
+    },
+    {
+      "id": 258,
+      "name": "Spojené království",
+      "isoCode": "GB",
+      "population": 66460344,
+      "healthcareIndex": 1.7,
+      "regionSpreadingSpeed": 1.25,
+      "abilityIds": [
+        4,
+        10,
+        20
+      ],
+      "neighbourIds": [
+        253
+      ]
+    },
+    {
+      "id": 259,
+      "name": "Ázerbájdžán",
+      "isoCode": "AZ",
+      "population": 9939800,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17,
+        25
+      ],
+      "neighbourIds": [
+        46,
+        63,
+        230,
+        244,
+        260
+      ]
+    },
+    {
+      "id": 260,
+      "name": "Gruzie",
+      "isoCode": "GE",
+      "population": 3726549,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        12,
+        7
+      ],
+      "neighbourIds": [
+        63,
+        230,
+        244,
+        259
+      ]
+    },
+    {
+      "id": 261,
+      "name": "Brunej",
+      "isoCode": "BN",
+      "population": 428962,
+      "healthcareIndex": 0.85,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        23,
+        17
+      ],
+      "neighbourIds": [
+        112
+      ]
+    },
+    {
+      "id": 262,
+      "name": "Slovinsko",
+      "isoCode": "SI",
+      "population": 2073894,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        3,
+        4
+      ],
+      "neighbourIds": [
+        110,
+        235,
+        236,
+        246
+      ]
+    },
+    {
+      "id": 263,
+      "name": "Finsko",
+      "isoCode": "FI",
+      "population": 5515525,
+      "healthcareIndex": 1.85,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        2,
+        8
+      ],
+      "neighbourIds": [
+        63,
+        175,
+        231
+      ]
+    },
+    {
+      "id": 264,
+      "name": "Slovensko",
+      "isoCode": "SK",
+      "population": 5446771,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        3,
+        4
+      ],
+      "neighbourIds": [
+        233,
+        234,
+        235,
+        236,
+        265
+      ]
+    },
+    {
+      "id": 265,
+      "name": "Česko",
+      "isoCode": "CZ",
+      "population": 10629928,
+      "healthcareIndex": 1.1,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        3,
+        4
+      ],
+      "neighbourIds": [
+        100,
+        234,
+        235,
+        264
+      ]
+    },
+    {
+      "id": 266,
+      "name": "Eritrea",
+      "isoCode": "ER",
+      "population": 6213972,
+      "healthcareIndex": 0.25,
+      "regionSpreadingSpeed": 0.9,
+      "abilityIds": [
+        17,
+        19
+      ],
+      "neighbourIds": [
+        5,
+        10,
+        269
+      ]
+    },
+    {
+      "id": 267,
+      "name": "Paraguay",
+      "isoCode": "PY",
+      "population": 6956071,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        21,
+        19
+      ],
+      "neighbourIds": [
+        136,
+        142,
+        144
+      ]
+    },
+    {
+      "id": 268,
+      "name": "Maroko",
+      "isoCode": "MA",
+      "population": 36029138,
+      "healthcareIndex": 0.55,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        17,
+        7
+      ],
+      "neighbourIds": [
+        24,
+        166,
+        252
+      ]
+    },
+    {
+      "id": 269,
+      "name": "Džibutsko",
+      "isoCode": "DJ",
+      "population": 958920,
+      "healthcareIndex": 0.4,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        17,
+        23
+      ],
+      "neighbourIds": [
+        5,
+        6,
+        266
+      ]
+    },
+    {
+      "id": 270,
+      "name": "Rwanda",
+      "isoCode": "RW",
+      "population": 12301939,
+      "healthcareIndex": 0.45,
+      "regionSpreadingSpeed": 1.05,
+      "abilityIds": [
+        19,
+        18
+      ],
+      "neighbourIds": [
+        2,
+        4,
+        9,
+        210
+      ]
+    },
+    {
+      "id": 271,
+      "name": "Bosna a Hercegovina",
+      "isoCode": "BA",
+      "population": 3323929,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        12,
+        1
+      ],
+      "neighbourIds": [
+        246,
+        273,
+        274
+      ]
+    },
+    {
+      "id": 272,
+      "name": "Severní Makedonie",
+      "isoCode": "MK",
+      "population": 2084367,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        1,
+        9
+      ],
+      "neighbourIds": [
+        242,
+        243,
+        245,
+        273,
+        275
+      ]
+    },
+    {
+      "id": 273,
+      "name": "Srbsko",
+      "isoCode": "RS",
+      "population": 6963764,
+      "healthcareIndex": 0.8,
+      "regionSpreadingSpeed": 1.15,
+      "abilityIds": [
+        9,
+        1
+      ],
+      "neighbourIds": [
+        236,
+        238,
+        242,
+        246,
+        271,
+        272,
+        274,
+        275
+      ]
+    },
+    {
+      "id": 274,
+      "name": "Černá Hora",
+      "isoCode": "ME",
+      "population": 631219,
+      "healthcareIndex": 0.75,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        7,
+        5
+      ],
+      "neighbourIds": [
+        245,
+        246,
+        271,
+        273,
+        275
+      ]
+    },
+    {
+      "id": 275,
+      "name": "Kosovo",
+      "isoCode": "XK",
+      "population": 1790000,
+      "healthcareIndex": 0.6,
+      "regionSpreadingSpeed": 1.1,
+      "abilityIds": [
+        14,
+        1
+      ],
+      "neighbourIds": [
+        245,
+        272,
+        273,
+        274
+      ]
+    },
+    {
+      "id": 276,
+      "name": "Trinidad a Tobago",
+      "isoCode": "TT",
+      "population": 1389858,
+      "healthcareIndex": 0.7,
+      "regionSpreadingSpeed": 1.0,
+      "abilityIds": [
+        23,
+        21
+      ],
+      "neighbourIds": []
+    }
   ],
   "DiseaseAbilities": [
-    { "Id": 1, "Name": "Zoonotický skok", "Description": "Nemoc mutuje a přenáší se ze zvířat na lidi.", "spreadingModifier": 1.15, "deathModifier": 1.0 },
-    { "Id": 2, "Name": "Kryofilní struktura", "Description": "Odolnost vůči extrémnímu chladu a mrazu.", "spreadingModifier": 1.1, "deathModifier": 1.0 },
-    { "Id": 3, "Name": "Aerosolová stabilizace", "Description": "Kapénky se udrží ve vzduchu suspendované po dlouhou dobu.", "spreadingModifier": 1.3, "deathModifier": 1.0 },
-    { "Id": 4, "Name": "Antibiotická rezistence", "Description": "Mutace odolná vůči běžným léčivům.", "spreadingModifier": 1.05, "deathModifier": 1.2 },
-    { "Id": 5, "Name": "Asymptomatická inkubace", "Description": "Nakažení přenášejí virus bez viditelných projevů nákazy.", "spreadingModifier": 1.5, "deathModifier": 1.0 },
-    { "Id": 6, "Name": "Vektor: Komáři", "Description": "Nemoc je aktivně roznášena krevsajícím hmyzem.", "spreadingModifier": 1.2, "deathModifier": 1.05 },
-    { "Id": 7, "Name": "UV Foto-rezistence", "Description": "Bílkovinný obal viru je imunní vůči přímému slunečnímu záření.", "spreadingModifier": 1.15, "deathModifier": 1.0 },
-    { "Id": 9, "Name": "Vzduchotechnická adaptace", "Description": "Patogen se dokáže replikovat a přežívat ve filtrech klimatizací.", "spreadingModifier": 1.25, "deathModifier": 1.0 },
-    { "Id": 10, "Name": "Akutní encefalitida", "Description": "Agresivní mutace napadající centrální nervovou soustavu.", "spreadingModifier": 0.9, "deathModifier": 1.4 }
+    {
+      "Id": 1,
+      "Name": "Zoonotický skok",
+      "Description": "Nemoc mutuje a přenáší se ze zvířat na lidi.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.0
+    },
+    {
+      "Id": 2,
+      "Name": "Kryofilní struktura",
+      "Description": "Odolnost vůči extrémnímu chladu a mrazu.",
+      "spreadingModifier": 1.1,
+      "deathModifier": 1.0
+    },
+    {
+      "Id": 3,
+      "Name": "Aerosolová stabilizace",
+      "Description": "Kapénky se udrží ve vzduchu suspendované po dlouhou dobu.",
+      "spreadingModifier": 1.3,
+      "deathModifier": 1.0
+    },
+    {
+      "Id": 4,
+      "Name": "Antibiotická rezistence",
+      "Description": "Mutace odolná vůči běžným léčivům.",
+      "spreadingModifier": 1.05,
+      "deathModifier": 1.2
+    },
+    {
+      "Id": 5,
+      "Name": "Asymptomatická inkubace",
+      "Description": "Nakažení přenášejí virus bez viditelných projevů nákazy.",
+      "spreadingModifier": 1.5,
+      "deathModifier": 1.0
+    },
+    {
+      "Id": 6,
+      "Name": "Vektor: Komáři",
+      "Description": "Nemoc je aktivně roznášena krevsajícím hmyzem.",
+      "spreadingModifier": 1.2,
+      "deathModifier": 1.05
+    },
+    {
+      "Id": 7,
+      "Name": "UV Foto-rezistence",
+      "Description": "Bílkovinný obal viru je imunní vůči přímému slunečnímu záření.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.0
+    },
+    {
+      "Id": 9,
+      "Name": "Vzduchotechnická adaptace",
+      "Description": "Patogen se dokáže replikovat a přežívat ve filtrech klimatizací.",
+      "spreadingModifier": 1.25,
+      "deathModifier": 1.0
+    },
+    {
+      "Id": 10,
+      "Name": "Akutní encefalitida",
+      "Description": "Agresivní mutace napadající centrální nervovou soustavu.",
+      "spreadingModifier": 0.9,
+      "deathModifier": 1.4
+    }
   ],
   "RegionAbilities": [
-    { "Id": 16, "Name": "Asijská megapole", "Description": "Extrémní hustota zalidnění a neustálý masivní pohyb lidí na malém prostoru.", "spreadingModifier": 1.35, "deathModifier": 1.0, "borderModifier": 1.20, "vaccinationCapacityModifier": 1.10 },
-    { "Id": 17, "Name": "Aridní pouštní klima", "Description": "Suché prostředí Blízkého východu a severní Afriky. Vysoké denní teploty.", "spreadingModifier": 0.85, "deathModifier": 1.0, "borderModifier": 1.0, "vaccinationCapacityModifier": 0.95 },
-    { "Id": 18, "Name": "Tropické deštné pásmo", "Description": "Vysoká vlhkost vzduchu, celoroční srážky a obrovské množství hmyzu.", "spreadingModifier": 1.15, "deathModifier": 1.05, "borderModifier": 0.90, "vaccinationCapacityModifier": 0.70 },
-    { "Id": 19, "Name": "Izolovaná savana", "Description": "Rozsáhlé venkovské oblasti s horší infrastrukturou daleko od center.", "spreadingModifier": 0.90, "deathModifier": 1.15, "borderModifier": 0.80, "vaccinationCapacityModifier": 0.60 },
-    { "Id": 20, "Name": "Globální super-hub", "Description": "Ekonomická a letecká centra světa s obrovským denním mezinárodním tranzitem.", "spreadingModifier": 1.20, "deathModifier": 0.90, "borderModifier": 1.50, "vaccinationCapacityModifier": 1.40 },
-    { "Id": 21, "Name": "Latinskoamerická koridová kultura", "Description": "Hustá dálková autobusová doprava a velmi frekventovaná pouliční tržiště.", "spreadingModifier": 1.15, "deathModifier": 1.0, "borderModifier": 1.10, "vaccinationCapacityModifier": 0.85 },
-    { "Id": 22, "Name": "Arktická a sibiřská izolace", "Description": "Extrémně nízké teploty a obrovské geografické vzdálenosti mezi městy.", "spreadingModifier": 0.60, "deathModifier": 1.05, "borderModifier": 0.30, "vaccinationCapacityModifier": 0.80 },
-    { "Id": 23, "Name": "Izolovaný ostrovní ekosystém", "Description": "Země zcela obklopené oceánem. Absolutní závislost na námořních a leteckých přístavech.", "spreadingModifier": 0.75, "deathModifier": 1.0, "borderModifier": 0.15, "vaccinationCapacityModifier": 1.0 },
-    { "Id": 24, "Name": "Pacifické monzunové pásmo", "Description": "Sezónní extrémní deště a záplavy nutící populaci k dlouhodobému pobytu v uzavřených budovách.", "spreadingModifier": 1.10, "deathModifier": 1.0, "borderModifier": 1.0, "vaccinationCapacityModifier": 0.90 },
-    { "Id": 25, "Name": "Nomádské a stepní regiony", "Description": "Populace rozptýlená na obrovských travnatých pláních s minimální hustotou obyvatel.", "spreadingModifier": 0.70, "deathModifier": 1.10, "borderModifier": 0.70, "vaccinationCapacityModifier": 0.65 }
+    {
+      "Id": 1,
+      "Name": "Zemědělská oblast",
+      "Description": "Vysoká koncentrace venkovského obyvatelstva a farem.",
+      "spreadingModifier": 1.05,
+      "deathModifier": 1.0,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 2,
+      "Name": "Subarktické klima",
+      "Description": "Chladné severní prostředí s dlouhými zimami.",
+      "spreadingModifier": 0.9,
+      "deathModifier": 1.0,
+      "borderModifier": 0.9,
+      "vaccinationCapacityModifier": 0.95
+    },
+    {
+      "Id": 3,
+      "Name": "Dopravní uzel",
+      "Description": "Masivní mezinárodní tranzit, klíčová letiště a koridory.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.0,
+      "borderModifier": 1.45,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 4,
+      "Name": "Hustě osídlená oblast",
+      "Description": "Vysoká koncentrace obyvatel v aglomeracích.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.0,
+      "borderModifier": 1.1,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 5,
+      "Name": "Izolovaný region",
+      "Description": "Ostrovy nebo horské státy se špatnou přístupností.",
+      "spreadingModifier": 0.85,
+      "deathModifier": 1.0,
+      "borderModifier": 0.4,
+      "vaccinationCapacityModifier": 0.9
+    },
+    {
+      "Id": 6,
+      "Name": "Špičkové zdravotnictví",
+      "Description": "Země s nadstandardní lékařskou péčí. (Zde násobíme, takže hodnota pod 1.0 snižuje smrtnost)",
+      "spreadingModifier": 0.95,
+      "deathModifier": 0.7,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 1.35
+    },
+    {
+      "Id": 7,
+      "Name": "Přímořská oblast",
+      "Description": "Intenzivní námořní doprava a silná letní turistická sezóna.",
+      "spreadingModifier": 1.05,
+      "deathModifier": 1.0,
+      "borderModifier": 1.25,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 8,
+      "Name": "Digitální společnost",
+      "Description": "Vysoká míra digitalizace, státní správy i práce z domova (Home Office).",
+      "spreadingModifier": 0.9,
+      "deathModifier": 1.0,
+      "borderModifier": 0.95,
+      "vaccinationCapacityModifier": 1.15
+    },
+    {
+      "Id": 9,
+      "Name": "Tranzitní železnice",
+      "Description": "Hustá síť vnitrostátních i mezistátních vlakových spojů.",
+      "spreadingModifier": 1.1,
+      "deathModifier": 1.0,
+      "borderModifier": 1.2,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 10,
+      "Name": "Finanční centrum",
+      "Description": "Denní migrace statisíců pendlerů do kancelářských komplexů.",
+      "spreadingModifier": 1.1,
+      "deathModifier": 1.0,
+      "borderModifier": 1.15,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 11,
+      "Name": "Středomořské klima",
+      "Description": "Horká, suchá léta a vysoká společenská aktivita venku.",
+      "spreadingModifier": 1.05,
+      "deathModifier": 0.95,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 12,
+      "Name": "Alpský reliéf",
+      "Description": "Horský terén komplikuje pohyb, ale láká statisíce lyžařů.",
+      "spreadingModifier": 0.95,
+      "deathModifier": 1.0,
+      "borderModifier": 0.8,
+      "vaccinationCapacityModifier": 0.9
+    },
+    {
+      "Id": 13,
+      "Name": "Kultura individualismu",
+      "Description": "Obyvatelé přirozeně dodržují osobní odstup a sociální distanc.",
+      "spreadingModifier": 0.85,
+      "deathModifier": 1.0,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 14,
+      "Name": "Zastaralá infrastruktura",
+      "Description": "Přetížené nemocnice. (V kódu násobíme, takže hodnota nad 1.0 dále zvyšuje smrtnost)",
+      "spreadingModifier": 1.1,
+      "deathModifier": 1.3,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 0.75
+    },
+    {
+      "Id": 15,
+      "Name": "Turistický magnet",
+      "Description": "Miliony návštěvníků u historických památek a v muzeích.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.0,
+      "borderModifier": 1.3,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 16,
+      "Name": "Asijská megapole",
+      "Description": "Extrémní hustota zalidnění a neustálý masivní pohyb lidí na malém prostoru.",
+      "spreadingModifier": 1.35,
+      "deathModifier": 1.0,
+      "borderModifier": 1.2,
+      "vaccinationCapacityModifier": 1.1
+    },
+    {
+      "Id": 17,
+      "Name": "Aridní pouštní klima",
+      "Description": "Suché prostředí Blízkého východu a severní Afriky. Vysoké denní teploty.",
+      "spreadingModifier": 0.85,
+      "deathModifier": 1.0,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 0.95
+    },
+    {
+      "Id": 18,
+      "Name": "Tropické deštné pásmo",
+      "Description": "Vysoká vlhkost vzduchu, celoroční srážky a obrovské množství hmyzu.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.05,
+      "borderModifier": 0.9,
+      "vaccinationCapacityModifier": 0.7
+    },
+    {
+      "Id": 19,
+      "Name": "Izolovaná savana",
+      "Description": "Rozsáhlé venkovské oblasti s horší infrastrukturou daleko od center.",
+      "spreadingModifier": 0.9,
+      "deathModifier": 1.15,
+      "borderModifier": 0.8,
+      "vaccinationCapacityModifier": 0.6
+    },
+    {
+      "Id": 20,
+      "Name": "Globální super-hub",
+      "Description": "Ekonomická a letecká centra světa s obrovským denním mezinárodním tranzitem.",
+      "spreadingModifier": 1.2,
+      "deathModifier": 0.9,
+      "borderModifier": 1.5,
+      "vaccinationCapacityModifier": 1.4
+    },
+    {
+      "Id": 21,
+      "Name": "Latinskoamerická koridová kultura",
+      "Description": "Hustá dálková autobusová doprava a velmi frekventovaná pouliční tržiště.",
+      "spreadingModifier": 1.15,
+      "deathModifier": 1.0,
+      "borderModifier": 1.1,
+      "vaccinationCapacityModifier": 0.85
+    },
+    {
+      "Id": 22,
+      "Name": "Arktická a sibiřská izolace",
+      "Description": "Extrémně nízké teploty a obrovské geografické vzdálenosti mezi městy.",
+      "spreadingModifier": 0.6,
+      "deathModifier": 1.05,
+      "borderModifier": 0.3,
+      "vaccinationCapacityModifier": 0.8
+    },
+    {
+      "Id": 23,
+      "Name": "Izolovaný ostrovní ekosystém",
+      "Description": "Země zcela obklopené oceánem. Absolutní závislost na námořních a leteckých přístavech.",
+      "spreadingModifier": 0.75,
+      "deathModifier": 1.0,
+      "borderModifier": 0.15,
+      "vaccinationCapacityModifier": 1.0
+    },
+    {
+      "Id": 24,
+      "Name": "Pacifické monzunové pásmo",
+      "Description": "Sezónní extrémní deště a záplavy nutící populaci k dlouhodobému pobytu v uzavřených budovách.",
+      "spreadingModifier": 1.1,
+      "deathModifier": 1.0,
+      "borderModifier": 1.0,
+      "vaccinationCapacityModifier": 0.9
+    },
+    {
+      "Id": 25,
+      "Name": "Nomádské a stepní regiony",
+      "Description": "Populace rozptýlená na obrovských travnatých pláních s minimální hustotou obyvatel.",
+      "spreadingModifier": 0.7,
+      "deathModifier": 1.1,
+      "borderModifier": 0.7,
+      "vaccinationCapacityModifier": 0.65
+    }
   ],
   "Interactions": [
-    { "DiseaseAbilityId": 3, "RegionAbilityId": 16, "spreadingModifier": 1.65, "deathModifier": 1.0, "Comment": "Aerosolové šíření v asijských megapolích způsobuje bleskovou explozivní epidemii." },
-    { "DiseaseAbilityId": 7, "RegionAbilityId": 17, "spreadingModifier": 1.40, "deathModifier": 1.0, "Comment": "UV foto-rezistence chrání virus před horkým pouštním sluncem nákazových center Blízkého východu." },
-    { "DiseaseAbilityId": 1, "RegionAbilityId": 18, "spreadingModifier": 1.35, "deathModifier": 1.10, "Comment": "Zoonotický skok v džunglích vyvolá nekontrolovatelný rezervoár viru v lokální fauně." },
-    { "DiseaseAbilityId": 5, "RegionAbilityId": 20, "spreadingModifier": 1.70, "deathModifier": 1.0, "Comment": "Asymptomatičtí cestující projdou letištními skenery globálních super-hubů a infikují mezinárodní linky." },
-    { "DiseaseAbilityId": 2, "RegionAbilityId": 17, "spreadingModifier": 0.50, "deathModifier": 0.90, "Comment": "Virus evolučně přizpůsobený na tuhý mráz v horkém pouštním klimatu selhává a degraduje." },
-    { "DiseaseAbilityId": 4, "RegionAbilityId": 19, "spreadingModifier": 1.10, "deathModifier": 1.45, "Comment": "Léková rezistence ve spojení se špatnou infrastrukturou izolované savany drasticky zvyšuje úmrtnost." },
-    { "DiseaseAbilityId": 2, "RegionAbilityId": 22, "spreadingModifier": 1.75, "deathModifier": 1.0, "Comment": "Kryofilní struktura promění mrazivou Sibiř, Kanadu a Grónsko v ideální zónu šíření." },
-    { "DiseaseAbilityId": 6, "RegionAbilityId": 18, "spreadingModifier": 1.50, "deathModifier": 1.15, "Comment": "Komáří vektor v deštných pralesích Amazonie a Konga vyvolá absolutní nezvladatelnost nákazy." },
-    { "DiseaseAbilityId": 3, "RegionAbilityId": 21, "spreadingModifier": 1.35, "deathModifier": 1.0, "Comment": "Aerosolová stabilizace v přeplněné autobusové dopravě Latinské Ameriky nakazí celé koridory." },
-    { "DiseaseAbilityId": 9, "RegionAbilityId": 24, "spreadingModifier": 1.40, "deathModifier": 1.0, "Comment": "Klimatizační systémy během monzunu v uzavřených prostorech masivně distribuují patogen." },
-    { "DiseaseAbilityId": 10, "RegionAbilityId": 25, "spreadingModifier": 0.80, "deathModifier": 1.30, "Comment": "Encefalitická mutace paralyzuje stepní komunity, kde je nejbližší pomoc vzdálená stovky kilometrů." }
+    {
+      "DiseaseAbilityId": 3,
+      "RegionAbilityId": 16,
+      "spreadingModifier": 1.65,
+      "deathModifier": 1.0,
+      "Comment": "Aerosolové šíření v asijských megapolích způsobuje bleskovou explozivní epidemii."
+    },
+    {
+      "DiseaseAbilityId": 7,
+      "RegionAbilityId": 17,
+      "spreadingModifier": 1.4,
+      "deathModifier": 1.0,
+      "Comment": "UV foto-rezistence chrání virus před horkým pouštním sluncem nákazových center Blízkého východu."
+    },
+    {
+      "DiseaseAbilityId": 1,
+      "RegionAbilityId": 18,
+      "spreadingModifier": 1.35,
+      "deathModifier": 1.1,
+      "Comment": "Zoonotický skok v džunglích vyvolá nekontrolovatelný rezervoár viru v lokální fauně."
+    },
+    {
+      "DiseaseAbilityId": 5,
+      "RegionAbilityId": 20,
+      "spreadingModifier": 1.7,
+      "deathModifier": 1.0,
+      "Comment": "Asymptomatičtí cestující projdou letištními skenery globálních super-hubů a infikují mezinárodní linky."
+    },
+    {
+      "DiseaseAbilityId": 2,
+      "RegionAbilityId": 17,
+      "spreadingModifier": 0.5,
+      "deathModifier": 0.9,
+      "Comment": "Virus evolučně přizpůsobený na tuhý mráz v horkém pouštním klimatu selhává a degraduje."
+    },
+    {
+      "DiseaseAbilityId": 4,
+      "RegionAbilityId": 19,
+      "spreadingModifier": 1.1,
+      "deathModifier": 1.45,
+      "Comment": "Léková rezistence ve spojení se špatnou infrastrukturou izolované savany drasticky zvyšuje úmrtnost."
+    },
+    {
+      "DiseaseAbilityId": 2,
+      "RegionAbilityId": 22,
+      "spreadingModifier": 1.75,
+      "deathModifier": 1.0,
+      "Comment": "Kryofilní struktura promění mrazivou Sibiř, Kanadu a Grónsko v ideální zónu šíření."
+    },
+    {
+      "DiseaseAbilityId": 6,
+      "RegionAbilityId": 18,
+      "spreadingModifier": 1.5,
+      "deathModifier": 1.15,
+      "Comment": "Komáří vektor v deštných pralesích Amazonie a Konga vyvolá absolutní nezvladatelnost nákazy."
+    },
+    {
+      "DiseaseAbilityId": 3,
+      "RegionAbilityId": 21,
+      "spreadingModifier": 1.35,
+      "deathModifier": 1.0,
+      "Comment": "Aerosolová stabilizace v přeplněné autobusové dopravě Latinské Ameriky nakazí celé koridory."
+    },
+    {
+      "DiseaseAbilityId": 9,
+      "RegionAbilityId": 24,
+      "spreadingModifier": 1.4,
+      "deathModifier": 1.0,
+      "Comment": "Klimatizační systémy během monzunu v uzavřených prostorech masivně distribuují patogen."
+    },
+    {
+      "DiseaseAbilityId": 10,
+      "RegionAbilityId": 25,
+      "spreadingModifier": 0.8,
+      "deathModifier": 1.3,
+      "Comment": "Encefalitická mutace paralyzuje stepní komunity, kde je nejbližší pomoc vzdálená stovky kilometrů."
+    }
   ]
 }

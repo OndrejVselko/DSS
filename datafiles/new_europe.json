@@ -1,5 +1,5 @@
 {
-  "ScenarioName": "Evropská epidemie 2026 (Balanční model B)",
+  "ScenarioName": "europe",
   "Regions": [
     { "id": 1, "name": "Albánie", "isoCode": "AL", "population": 2830000, "healthcareIndex": 0.8, "regionSpreadingSpeed": 1.2, "abilityIds": [1, 11], "neighbourIds": [5, 7, 17, 35, 37] },
     { "id": 2, "name": "Andorra", "isoCode": "AD", "population": 77000, "healthcareIndex": 1.6, "regionSpreadingSpeed": 1.1, "abilityIds": [5, 12], "neighbourIds": [12, 42] },

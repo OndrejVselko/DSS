@@ -24,6 +24,9 @@ public partial class CreateDiseaseStepView : UserControl
         this.FindControl<ListBox>("AvailableAbilitiesBox")!.ItemsSource = _availableAbilities;
     }
 
+
+    // SAVING
+
     private void ValidateAndSetNext()
     {
         var name = this.FindControl<TextBox>("NameBox")!.Text ?? "";
@@ -34,13 +37,56 @@ public partial class CreateDiseaseStepView : UserControl
 
         bool valid = !string.IsNullOrWhiteSpace(name)
             && int.TryParse(lengthText, out int length) && length >= 1
-            && int.TryParse(lengthText, out int immunityLengt) && immunityLengt >= 1
+            && int.TryParse(immunityLengtText, out int immunityLengt) && immunityLengt >= 1
             && double.TryParse(speedText, out double speed) && speed > 0
             && double.TryParse(deathText, out double death) && death >= 0 && death <= 100;
 
         _parent.SetNextEnabled(valid);
         _parent.DiseaseNextButton = valid;
     }
+
+    public bool TrySaveDisease()
+    {
+        var name = this.FindControl<TextBox>("NameBox")!.Text ?? "";
+        var lengthText = this.FindControl<TextBox>("LengthBox")!.Text ?? "";
+        var speedText = this.FindControl<TextBox>("SpeedBox")!.Text ?? "";
+        var deathText = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
+        var immunityLengthText = this.FindControl<TextBox>("ImmunityLengthBox")!.Text ?? "";
+
+        if (!int.TryParse(lengthText, out int length) || length < 1)
+        {
+            this.FindControl<TextBlock>("ErrorText")!.Text = "Délka onemocnìní musí být kladné celé èíslo.";
+            return false;
+        }
+        if (!int.TryParse(immunityLengthText, out int immunityLength) || immunityLength < 1)
+        {
+            this.FindControl<TextBlock>("ErrorText")!.Text = "Délka onemocnìní musí být kladné celé èíslo.";
+            return false;
+        }
+        if (!double.TryParse(speedText, out double speed) || speed <= 0)
+        {
+            this.FindControl<TextBlock>("ErrorText")!.Text = "Rychlost šíøení musí být vìtší než 0.";
+            return false;
+        }
+        if (!double.TryParse(deathText, out double death) || death < 0 || death > 100)
+        {
+            this.FindControl<TextBlock>("ErrorText")!.Text = "Úmrtnost musí být v rozsahu 0-100.";
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            this.FindControl<TextBlock>("ErrorText")!.Text = "Název nemoci nesmí být prázdný.";
+            return false;
+        }
+
+        this.FindControl<TextBlock>("ErrorText")!.Text = "";
+        _parent.AppService.SetDisease(name, speed, death / 100.0, length, immunityLength);
+        _parent.AppService.ProcessPendingCommands();
+        return true;
+    }
+
+
+    // ABILITY FIELDS LLOGIC
 
     private void OnAbilitySelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -61,11 +107,9 @@ public partial class CreateDiseaseStepView : UserControl
         }
     }
 
-    private void OnActiveAbilityDoubleTapped(object? sender, TappedEventArgs e)
-        => MoveFromActiveToAvailable();
+    private void OnActiveAbilityDoubleTapped(object? sender, TappedEventArgs e) => MoveFromActiveToAvailable();
 
-    private void OnAvailableAbilityDoubleTapped(object? sender, TappedEventArgs e)
-        => MoveFromAvailableToActive();
+    private void OnAvailableAbilityDoubleTapped(object? sender, TappedEventArgs e) => MoveFromAvailableToActive();
 
     private void OnMoveAbilityClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -98,6 +142,9 @@ public partial class CreateDiseaseStepView : UserControl
             _parent.AppService.AddDiseaseAbilityToDisease(ability.Id);
         }
     }
+
+
+    // INPUT FIELDS CHECKING
 
     private void OnIntTextChanged(object? sender, TextChangedEventArgs e)
     {
@@ -137,42 +184,4 @@ public partial class CreateDiseaseStepView : UserControl
         ValidateAndSetNext();
     }
 
-    public bool TrySaveDisease()
-    {
-        var name = this.FindControl<TextBox>("NameBox")!.Text ?? "";
-        var lengthText = this.FindControl<TextBox>("LengthBox")!.Text ?? "";
-        var speedText = this.FindControl<TextBox>("SpeedBox")!.Text ?? "";
-        var deathText = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
-        var immunityLengthText = this.FindControl<TextBox>("ImmunityLengthBox")!.Text ?? "";
-
-        if (!int.TryParse(lengthText, out int length) || length < 1)
-        {
-            this.FindControl<TextBlock>("ErrorText")!.Text = "Délka onemocnìní musí být kladné celé èíslo.";
-            return false;
-        }
-        if (!int.TryParse(immunityLengthText, out int immunityLength) || immunityLength < 1)
-        {
-            this.FindControl<TextBlock>("ErrorText")!.Text = "Délka onemocnìní musí být kladné celé èíslo.";
-            return false;
-        }
-        if (!double.TryParse(speedText, out double speed) || speed <= 0)
-        {
-            this.FindControl<TextBlock>("ErrorText")!.Text = "Rychlost šíøení musí být vìtší než 0.";
-            return false;
-        }
-        if (!double.TryParse(deathText, out double death) || death < 0 || death > 100)
-        {
-            this.FindControl<TextBlock>("ErrorText")!.Text = "Úmrtnost musí být v rozsahu 0-100.";
-            return false;
-        }
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            this.FindControl<TextBlock>("ErrorText")!.Text = "Název nemoci nesmí být prázdný.";
-            return false;
-        }
-
-        this.FindControl<TextBlock>("ErrorText")!.Text = "";
-        _parent.AppService.SetDisease(name, speed, death / 100.0, length, immunityLength);
-        return true;
-    }
 }

@@ -17,6 +17,8 @@ public partial class MainMenuView : UserControl
         InitializeComponent();
     }
 
+    // BUTTON HANDLERS
+
     private void OnNewSimulationClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         _mainWindow.Content = new NewSimulationView(_mainWindow, _appService);

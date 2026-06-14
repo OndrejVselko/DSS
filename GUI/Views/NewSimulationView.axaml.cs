@@ -20,9 +20,7 @@ public partial class NewSimulationView : UserControl
     public bool DiseaseNextButton = false;
     public bool RegionsNextButton = false;
 
-    // Zadané hodnoty
     private string? _scenarioPath;
-    // další hodnoty přibydou
 
     public NewSimulationView(MainWindow mainWindow, AppService service)
     {
@@ -31,6 +29,9 @@ public partial class NewSimulationView : UserControl
         InitializeComponent();
         NavigateToStep(0);
     }
+
+
+    // CHANGING VIEW LOGIC
 
     private void NavigateToStep(int step)
     {
@@ -58,6 +59,9 @@ public partial class NewSimulationView : UserControl
     {
         this.FindControl<Button>("NextButton")!.IsEnabled = enabled;
     }
+
+     
+    // BUTTON HANDLERS
 
     private void OnBackClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -90,6 +94,9 @@ public partial class NewSimulationView : UserControl
             _mainWindow.Content = new SimulationView(AppService, _mainWindow);
         }
     }
+
+
+    // HELPERS
 
     public void ResetSteps()
     {

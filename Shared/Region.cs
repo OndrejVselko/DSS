@@ -13,15 +13,15 @@ namespace Shared
         public int Id { get; set; }
         public string Name { get; set; }
         public string IsoCode { get; set; } = string.Empty;
-        public int Population { get; set; }
-        public int Sick { get; set; } = 0;
-        public int Dead { get; set; } = 0;
-        public int Vaccinated { get; set; } = 0;
-        public int Immune { get; set; }
+        public long Population { get; set; }
+        public long Sick { get; set; } = 0;
+        public long Dead { get; set; } = 0;
+        public long Vaccinated { get; set; } = 0;
+        public long Immune { get; set; }
 
 
         public bool Vaccinating { get; set; }
-        public Vaccine vaccine { get; set; }
+        public Vaccine Vaccine { get; set; }
         public double TotalVaccinatingCapacity { get; set; }
         public double HealthcareIndex { get; set; }
         public double TotalSpreadingSpeed { get; set; }
@@ -30,7 +30,7 @@ namespace Shared
         public double RegionDeathPropability { get; set; } = 1;
         public double DiseaseSpreadingSpeed { get; set; }
         public double DiseaseDeathPropability { get; set; }
-        public Queue<int> ImmunityHistory;
+        public Queue<long> ImmunityHistory;
         public int ImmunityLength { get; set; }
 
         public List<RegionAbility> Abilities { get; set; }
@@ -44,43 +44,35 @@ namespace Shared
         public double InteractionDeathModifier;
         public int SicknessLength { get; set; }
 
-        public StatisticUpdate LastUpdate { get; set; } = new StatisticUpdate(0, 0, 0, 0, 0, 0)
+        public StatisticUpdate LastUpdate { get; set; } = new StatisticUpdate(0, 0, 0, 0, 0, 0);
 
         public Region()
         {
             Abilities = new List<RegionAbility>();
             ActiveInteractions = new List<Interaction>();
-            ImmunityHistory = new Queue<int>();
+            ImmunityHistory = new Queue<long>();
             TotalVaccinatingCapacity = 0.001;
             InteractionSpreadingModifier = 1.0;
             InteractionDeathModifier = 1.0;
         }
 
-        /// <summary>
-        /// Inicializuje frontu imunity nulami.
-        /// </summary>
+
+        // SETTING METHODS
         public void SetStartingQueue(int sicknessLength, int immunityLength)
         {
             SicknessLength = sicknessLength;
             ImmunityLength = immunityLength;
-            ImmunityHistory = new Queue<int>();
+            ImmunityHistory = new Queue<long>();
             for (int i = 0; i < immunityLength; i++)
                 ImmunityHistory.Enqueue(0);
         }
 
-        public void AddAbility(RegionAbility ability)
-        {
-            Abilities.Add(ability);
-            UpdateRegionValues();
-        }
+        public void SetVaccine(Vaccine vaccine) => this.Vaccine = vaccine;
 
-        public void RemoveAbility(RegionAbility ability)
-        {
-            Abilities.Remove(ability);
-            UpdateRegionValues();
-        }
 
-        public void RecalculateRandomOccurrence(int globalSick, long globalPopulation)
+        // UPDATING METHODS
+
+        public void RecalculateRandomOccurrence(long globalSick, long globalPopulation)
         {
             double globalRatio = (double)globalSick / globalPopulation;
             double neighbourSick = NeighbouringRegions.Sum(r => r.Sick);
@@ -114,38 +106,60 @@ namespace Shared
             TotalVaccinatingCapacity = vaccinationCapacity;
         }
 
+        public void UpdateDiseaseValues(double diseaseSpreadingSpeed, double diseaseDeathProbability)
+        {
+            DiseaseSpreadingSpeed = diseaseSpreadingSpeed;
+            DiseaseDeathPropability = diseaseDeathProbability;
+        }
+
+        private void RecalculateInteractionModifiers()
+        {
+            double totalSpreadingInteraction = 1;
+            double totalDeathInteraction = 1;
+            foreach (Interaction interaction in ActiveInteractions)
+            {
+                totalDeathInteraction *= interaction.DeathModifier;
+                totalSpreadingInteraction *= interaction.SpreadingModifier;
+            }
+            InteractionSpreadingModifier = totalSpreadingInteraction;
+            InteractionDeathModifier = totalDeathInteraction;
+            UpdateRegionValues();
+        }
+
+
+        // SIMULATION METHODS
         public StatisticUpdate SimulateDay()
         {
             double localDeathProtectionEfficiency = 0;
             double localProtectionEfficiency = 0;
-            if (vaccine is not null)
+            if (Vaccine is not null)
             {
-                localDeathProtectionEfficiency = vaccine.DeathProtectionEfficiency;
-                localProtectionEfficiency = vaccine.ProtectionEfficiency;
+                localDeathProtectionEfficiency = Vaccine.DeathProtectionEfficiency;
+                localProtectionEfficiency = Vaccine.ProtectionEfficiency;
             }
 
             // --- Uzdravování ---
             double recoveryChance = 1.0 / Math.Max(SicknessLength, 1);
-            int recovering = ProbabilisticFloor(Sick * recoveryChance);
+            long recovering = ProbabilisticFloor(Sick * recoveryChance);
             recovering = Math.Min(recovering, Sick);
 
             // --- Úmrtí ---
-            int deathGrowth = ProbabilisticFloor(recovering * TotalDeathProbability);
+            long deathGrowth = ProbabilisticFloor(recovering * TotalDeathProbability);
             deathGrowth -= ProbabilisticFloor(((double)Vaccinated / Math.Max(Population, 1)) * deathGrowth * localDeathProtectionEfficiency);
             deathGrowth = Math.Clamp(deathGrowth, 0, recovering);
 
-            int newlyRecovered = recovering - deathGrowth;
+            long newlyRecovered = recovering - deathGrowth;
 
             // --- Imunita ---
-            int losingImmunity = ImmunityHistory.Dequeue();
+            long losingImmunity = ImmunityHistory.Dequeue();
             ImmunityHistory.Enqueue(newlyRecovered);
             Immune += newlyRecovered - losingImmunity;
             Immune = Math.Max(Immune, 0);
 
             // --- Nové nákazy ---
-            int susceptible = Math.Max(Population - Sick - Dead - Immune - Vaccinated, 0);
+            long susceptible = Math.Max(Population - Sick - Dead - Immune - Vaccinated, 0);
 
-            int newInfections = ProbabilisticFloor(Sick * TotalSpreadingSpeed * ((double)susceptible / Math.Max(Population, 1)));
+            long newInfections = ProbabilisticFloor(Sick * TotalSpreadingSpeed * ((double)susceptible / Math.Max(Population, 1)));
             newInfections -= ProbabilisticFloor(((double)Vaccinated / Math.Max(Population, 1)) * newInfections * localProtectionEfficiency);
             newInfections = Math.Clamp(newInfections, 0, susceptible);
 
@@ -163,13 +177,13 @@ namespace Shared
             }
 
             // --- Očkování ---
-            int newVaccinated = 0;
+            long newVaccinated = 0;
             if (Vaccinating)
             {
                 double capacity = TotalVaccinatingCapacity > 0
                     ? TotalVaccinatingCapacity
                     : Population * 0.001;
-                int remaining = Math.Max(Population - Dead - Vaccinated - Immune - Sick, 0);
+                long remaining = Math.Max(Population - Dead - Vaccinated - Immune - Sick, 0);
                 newVaccinated = Math.Min(ProbabilisticFloor(Population * capacity), remaining);
                 Vaccinated = Math.Min(Vaccinated + newVaccinated, Population - Dead);
             }
@@ -178,11 +192,7 @@ namespace Shared
             return LastUpdate;
         }
 
-        public void UpdateDiseaseValues(double diseaseSpreadingSpeed, double diseaseDeathProbability)
-        {
-            DiseaseSpreadingSpeed = diseaseSpreadingSpeed;
-            DiseaseDeathPropability = diseaseDeathProbability;
-        }
+        // CONTROLLING METHODS
 
         public void ChangeSpreadingSpeed(double newSpeed)
         {
@@ -196,26 +206,20 @@ namespace Shared
             UpdateRegionValues();
         }
 
+        public void AddAbility(RegionAbility ability)
+        {
+            Abilities.Add(ability);
+            UpdateRegionValues();
+        }
+
+        public void RemoveAbility(RegionAbility ability)
+        {
+            Abilities.Remove(ability);
+            UpdateRegionValues();
+        }
+
         public void StartVaccinating() => Vaccinating = true;
         public void StopVaccinating() => Vaccinating = false;
-        public void SetVaccine(Vaccine vaccine) => this.vaccine = vaccine;
-
-        public override string ToString() => Name;
-
-        public string ToStringFull()
-        {
-            string result = $"[{Id}] {Name}, populace: {Population}, index zdravotnictví: {HealthcareIndex} \n" +
-                $"nemocní: {Sick}, mrtví: {Dead}, očkovaní: {Vaccinated}, imunní: {Immune}\n" +
-                $"zákl. rychlost šíření: {RegionSpreadingSpeed}, rychlost šíření celkem: {TotalSpreadingSpeed}\n" +
-                $"zákl. šance na úmrtí: {RegionDeathPropability}, šance na úmrtí celkem: {TotalDeathProbability}\n" +
-                $"Vlastnosti regionu: ";
-            if (Abilities.Count > 0)
-                foreach (RegionAbility ability in Abilities)
-                    result += ability.ToString() + "\n";
-            else
-                result += "\\";
-            return result;
-        }
 
         public void AddInteraction(Interaction interaction)
         {
@@ -232,27 +236,8 @@ namespace Shared
             }
         }
 
-        private void RecalculateInteractionModifiers()
-        {
-            double totalSpreadingInteraction = 1;
-            double totalDeathInteraction = 1;
-            foreach (Interaction interaction in ActiveInteractions)
-            {
-                totalDeathInteraction *= interaction.DeathModifier;
-                totalSpreadingInteraction *= interaction.SpreadingModifier;
-            }
-            InteractionSpreadingModifier = totalSpreadingInteraction;
-            InteractionDeathModifier = totalDeathInteraction;
-            UpdateRegionValues();
-        }
-
-        public string InteractionsToString()
-        {
-            string result = string.Empty;
-            foreach (Interaction interaction in ActiveInteractions)
-                result += interaction.ToString() + "\n";
-            return result != string.Empty ? result : "Žádné interakce";
-        }
+        // OTHER METHODS
+        public override string ToString() => Name;
 
         private int ProbabilisticFloor(double value)
         {

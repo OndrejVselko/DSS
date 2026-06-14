@@ -57,6 +57,10 @@ namespace Shared
             Abilities = new List<DiseaseAbility>();
         }
 
+
+
+        // CONTROLLING METHODS
+
         /// <summary>
         /// Adds an ability to the disease and updates totals.
         /// </summary>
@@ -96,6 +100,9 @@ namespace Shared
             UpdateTotals();
         }
 
+
+        // UPDATING METHODS
+        
         /// <summary>
         /// Recomputes TotalSpreadingSpeed by applying ability modifiers.
         /// </summary>

@@ -8,14 +8,14 @@ namespace SimulationCore
     public class Simulation
     {
 
-        public Disease disease { get; set; }
-        public Dictionary<int, Region> regions { get; set; }
-        public Vaccine vaccine { get; set; }
+        public Disease Disease { get; set; }
+        public Dictionary<int, Region> Regions { get; set; }
+        public Vaccine Vaccine { get; set; }
 
-        public DateOnly startDate { get; set; }
-        public DateOnly currentSimulationDate { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly CurrentSimulationDate { get; set; }
         private bool _isRunning;
-        public int dayLength { get; set; }
+        public int DayLength { get; set; }
         public Queue<ISimulationCommand> pendingCommands;
         public Dictionary<(int, int), Interaction> Interactions { get; set; } = new();
         private Dictionary<int, RegionAbility> _regionAbilities = new();
@@ -27,9 +27,9 @@ namespace SimulationCore
         public Simulation()
         {
             this.pendingCommands = new Queue<ISimulationCommand>();
-            this.dayLength = 1000;
-            this.startDate = DateOnly.FromDateTime(DateTime.Now);
-            this.currentSimulationDate = DateOnly.FromDateTime(DateTime.Now);
+            this.DayLength = 1000;
+            this.StartDate = DateOnly.FromDateTime(DateTime.Now);
+            this.CurrentSimulationDate = DateOnly.FromDateTime(DateTime.Now);
         }
 
         // SETTING METHODS
@@ -39,7 +39,7 @@ namespace SimulationCore
         /// </summary>
         public void SetDisease(Disease disease)
         {
-            this.disease = disease;
+            this.Disease = disease;
         }
 
         /// <summary>
@@ -47,14 +47,14 @@ namespace SimulationCore
         /// </summary>
         public void SetRegions(List<Region> regions)
         {
-            this.regions = new Dictionary<int, Region>();
+            this.Regions = new Dictionary<int, Region>();
             foreach (var region in regions)
-                this.regions[region.Id] = region;
+                this.Regions[region.Id] = region;
 
             AssignNeighbours();
             AssignAbilities();
 
-            GlobalPopulation = regions.Sum(x => x.Population);
+            GlobalPopulation = regions.Sum(x => (long)x.Population);
         }
 
         public void SetRegionAbilities(Dictionary<int, RegionAbility> regionAbilities)
@@ -65,21 +65,21 @@ namespace SimulationCore
         /// <summary>Prepares region queues using disease sickness length.</summary>
         public void SetRegionQueues()
         {
-            foreach (int key in this.regions.Keys)
-                regions[key].SetStartingQueue(disease.SicknessLength, disease.ImmunityLength);
+            foreach (int key in this.Regions.Keys)
+                Regions[key].SetStartingQueue(Disease.SicknessLength, Disease.ImmunityLength);
         }
 
         public void AssignNeighbours()
         {
-            foreach (var region in regions.Values)
+            foreach (var region in Regions.Values)
                 foreach (var id in region.NeighbourIds)
-                    if (regions.TryGetValue(id, out var neighbour))
+                    if (Regions.TryGetValue(id, out var neighbour))
                         region.NeighbouringRegions.Add(neighbour);
         }
 
         private void AssignAbilities()
         {
-            foreach (var region in regions.Values)
+            foreach (var region in Regions.Values)
                 foreach (var id in region.AbilityIds)
                     if (_regionAbilities.TryGetValue(id, out var ability))
                         region.AddAbility(ability);
@@ -87,7 +87,7 @@ namespace SimulationCore
 
         public void AssignRegionAbilities(Dictionary<int, RegionAbility> regionAbilities)
         {
-            foreach (var region in regions.Values)
+            foreach (var region in Regions.Values)
                 foreach (var id in region.AbilityIds)
                     if (regionAbilities.TryGetValue(id, out var ability))
                         region.AddAbility(ability);
@@ -95,10 +95,10 @@ namespace SimulationCore
 
         public void SetVaccine(Vaccine vaccine)
         {
-            this.vaccine = vaccine;
-            foreach (int key in this.regions.Keys)
+            this.Vaccine = vaccine;
+            foreach (int key in this.Regions.Keys)
             {
-                regions[key].SetVaccine(vaccine);
+                Regions[key].SetVaccine(vaccine);
             }
         }
 
@@ -108,7 +108,7 @@ namespace SimulationCore
         }
 
 
-        // CONTROLING METHODS
+        // CONTROLLING METHODS
 
         /// <summary>Marks the simulation as running.</summary>
         public void Run() => this._isRunning = true;
@@ -118,10 +118,10 @@ namespace SimulationCore
 
 
         /// <summary>Changes simulated day length (ms) with validation.</summary>
-        public void changeDayLength(int ms)
+        public void ChangeDayLength(int ms)
         {
             if (ms > 0)
-                this.dayLength = ms;
+                this.DayLength = ms;
             else
                 Console.WriteLine("Neplatný čas");
         }
@@ -141,21 +141,25 @@ namespace SimulationCore
         /// <summary>Updates disease values in all regions.</summary>
         public void UpdateRegionsDiseaseValues()
         {
-            foreach (var key in this.regions.Keys)
-                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.TotalDeathProbability);
+            foreach (var key in this.Regions.Keys)
+                Regions[key].UpdateDiseaseValues(Disease.TotalSpreadingSpeed, Disease.TotalDeathProbability);
         }
 
         /// <summary>Updates both disease and region-derived values for all regions.</summary>
         public void UpdateAllRegions()
         {
-            foreach (var key in regions.Keys)
+            foreach (var key in Regions.Keys)
             {
-                regions[key].UpdateDiseaseValues(disease.TotalSpreadingSpeed, disease.TotalDeathProbability);
-                regions[key].UpdateRegionValues();
+                Regions[key].UpdateDiseaseValues(Disease.TotalSpreadingSpeed, Disease.TotalDeathProbability);
+                Regions[key].UpdateRegionValues();
             }
         }
 
-
+        public void ProcessPendingCommands()
+        {
+            while (pendingCommands.Count > 0)
+                pendingCommands.Dequeue().Execute(this);
+        }
         // SIMULATION METHODS
 
         /// <summary>
@@ -165,11 +169,11 @@ namespace SimulationCore
         {
             while (this._isRunning && !ct.IsCancellationRequested)
             {
-                currentSimulationDate = currentSimulationDate.AddDays(1);
+                CurrentSimulationDate = CurrentSimulationDate.AddDays(1);
                 var update = SimulateDay();
                 OnDaySimulated?.Invoke(update);
 
-                try { await Task.Delay(dayLength, ct); }
+                try { await Task.Delay(DayLength, ct); }
                 catch (TaskCanceledException) { break; }
             }
         }
@@ -182,12 +186,12 @@ namespace SimulationCore
             while (pendingCommands.Count > 0)
                 pendingCommands.Dequeue().Execute(this);
 
-            int totalSick = 0, totalDeath = 0, totalVaccinated = 0;
-            int newSick = 0, newDead = 0, newVaccinated = 0;
+            long totalSick = 0, totalDeath = 0, totalVaccinated = 0;
+            long newSick = 0, newDead = 0, newVaccinated = 0;
 
-            foreach (int key in this.regions.Keys)
+            foreach (int key in this.Regions.Keys)
             {
-                StatisticUpdate regionUpdate = regions[key].SimulateDay();
+                StatisticUpdate regionUpdate = Regions[key].SimulateDay();
                 newDead += regionUpdate.NewDead;
                 newSick += regionUpdate.NewSick;
                 newVaccinated += regionUpdate.NewVaccinated;
@@ -196,17 +200,17 @@ namespace SimulationCore
                 totalVaccinated += regionUpdate.TotalVaccinated;
             }
 
-            foreach (int key in this.regions.Keys)
-                regions[key].RecalculateRandomOccurrence(totalSick, GlobalPopulation);
+            foreach (int key in this.Regions.Keys)
+                Regions[key].RecalculateRandomOccurrence(totalSick, GlobalPopulation);
 
-            var regionsByIso = regions.Values
+            var regionsByIso = Regions.Values
                 .Where(r => !string.IsNullOrEmpty(r.IsoCode))
                 .ToDictionary(r => r.IsoCode, r => r);
 
-            StatisticUpdate update = new StatisticUpdate(currentSimulationDate, newSick, newDead, newVaccinated,
+            StatisticUpdate update = new StatisticUpdate(CurrentSimulationDate, newSick, newDead, newVaccinated,
                 totalSick, totalDeath, totalVaccinated, regionsByIso);
 
-            AddLog(currentSimulationDate, update.ToString());
+            AddLog(CurrentSimulationDate, update.ToString());
 
             return update;
         }

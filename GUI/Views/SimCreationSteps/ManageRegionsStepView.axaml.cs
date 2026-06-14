@@ -32,6 +32,38 @@ public partial class ManageRegionsStepView : UserControl
         this.FindControl<ListBox>("AvailableAbilitiesBox")!.ItemsSource = _availableAbilities;
     }
 
+
+    // SAVING
+
+    private void SaveCurrentRegion()
+    {
+        if (_selectedRegion == null) return;
+
+        if (int.TryParse(this.FindControl<TextBox>("PopulationBox")!.Text, out int population))
+            _selectedRegion.Population = population;
+
+        if (double.TryParse(this.FindControl<TextBox>("HealthcareBox")!.Text, out double healthcare))
+            _selectedRegion.HealthcareIndex = healthcare;
+    }
+
+    public void ValidateNext()
+    {
+        bool anyInfected = _parent.AppService.GetAllRegions().Values.Any(r => r.Sick > 0);
+        _parent.RegionsNextButton = anyInfected;
+        _parent.SetNextEnabled(anyInfected);
+    }
+
+
+    // HANDLERS
+
+    private void OnInfectedChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_selectedRegion == null) return;
+        var infected = this.FindControl<CheckBox>("InfectedCheckBox")!.IsChecked == true;
+        _selectedRegion.Sick = infected ? 1 : 0;
+        ValidateNext();
+    }
+
     private void OnRegionSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         SaveCurrentRegion();
@@ -59,31 +91,9 @@ public partial class ManageRegionsStepView : UserControl
         this.FindControl<CheckBox>("InfectedCheckBox")!.IsChecked = region.Sick > 0;
     }
 
-    private void SaveCurrentRegion()
-    {
-        if (_selectedRegion == null) return;
 
-        if (int.TryParse(this.FindControl<TextBox>("PopulationBox")!.Text, out int population))
-            _selectedRegion.Population = population;
 
-        if (double.TryParse(this.FindControl<TextBox>("HealthcareBox")!.Text, out double healthcare))
-            _selectedRegion.HealthcareIndex = healthcare;
-    }
-
-    private void OnInfectedChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (_selectedRegion == null) return;
-        var infected = this.FindControl<CheckBox>("InfectedCheckBox")!.IsChecked == true;
-        _selectedRegion.Sick = infected ? 1 : 0;
-        ValidateNext();
-    }
-
-    public void ValidateNext()
-    {
-        bool anyInfected = _parent.AppService.GetAllRegions().Values.Any(r => r.Sick > 0);
-        _parent.RegionsNextButton = anyInfected;
-        _parent.SetNextEnabled(anyInfected);
-    }
+    // ABILITY FIELDS LOGIC
 
     private void OnAbilitySelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
@@ -150,6 +160,9 @@ public partial class ManageRegionsStepView : UserControl
             _selectedRegion.AddAbility(ability);
         }
     }
+
+
+    // INPUT FIELDS CHECKING
 
     private void OnIntTextChanged(object? sender, TextChangedEventArgs e)
     {

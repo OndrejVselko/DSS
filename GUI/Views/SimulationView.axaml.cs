@@ -20,8 +20,6 @@ using System.Linq;
 
 namespace GUI.Views;
 
-
-
 public partial class SimulationView : UserControl
 {
     private readonly AppService _appService;
@@ -35,15 +33,12 @@ public partial class SimulationView : UserControl
     private ObservableCollection<string> _logItems = new();
     private StatisticUpdate _lastUpdate;
     private Mapsui.UI.Avalonia.MapControl _mapControl = null!;
-    private int _lastSick = 0;
-    private int _lastDead = 0;
-    private int _lastVaccinated = 0;
+    private long _lastSick = 0;
+    private long _lastDead = 0;
+    private long _lastVaccinated = 0;
     private ObservableCollection<RegionAbility> _activeRegionAbilities = new();
     private ObservableCollection<RegionAbility> _availableRegionAbilities = new();
     private string? _lastLoadedRegionIso = null;
-
-
-
 
     public SimulationView(AppService appService, MainWindow mainWindow)
     {
@@ -82,6 +77,9 @@ public partial class SimulationView : UserControl
         _appService.UpdateAllRegions();
     }
 
+
+    // RENDERING / UPDATING / INITIALIZE
+
     private void UpdateDiseaseValues()
     {
         this.FindControl<TextBlock>("DiseaseNameText")!.Text = _appService.GetDiseaseName();
@@ -99,8 +97,14 @@ public partial class SimulationView : UserControl
 
     private void InitializeAbilities()
     {
+        var activeAbilities = _appService.GetActiveDiseaseAbilities();
+
+        foreach (var ability in activeAbilities)
+            _activeAbilities.Add(ability);
+
         foreach (var ability in _appService.GetAvailableDiseaseAbilities().Values)
-            _availableAbilities.Add(ability);
+            if (!activeAbilities.Contains(ability))
+                _availableAbilities.Add(ability);
 
         this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!.ItemsSource = _activeAbilities;
         this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!.ItemsSource = _availableAbilities;
@@ -148,229 +152,6 @@ public partial class SimulationView : UserControl
         mapControl.Map.Layers.Add(layer);
         mapControl.Tapped += OnMapTapped;
     }
-    private void OnDaySimulated(StatisticUpdate update)
-    {
-        _lastUpdate = update;
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-        {
-            this.FindControl<TextBlock>("DateText")!.Text = update.Date.ToString();
-            if (_logItems.Count > 50)
-                _logItems.RemoveAt(_logItems.Count - 1);
-            UpdateMapColors(update.RegionsByIso);
-
-            UpdateDiseaseTotals();
-
-            var region = _selectedRegionCode == null ? null
-                : update.RegionsByIso.GetValueOrDefault(_selectedRegionCode);
-            UpdateBottomPanel(region);
-
-            _lastSick = update.TotalSick;
-            _lastDead = update.TotalDead;
-            _lastVaccinated = update.TotalVaccinated;
-        });
-    }
-
-    private void OnLogAdded(Log log)
-    {
-        _logItems.Insert(0, log.ToString());
-    }
-
-    // --- Play/Pause ---
-    private void OnPlayPauseClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (_isRunning)
-        {
-            _appService.StopSimulation();
-            this.FindControl<Button>("PlayPauseButton")!.Content = "▶️";
-            _isRunning = false;
-        }
-        else
-        {
-            _appService.StartSimulation();
-            this.FindControl<Button>("PlayPauseButton")!.Content = "⏸️";
-            _isRunning = true;
-        }
-    }
-
-    // --- Rychlost šíření ---
-    private void OnSpreadingSpeedConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var text = this.FindControl<TextBox>("SpreadingSpeedBox")!.Text ?? "";
-        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
-        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
-        try { _appService.ChangeDefaultSpreadingSpeed(text); }
-        catch { }
-    }
-
-    // --- Úmrtnost ---
-    private void OnDeathConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        // Function expects string, not double. Temporary solution :(
-        var text = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
-        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
-        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
-        if (double.TryParse(text, out var d))
-        {
-            try { _appService.ChangeDeathProbability((d / 100).ToString()); }
-            catch { }
-        }
-
-    }
-
-    // --- Ability ---
-    private void OnDiseaseAbilitySelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        var listBox = sender as ListBox;
-        if (listBox?.SelectedItem is DiseaseAbility ability)
-        {
-            string text = $"{ability.Name}\n{ability.Description}\n\n" +
-                          $"Modifikátor šíření: {ability.SpreadingModifier:F2}\n" +
-                          $"Modifikátor úmrtí: {ability.DeathModifier:F2}";
-            this.FindControl<TextBlock>("DiseaseAbilityDescText")!.Text = text;
-        }
-    }
-
-    private void OnActiveDiseaseAbilityDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
-        => MoveFromActiveToAvailable();
-
-    private void OnAvailableDiseaseAbilityDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
-        => MoveFromAvailableToActive();
-
-    private void OnMoveDiseaseAbilityClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var activeBox = this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!;
-        var availableBox = this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!;
-        if (activeBox.SelectedItem is DiseaseAbility)
-            MoveFromActiveToAvailable();
-        else if (availableBox.SelectedItem is DiseaseAbility)
-            MoveFromAvailableToActive();
-
-    }
-
-    private void MoveFromActiveToAvailable()
-    {
-        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
-        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
-        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
-        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
-        var box = this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!;
-        if (box.SelectedItem is DiseaseAbility ability)
-        {
-            _activeAbilities.Remove(ability);
-            _availableAbilities.Add(ability);
-            _appService.RemoveDiseaseAbilityFromDisease(ability.Id);
-        }
-    }
-
-    private void MoveFromAvailableToActive()
-    {
-        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
-        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
-        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
-        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
-        var box = this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!;
-        if (box.SelectedItem is DiseaseAbility ability)
-        {
-            _availableAbilities.Remove(ability);
-            _activeAbilities.Add(ability);
-            _appService.AddDiseaseAbilityToDisease(ability.Id);
-        }
-    }
-
-    // --- Vakcína ---
-    private void OnVaccineConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var protText = this.FindControl<TextBox>("VaccineProtectionBox")!.Text ?? "";
-        var deathText = this.FindControl<TextBox>("VaccineDeathBox")!.Text ?? "";
-        if (double.TryParse(protText, out double prot) && double.TryParse(deathText, out double death))
-            _appService.ChangeVaccineEfficiency(prot / 100.0, death / 100.0);
-    }
-
-    // --- Rychlost dne ---
-    private void OnDaySpeedConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (int.TryParse(this.FindControl<TextBox>("DaySpeedBox")!.Text, out int newSpeed))
-            _appService.ChangeSimulationSpeed(newSpeed);
-    }
-
-    // --- Ukončit ---
-    private async void OnStopSimulationClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        _appService.StopSimulation();
-        await _appService.SaveSimulationAsync(_appService.GetLogs());
-        _mainWindow.SetMenuSize();
-        _mainWindow.Content = new MainMenuView(_mainWindow);
-    }
-
-
-    private void UpdateMapColors(Dictionary<string, Region> regionsByIso)
-    {
-        var layer = _mapControl.Map.Layers.FirstOrDefault(l => l.Name == "Countries") as MemoryLayer;
-        if (layer == null) return;
-
-        foreach (var feature in layer.Features.OfType<GeometryFeature>())
-        {
-            var iso = feature["ISO_A2"]?.ToString() ?? "";
-            if (regionsByIso.TryGetValue(iso, out Region region))
-            {
-                double sickRatio = region.Population > 0
-                    ? Math.Clamp((double)region.Sick / region.Population, 0, 1)
-                    : 0;
-                double deadRatio = region.Population > 0
-                    ? Math.Clamp((double)region.Dead / region.Population, 0, 1)
-                    : 0;
-
-                // Složka nemocných: zelená #00FF00 → červená #FF0000
-                byte sickR = (byte)(sickRatio * 255);
-                byte sickG = (byte)((1.0 - sickRatio) * 255);
-                byte sickB = 0;
-
-                // Složka mrtvých: černá #000000 → modrá #0000FF
-                byte deadR = 0;
-                byte deadG = 0;
-                byte deadB = (byte)(deadRatio * 255);
-
-                // Výsledná barva = mix obou složek (aditivní blend)
-                // Zdraví (0 sick, 0 dead) = zelená; vše mrtvé = modrá; vše nemocné = červená
-                // Základ je zelená pro zdravé regiony
-                byte baseR = (byte)((1.0 - sickRatio) * 0 + sickRatio * 255);  // 0→255
-                byte baseG = (byte)((1.0 - sickRatio) * 255);                   // 255→0
-                byte baseB = 0;
-
-                // Přimíchat modrou za mrtvé
-                byte r = (byte)Math.Min(255, baseR * (1.0 - deadRatio) + deadR * deadRatio);
-                byte g = (byte)Math.Min(255, baseG * (1.0 - deadRatio) + deadG * deadRatio);
-                byte b = (byte)Math.Min(255, baseB * (1.0 - deadRatio) + deadB * deadRatio);
-
-                var style = feature.Styles.OfType<VectorStyle>().FirstOrDefault();
-                if (style != null)
-                    style.Fill = new Brush(Color.FromArgb(255, r, g, b));
-            }
-        }
-        _mapControl.Map.RefreshGraphics();
-    }
-
-    private void OnClearRegionClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        _selectedRegionCode = null;
-        UpdateBottomPanel(null);
-    }
-
-    private void OnMapTapped(object? sender, Avalonia.Input.TappedEventArgs e)
-    {
-        var mapControl = this.FindControl<Mapsui.UI.Avalonia.MapControl>("MapControl")!;
-        var pos = e.GetPosition(mapControl);
-        var screenPosition = new ScreenPosition(pos.X, pos.Y);
-        var mapInfo = mapControl.GetMapInfo(screenPosition, mapControl.Map.Layers);
-
-        if (mapInfo?.Feature is GeometryFeature feature)
-        {
-            _selectedRegionCode = feature["ISO_A2"]?.ToString();
-            var region = _appService.GetAllRegions().Values
-                .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
-            UpdateBottomPanel(region);
-        }
-    }
 
     private void UpdateBottomPanel(Region? region)
     {
@@ -390,9 +171,9 @@ public partial class SimulationView : UserControl
             this.FindControl<TextBlock>("PopulationLabel")!.Text =
                 $"Populace: {allRegions.Sum(r => r.Population):N0}";
 
-            int sick = allRegions.Sum(r => r.Sick);
-            int dead = allRegions.Sum(r => r.Dead);
-            int vaccinated = allRegions.Sum(r => r.Vaccinated);
+            long sick = allRegions.Sum(r => r.Sick);
+            long dead = allRegions.Sum(r => r.Dead);
+            long vaccinated = allRegions.Sum(r => r.Vaccinated);
 
             SetStatLabel("SickLabel", sick);
             SetDeltaLabel("SickDeltaLabel", sick - _lastSick, false);
@@ -435,7 +216,6 @@ public partial class SimulationView : UserControl
 
             vaccinatingCheck.IsChecked = region.Vaccinating;
 
-            // Načti abilities jen při změně regionu
             if (region.IsoCode != _lastLoadedRegionIso)
             {
                 _lastLoadedRegionIso = region.IsoCode;
@@ -457,12 +237,12 @@ public partial class SimulationView : UserControl
         }
     }
 
-    private void SetStatLabel(string name, int value)
+    private void SetStatLabel(string name, long value)
     {
         this.FindControl<TextBlock>(name)!.Text = value.ToString("N0");
     }
 
-    private void SetDeltaLabel(string name, int delta, bool alwaysGray)
+    private void SetDeltaLabel(string name, long delta, bool alwaysGray)
     {
         var label = this.FindControl<TextBlock>(name)!;
         label.Text = delta >= 0 ? $"(+{delta})" : $"({delta})";
@@ -477,18 +257,116 @@ public partial class SimulationView : UserControl
                     : Avalonia.Media.Brushes.Gray;
     }
 
+
+    // INVOKED METHODS
+    private void OnDaySimulated(StatisticUpdate update)
+    {
+        _lastUpdate = update;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            this.FindControl<TextBlock>("DateText")!.Text = update.Date.ToString();
+            if (_logItems.Count > 50)
+                _logItems.RemoveAt(_logItems.Count - 1);
+            UpdateMapColors(update.RegionsByIso);
+
+            UpdateDiseaseTotals();
+
+            var region = _selectedRegionCode == null ? null
+                : update.RegionsByIso.GetValueOrDefault(_selectedRegionCode);
+            UpdateBottomPanel(region);
+
+            _lastSick = update.TotalSick;
+            _lastDead = update.TotalDead;
+            _lastVaccinated = update.TotalVaccinated;
+        });
+    }
+
+    private void OnLogAdded(Log log)
+    {
+        _logItems.Insert(0, log.ToString());
+    }
+
+
+    // MAP METHODS
+    private void UpdateMapColors(Dictionary<string, Region> regionsByIso)
+    {
+        var layer = _mapControl.Map.Layers.FirstOrDefault(l => l.Name == "Countries") as MemoryLayer;
+        if (layer == null) return;
+
+        foreach (var feature in layer.Features.OfType<GeometryFeature>())
+        {
+            var iso = feature["ISO_A2"]?.ToString() ?? "";
+            if (regionsByIso.TryGetValue(iso, out Region region))
+            {
+                double sickRatio = region.Population > 0
+                    ? Math.Clamp((double)region.Sick / region.Population, 0, 1)
+                    : 0;
+                double deadRatio = region.Population > 0
+                    ? Math.Clamp((double)region.Dead / region.Population, 0, 1)
+                    : 0;
+
+                byte sickR = (byte)(sickRatio * 255);
+                byte sickG = (byte)((1.0 - sickRatio) * 255);
+                byte sickB = 0;
+
+                byte deadR = 0;
+                byte deadG = 0;
+                byte deadB = (byte)(deadRatio * 255);
+
+                byte baseR = (byte)((1.0 - sickRatio) * 0 + sickRatio * 255); 
+                byte baseG = (byte)((1.0 - sickRatio) * 255);
+                byte baseB = 0;
+
+                byte r = (byte)Math.Min(255, baseR * (1.0 - deadRatio) + deadR * deadRatio);
+                byte g = (byte)Math.Min(255, baseG * (1.0 - deadRatio) + deadG * deadRatio);
+                byte b = (byte)Math.Min(255, baseB * (1.0 - deadRatio) + deadB * deadRatio);
+
+                var style = feature.Styles.OfType<VectorStyle>().FirstOrDefault();
+                if (style != null)
+                    style.Fill = new Brush(Color.FromArgb(255, r, g, b));
+            }
+        }
+        _mapControl.Map.RefreshGraphics();
+    }
+
+    private void OnClearRegionClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _selectedRegionCode = null;
+        UpdateBottomPanel(null);
+    }
+
+    private void OnMapTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        var mapControl = this.FindControl<Mapsui.UI.Avalonia.MapControl>("MapControl")!;
+        var pos = e.GetPosition(mapControl);
+        var screenPosition = new ScreenPosition(pos.X, pos.Y);
+        var mapInfo = mapControl.GetMapInfo(screenPosition, mapControl.Map.Layers);
+
+        if (mapInfo?.Feature is GeometryFeature feature)
+        {
+            _selectedRegionCode = feature["ISO_A2"]?.ToString();
+            var region = _appService.GetAllRegions().Values
+                .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
+            UpdateBottomPanel(region);
+        }
+    }
+
+
+    // USER ACTION HANDLERS
+
     private void OnVaccinatingChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var isChecked = this.FindControl<CheckBox>("VaccinatingCheckBox")!.IsChecked == true;
 
         if (_selectedRegionCode == null)
         {
-            // celý svět
+            // whole world
             if (isChecked) _appService.StartVaccinatingAllRegions();
             else _appService.StopVaccinatingAllRegions();
         }
         else
         {
+            // single region
             var region = _appService.GetAllRegions().Values
                 .FirstOrDefault(r => r.IsoCode == _selectedRegionCode);
             if (region == null) return;
@@ -508,11 +386,133 @@ public partial class SimulationView : UserControl
 
         var text = this.FindControl<TextBox>("HealthcareIndexBox")!.Text ?? "";
         if (double.TryParse(text, out double value))
-            _appService.SetRegionHealthcareIndex(region.Id, text);
+            _appService.ChangeRegionHealthcareIndex(region.Id, text);
+    }
+
+    private void OnVaccineConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var protText = this.FindControl<TextBox>("VaccineProtectionBox")!.Text ?? "";
+        var deathText = this.FindControl<TextBox>("VaccineDeathBox")!.Text ?? "";
+        if (double.TryParse(protText, out double prot) && double.TryParse(deathText, out double death))
+            _appService.ChangeVaccineEfficiency(prot / 100.0, death / 100.0);
+    }
+
+    private void OnDaySpeedConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (int.TryParse(this.FindControl<TextBox>("DaySpeedBox")!.Text, out int newSpeed))
+            _appService.ChangeSimulationSpeed(newSpeed);
+    }
+
+    private async void OnStopSimulationClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        _appService.StopSimulation();
+        await _appService.SaveSimulationAsync(_appService.GetLogs());
+        _mainWindow.SetMenuSize();
+        _mainWindow.Content = new MainMenuView(_mainWindow);
+    }
+
+    private void OnPlayPauseClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_isRunning)
+        {
+            _appService.StopSimulation();
+            this.FindControl<Button>("PlayPauseButton")!.Content = "▶️";
+            _isRunning = false;
+        }
+        else
+        {
+            _appService.StartSimulation();
+            this.FindControl<Button>("PlayPauseButton")!.Content = "⏸️";
+            _isRunning = true;
+        }
+    }
+
+    private void OnSpreadingSpeedConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var text = this.FindControl<TextBox>("SpreadingSpeedBox")!.Text ?? "";
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        try { _appService.ChangeDefaultSpreadingSpeed(text); }
+        catch { }
+    }
+
+    private void OnDeathConfirmed(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // Function expects string, not double. Temporary solution :(
+        var text = this.FindControl<TextBox>("DeathBox")!.Text ?? "";
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
+        if (double.TryParse(text, out var d))
+        {
+            try { _appService.ChangeDeathProbability((d / 100).ToString()); }
+            catch { }
+        }
+
     }
 
 
-    //----------------------------------------
+    // DISEASE ABILITY LOGIC
+
+    private void OnDiseaseAbilitySelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var listBox = sender as ListBox;
+        if (listBox?.SelectedItem is DiseaseAbility ability)
+        {
+            string text = $"{ability.Name}\n{ability.Description}\n\n" +
+                          $"Modifikátor šíření: {ability.SpreadingModifier:F2}\n" +
+                          $"Modifikátor úmrtí: {ability.DeathModifier:F2}";
+            this.FindControl<TextBlock>("DiseaseAbilityDescText")!.Text = text;
+        }
+    }
+
+    private void OnActiveDiseaseAbilityDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e) => MoveFromActiveToAvailable();
+
+    private void OnAvailableDiseaseAbilityDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e) => MoveFromAvailableToActive();
+
+    private void OnMoveDiseaseAbilityClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var activeBox = this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!;
+        var availableBox = this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!;
+        if (activeBox.SelectedItem is DiseaseAbility)
+            MoveFromActiveToAvailable();
+        else if (availableBox.SelectedItem is DiseaseAbility)
+            MoveFromAvailableToActive();
+
+    }
+
+    private void MoveFromActiveToAvailable()
+    {
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
+        var box = this.FindControl<ListBox>("ActiveDiseaseAbilitiesBox")!;
+        if (box.SelectedItem is DiseaseAbility ability)
+        {
+            _activeAbilities.Remove(ability);
+            _availableAbilities.Add(ability);
+            _appService.RemoveDiseaseAbilityFromDisease(ability.Id);
+        }
+    }
+
+    private void MoveFromAvailableToActive()
+    {
+        this.FindControl<TextBlock>("TotalSpreadingText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
+        this.FindControl<TextBlock>("TotalDeathText")!.Text = "Updating...";
+        this.FindControl<TextBlock>("DeathLabel")!.Text = "Úmrtnost: Updating...";
+        var box = this.FindControl<ListBox>("AvailableDiseaseAbilitiesBox")!;
+        if (box.SelectedItem is DiseaseAbility ability)
+        {
+            _availableAbilities.Remove(ability);
+            _activeAbilities.Add(ability);
+            _appService.AddDiseaseAbilityToDisease(ability.Id);
+        }
+    }
+
+
+    // REGION ABILITY LOGIC
+
     private void OnAbilitySelectionRegionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var listBox = sender as ListBox;
@@ -555,7 +555,6 @@ public partial class SimulationView : UserControl
             MoveFromAvailableToActiveRegion();
     }
 
-
     private void MoveFromActiveToAvailableRegion()
     {
         this.FindControl<TextBlock>("SpreadingLabel")!.Text = "Šíření: Updating...";
@@ -587,6 +586,9 @@ public partial class SimulationView : UserControl
             _appService.AddRegionAbility(region.Id, ability);
         }
     }
+
+
+    // INPUT FIELDS CHECKING
 
     private void OnDaySpeedTextChanged(object? sender, TextChangedEventArgs e)
     {

@@ -24,21 +24,23 @@ namespace SimulationCore
         /// <summary>Executes the command and updates regions.</summary>
         public void Execute(Simulation simulation)
         {
-            simulation.disease.AddAbility(_ability);
+            System.Diagnostics.Debug.WriteLine($"[Execute] Disease hash: {simulation.Disease.GetHashCode()}, Before: {simulation.Disease.Abilities.Count}");
+            simulation.Disease.AddAbility(_ability);
+            System.Diagnostics.Debug.WriteLine($"[Execute] After: {simulation.Disease.Abilities.Count}");
             simulation.UpdateAllRegions();
 
             var relevantInteractions = simulation.Interactions
                 .Where(kvp => kvp.Key.Item1 == _ability.Id)
                 .Select(kvp => kvp.Value);
 
-            foreach (Region region in simulation.regions.Values)
+            foreach (Region region in simulation.Regions.Values)
             {
                 foreach (Interaction interaction in relevantInteractions)
                     if (region.Abilities.Any(a => a.Id == interaction.RegionAbilityId))
                         region.AddInteraction(interaction);
             }
 
-            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost nemoci", _ability.Name);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Přidána vlastnost nemoci", _ability.Name);
 
         }
     }
@@ -58,14 +60,14 @@ namespace SimulationCore
         /// <summary>Executes the removal and updates regions.</summary>
         public void Execute(Simulation simulation)
         {
-            simulation.disease.RemoveAbility(_ability);
+            simulation.Disease.RemoveAbility(_ability);
             simulation.UpdateAllRegions();
 
             var relevantInteractions = simulation.Interactions
                 .Where(kvp => kvp.Key.Item1 == _ability.Id)
                 .Select(kvp => kvp.Value);
 
-            foreach (Region region in simulation.regions.Values)
+            foreach (Region region in simulation.Regions.Values)
             {
                 foreach (Interaction interaction in relevantInteractions)
                 {
@@ -74,7 +76,7 @@ namespace SimulationCore
                 }
             }
 
-            simulation.AddLog(simulation.currentSimulationDate, "Odebrána vlastnost nemoci", _ability.Name);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Odebrána vlastnost nemoci", _ability.Name);
 
         }
     }
@@ -94,9 +96,9 @@ namespace SimulationCore
         /// <summary>Applies new speed and updates regions.</summary>
         public void Execute(Simulation simulation)
         {
-            simulation.disease.ChangeDefaultSpreadingSpeed(_newSpeed);
+            simulation.Disease.ChangeDefaultSpreadingSpeed(_newSpeed);
             simulation.UpdateAllRegions();
-            simulation.AddLog(simulation.currentSimulationDate, "Změna rychlosti šíření", _newSpeed.ToString());
+            simulation.AddLog(simulation.CurrentSimulationDate, "Změna rychlosti šíření", _newSpeed.ToString());
 
         }
     }
@@ -116,10 +118,10 @@ namespace SimulationCore
         /// <summary>Applies new probability and updates regions.</summary>
         public void Execute(Simulation simulation)
         {
-            simulation.disease.ChangeDeathProbability(_probability);
+            simulation.Disease.ChangeDeathProbability(_probability);
             simulation.UpdateAllRegions();
 
-            simulation.AddLog(simulation.currentSimulationDate, "Změna šance na úmrtí", (_probability * 100).ToString());
+            simulation.AddLog(simulation.CurrentSimulationDate, "Změna šance na úmrtí", (_probability * 100).ToString());
 
         }
     }
@@ -148,13 +150,13 @@ namespace SimulationCore
              .Where(kvp => kvp.Key.Item2 == _ability.Id)
              .Select(kvp => kvp.Value);
 
-            simulation.AddLog(simulation.currentSimulationDate, "Přidána vlastnost regionu", _region.Name, _ability.Name);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Přidána vlastnost regionu", _region.Name, _ability.Name);
 
             foreach (var interaction in relevantInteractions)
             {
-                if (simulation.disease.Abilities.Any(a => a.Id == interaction.DiseaseAbilityId))
+                if (simulation.Disease.Abilities.Any(a => a.Id == interaction.DiseaseAbilityId))
                 {
-                    simulation.AddLog(simulation.currentSimulationDate, _region.Name + " - nová interakce: " + _ability.Name + " + " +simulation.disease.Abilities[interaction.DiseaseAbilityId].Name + ", Modifikátory: " + interaction.SpreadingModifier + "|" + interaction.DeathModifier);
+                    simulation.AddLog(simulation.CurrentSimulationDate, _region.Name + " - nová interakce: " + _ability.Name + " + " +simulation.Disease.Abilities[interaction.DiseaseAbilityId].Name + ", Modifikátory: " + interaction.SpreadingModifier + "|" + interaction.DeathModifier);
                     _region.AddInteraction(interaction);
                 }
             }
@@ -189,7 +191,7 @@ namespace SimulationCore
                 _region.RemoveInteraction(interaction);
             }
 
-            simulation.AddLog(simulation.currentSimulationDate, "Odebrána vlastnost regionu", _region.Name, _ability.Name);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Odebrána vlastnost regionu", _region.Name, _ability.Name);
         }
     }
 
@@ -211,7 +213,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.ChangeSpreadingSpeed(_newSpeed);
-            simulation.AddLog(simulation.currentSimulationDate, "Změna rychlosti šíření regionu", _region.Name, _newSpeed.ToString());
+            simulation.AddLog(simulation.CurrentSimulationDate, "Změna rychlosti šíření regionu", _region.Name, _newSpeed.ToString());
         }
 
 
@@ -235,7 +237,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.ChangeHealtcareIndex(_newIndex);
-            simulation.AddLog(simulation.currentSimulationDate, "Změna indexu zdravotnictví", _region.Name, _newIndex.ToString());
+            simulation.AddLog(simulation.CurrentSimulationDate, "Změna indexu zdravotnictví", _region.Name, _newIndex.ToString());
         }
     }
 
@@ -254,8 +256,8 @@ namespace SimulationCore
 
         public void Execute(Simulation simulation)
         {
-            simulation.vaccine.ChangeVaccineEfficiency(_newProtecitonEfficiency, _newDeathProtecitonEfficiency);
-            simulation.AddLog(simulation.currentSimulationDate, "Změna parametrů vakcíny",
+            simulation.Vaccine.ChangeVaccineEfficiency(_newProtecitonEfficiency, _newDeathProtecitonEfficiency);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Změna parametrů vakcíny",
                 (_newProtecitonEfficiency * 100)?.ToString() ?? "-",
                 (_newDeathProtecitonEfficiency * 100)?.ToString() ?? "-");
         }
@@ -273,7 +275,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.StartVaccinating();
-            simulation.AddLog(simulation.currentSimulationDate, "Spuštěno očkování", _region.Name);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Spuštěno očkování", _region.Name);
         }
     }
 
@@ -290,7 +292,7 @@ namespace SimulationCore
         public void Execute(Simulation simulation)
         {
             _region.StopVaccinating();
-            simulation.AddLog(simulation.currentSimulationDate, "Zastaveno očkování", _region.Name);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Zastaveno očkování", _region.Name);
         }
     }
 
@@ -303,11 +305,11 @@ namespace SimulationCore
 
         public void Execute(Simulation simulation)
         {
-            foreach (int key in simulation.regions.Keys)
+            foreach (int key in simulation.Regions.Keys)
             {
-                simulation.regions[key].StartVaccinating();
+                simulation.Regions[key].StartVaccinating();
             }
-            simulation.AddLog(simulation.currentSimulationDate, "Spuštěno očkování ve všech regionech");
+            simulation.AddLog(simulation.CurrentSimulationDate, "Spuštěno očkování ve všech regionech");
 
         }
     }
@@ -322,11 +324,11 @@ namespace SimulationCore
 
         public void Execute(Simulation simulation)
         {
-            foreach (int key in simulation.regions.Keys)
+            foreach (int key in simulation.Regions.Keys)
             {
-                simulation.regions[key].StopVaccinating();
+                simulation.Regions[key].StopVaccinating();
             }
-            simulation.AddLog(simulation.currentSimulationDate, "Zastaveno očkování ve všech regionech");
+            simulation.AddLog(simulation.CurrentSimulationDate, "Zastaveno očkování ve všech regionech");
         }
     }
 
@@ -342,8 +344,8 @@ namespace SimulationCore
 
         public void Execute(Simulation simulation)
         {
-            simulation.changeDayLength(_newSpeed);
-            simulation.AddLog(simulation.currentSimulationDate, "Změna rychlosti simulace", _newSpeed.ToString());
+            simulation.ChangeDayLength(_newSpeed);
+            simulation.AddLog(simulation.CurrentSimulationDate, "Změna rychlosti simulace", _newSpeed.ToString());
         }
     }
 }
