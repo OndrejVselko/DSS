@@ -79,6 +79,7 @@ public partial class SimulationView : UserControl
         this.FindControl<ListBox>("ActiveAbilitiesRegionBox")!.ItemsSource = _activeRegionAbilities;
         this.FindControl<ListBox>("AvailableAbilitiesRegionBox")!.ItemsSource = _availableRegionAbilities;
 
+        _appService.UpdateAllRegions();
     }
 
     private void UpdateDiseaseValues()
@@ -124,6 +125,8 @@ public partial class SimulationView : UserControl
         foreach (var feature in featureCollection)
         {
             var isoCode = feature.Attributes["ISO_A2"]?.ToString() ?? "";
+            if (isoCode == "-99")
+                isoCode = feature.Attributes["ISO_A2_EH"]?.ToString() ?? "";
             var mapFeature = new GeometryFeature { Geometry = feature.Geometry };
             mapFeature["ISO_A2"] = isoCode;
 

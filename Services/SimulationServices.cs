@@ -354,5 +354,7 @@ namespace Services
             else
                 throw new Exception("Hodnota musí být kladná nebo 0");
         }
+
+        public void UpdateAllRegions() => _simulation.UpdateAllRegions();
     }
 }

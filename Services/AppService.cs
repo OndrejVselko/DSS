@@ -259,5 +259,8 @@ namespace Services
 
         public async Task<List<LogEntry>> GetLogsAsync(int simulationId)
             => await _dataServices.GetLogs(simulationId);
+
+
+        public void UpdateAllRegions() => _simulationServices.UpdateAllRegions();
     }
 }

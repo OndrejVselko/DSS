@@ -100,7 +100,7 @@ namespace Shared
 
         public void UpdateRegionValues()
         {
-            double deathProbability = HealthcareIndex * DiseaseDeathPropability;
+            double deathProbability = DiseaseDeathPropability / Math.Max(HealthcareIndex, 0.01);
             double spreadingSpeed = RegionSpreadingSpeed * DiseaseSpreadingSpeed;
             double borderModifier = 1.0;
             double vaccinationCapacity = 0.001;
