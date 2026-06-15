@@ -32,7 +32,7 @@
                     FontSize="11" Foreground="Gray" TextWrapping="Wrap"/>
                 <TextBlock Text="Rychlost šíření"/>
                 <TextBox x:Name="SpeedBox" CaretBrush="#111111" TextChanged="OnDoubleTextChanged"/>
-                <TextBlock Text="Jeden člověk nakazí přibližně n dalších. Desetinné číslo, min: 0." 
+                <TextBlock Text="Jeden člověk nakazí přibližně n dalších. Desetinné číslo, větší než 0." 
                            FontSize="11" Foreground="Gray"/>
             
                 <TextBlock Text="Úmrtnost (%)"/>

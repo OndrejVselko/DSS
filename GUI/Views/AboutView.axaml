@@ -1,9 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="GUI.AboutView">
-  <Image Source="/Assets/background.png" Stretch="UniformToFill" Opacity="0.2"/>
+    <Grid RowDefinitions="*, Auto" ColumnDefinitions="*, *">
+        <Image Source="/Assets/background.png" Stretch="UniformToFill" Opacity="0.2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
+        <ScrollViewer Grid.Row="0" Grid.Column="0" Margin="20">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Vytvoření simulace" FontSize="20" FontWeight="Bold" Margin="0,0,0,8"/>
+                <TextBlock TextWrapping="Wrap">
+                    Nejprve se nahraje soubor se scénářem (.json), který obsahuje regiony, jejich vlastnosti a možné interakce.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    Při tvorbě nemoci se zadává její název, délka onemocnění (za kolik dní se nemocný uzdraví nebo zemře), délka imunity (za kolik dní se uzdravený může znovu nakazit), rychlost šíření (kolik dalších lidí nakazí jeden nemocný) a úmrtnost v %. Lze také přidat vlastnosti nemoci, které tyto hodnoty násobně upravují.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    V kroku správy regionů se pro každý region nastavuje populace, index zdravotnictví (vyšší hodnota snižuje úmrtnost) a zda je v něm na začátku simulace nákaza. Stejně jako u nemoci lze i regionu přidat vlastnosti ovlivňující jeho hodnoty. Mezi vlastnostmi nemoci a regionu může vzniknout interakce, která sekundárně modifikuje hodnoty regionu. Pro pokračování je nutné alespoň u jednoho regionu zaškrtnout, že je nakažený.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    Při tvorbě vakcíny se zadává účinnost proti přenosu a účinnost proti úmrtí (obě v %) – snižují počet nových nákaz, resp. úmrtí, úměrně podílu očkovaných v populaci.
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Row="0" Grid.Column="1" Margin="20">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Okno simulace" FontSize="20" FontWeight="Bold" Margin="0,0,0,8"/>
+                <TextBlock TextWrapping="Wrap">
+                    Horní lišta obsahuje spuštění/zastavení simulace, aktuální datum, rychlost simulace (ms mezi dny) a tlačítko pro screenshot.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    V panelu nemoci lze upravit základní rychlost šíření a úmrtnost a vlastnosti nemoci; vedle základních hodnot je zobrazena i celková hodnota po zohlednění vlastností. Pod tím lze upravit účinnost vakcíny.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    Mapa barevně zobrazuje stav regionů – zelená až červená podle podílu nakažených, modrá podle podílu mrtvých. Kliknutím se vybere region a zobrazí se jeho detail.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    Spodní panel ukazuje populaci, počty nakažených, mrtvých a očkovaných (s denní změnou) pro vybraný region nebo celý svět, a zaškrtávací pole pro zapnutí očkování. U regionu navíc rychlost šíření, úmrtnost, náhodný výskyt, index zdravotnictví a jeho vlastnosti.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    Tlačítko "Ukončit simulaci" simulaci nenávratně ukončí, její záznam uloží do historie a vrátí do menu.
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Zpět"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Margin="0,8,0,0" Click="OnBackClicked"/>
+    </Grid>
 </UserControl>
